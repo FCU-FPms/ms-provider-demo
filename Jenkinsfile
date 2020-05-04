@@ -19,7 +19,7 @@ pipeline {
         }
         stage('use image run container') {
             steps {
-                sh 'docker run -d -p 50602:8080 franky-ms-test-docker'
+                sh 'docker run --name franky-ms-test-docker -d -p 50602:8080 franky-ms-test-docker'
             }
         }
     }
