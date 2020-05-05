@@ -17,6 +17,11 @@ pipeline {
                 sh 'docker build -t="franky-ms-test-docker" .'
             }
         }
+        stage('remove old container if exist') {
+            steps {
+                sh 'docker rm -f franky-ms-test-docker | true'
+            }
+        }
         stage('use image run container') {
             steps {
                 sh 'docker run --name franky-ms-test-docker -d -p 50602:8080 franky-ms-test-docker'
