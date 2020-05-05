@@ -14,7 +14,7 @@ pipeline {
         }
         stage('build image') {
             steps {
-                sh 'docker build -t="franky-ms-test-docker" .'
+                sh 'docker build --no-cache -t="franky-ms-test-docker" .'
             }
         }
         stage('remove old container if exist') {
