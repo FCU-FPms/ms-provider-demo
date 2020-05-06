@@ -18,14 +18,11 @@ pipeline {
         }
         stage('build image') {
             steps {
-                sh 'echo see WORKSPACE'
-                sh 'echo ${WORKSPACE}'
                 sh 'docker build --no-cache -t="franky-ms-test-docker" .'
             }
         }
         stage('remove old container if exist') {
             steps {
-                sh 'echo ${WORKSPACE}'
                 sh 'docker rm -f franky-ms-test-docker | true'
             }
         }
@@ -33,6 +30,11 @@ pipeline {
             steps {
                 sh 'docker run --name franky-ms-test-docker -d -P franky-ms-test-docker'
             }
+        }
+    }
+    post { 
+        always { 
+            cleanWs()
         }
     }
 }
