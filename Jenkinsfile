@@ -1,24 +1,31 @@
 pipeline {
     agent any
+    tools { 
+        maven 'Maven 3.6.3' 
+        jdk 'jdk8' 
+    }
     stages {
-        stage('Build') {
-            agent {
-                docker {
-                    image 'maven:3-alpine'
-                    args '-v /root/.m2:/root/.m2' 
-                }
-            }
+        stage ('Initialize') {
             steps {
-                sh 'mvn -B -DskipTests clean package'
+                sh 'echo "PATH = ${PATH}"'
+                sh 'echo "M2_HOME = ${M2_HOME}"'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh "mvn -B -Dmaven.test.failure.ignore=true clean package"
             }
         }
         stage('build image') {
             steps {
+                sh 'echo see WORKSPACE'
+                sh 'echo ${WORKSPACE}'
                 sh 'docker build --no-cache -t="franky-ms-test-docker" .'
             }
         }
         stage('remove old container if exist') {
             steps {
+                sh 'echo ${WORKSPACE}'
                 sh 'docker rm -f franky-ms-test-docker | true'
             }
         }
