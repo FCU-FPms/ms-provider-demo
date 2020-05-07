@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 50609
   address: 140.134.26.71
 
 spring:
