@@ -1,10 +1,17 @@
 server:
   port: 50609
-  host: 140.134.26.71:50609
 
 spring:
   application:
     name: ms-provider
+  cloud:
+    inetutils:
+      ignoredInterfaces:
+        - docker
+        - eth.*
+        - lo
+      preferredNetworks:
+        - 140.134.26.71
 
 eureka:
   client:
