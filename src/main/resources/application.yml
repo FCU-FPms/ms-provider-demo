@@ -1,6 +1,5 @@
 server:
   port: 50609
-  address: 140.134.26.71
 
 spring:
   application:
