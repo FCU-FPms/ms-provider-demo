@@ -4,16 +4,11 @@ server:
 spring:
   application:
     name: ms-provider
-  cloud:
-    inetutils:
-      ignoredInterfaces:
-        - docker
-        - eth.*
-        - lo
-      preferredNetworks:
-        - 140.134.26.71
 
 eureka:
+  instance:
+    preferIpAddress: true
+    ip-address: 140.134.26.71
   client:
     serviceUrl:
       defaultZone: http://140.134.26.71:50608/eureka/
