@@ -11,6 +11,13 @@ pipeline {
                 sh 'echo "M2_HOME = ${M2_HOME}"'
             }
         }
+        stage('add jdbc to workspace') {
+                    steps {
+                        sh 'echo "pwd = ${pwd}"'
+                        sh "cp ../../franky-mysql/jdbc.properties ./src/main/resources/jdbc.properties"
+                    }
+                }
+
         stage('Build') {
             steps {
                 sh "mvn -B -DskipTests=true clean package"
