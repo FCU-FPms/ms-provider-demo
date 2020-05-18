@@ -16,13 +16,9 @@ pipeline {
                 sh "mvn -B -DskipTests=true clean package"
             }
         }
-        stage('build image') {
+        stage('build image and remove old container') {
             steps {
                 sh 'docker build --no-cache -t="franky-ms-test-docker" .'
-            }
-        }
-        stage('remove old container if exist') {
-            steps {
                 sh 'docker rm -f franky-ms-test-docker | true'
             }
         }
