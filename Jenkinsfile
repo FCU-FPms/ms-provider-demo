@@ -12,11 +12,11 @@ pipeline {
             }
         }
         stage('add jdbc to workspace') {
-                    steps {
-                        sh 'echo "pwd = ${pwd}"'
-                        sh "cp ../../franky-mysql/jdbc.properties ./src/main/resources/jdbc.properties"
-                    }
-                }
+            steps {
+                sh 'echo "pwd = ${pwd}"'
+                sh "cp ../../franky-mysql/jdbc.properties ./src/main/resources/jdbc.properties"
+            }
+        }
 
         stage('Build') {
             steps {
