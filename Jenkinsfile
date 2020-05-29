@@ -31,7 +31,7 @@ pipeline {
         }
         stage('use image run container') {
             steps {
-                sh 'docker run --name franky-ms-test-docker -d --memory 256MB -p 50609:50609 franky-ms-test-docker'
+                sh 'docker run --name franky-ms-test-docker -d --memory 256MB --net=host franky-ms-test-docker'
             }
         }
     }
