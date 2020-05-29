@@ -8,7 +8,6 @@ spring:
 eureka:
   instance:
     prefer-ip-address: true #以IP地址注册到服务中心
-    instance-id: ${spring.application.name} #服务中心的信息显示（如果IP地址不显示的话，进行配置）
   client:
     serviceUrl:
       defaultZone: http://140.134.26.71:50608/eureka/
