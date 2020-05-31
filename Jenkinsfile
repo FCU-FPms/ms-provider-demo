@@ -26,7 +26,7 @@ pipeline {
         stage('build image and remove old container') {
             steps {
                 sh 'docker build --no-cache -t="franky-ms-test-docker-$BRANCH_NAME" .'
-                sh 'docker rm -f franky-ms-test-docker-$BRANCH_NAME | true'
+                sh 'docker rm -f franky-ms-test-docker-$BRANCH_NAME | true' // | true 是為了如果沒有舊的容器時，會繼續執行
             }
         }
         stage('use image run container') {
@@ -36,9 +36,9 @@ pipeline {
         }
     }
 
-    //post {
+    //post { 
     //    always {
-    //        cleanWs()
+    //        cleanWs() // 這會清理workspace
     //   }
     //}
 }

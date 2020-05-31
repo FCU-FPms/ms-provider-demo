@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: 0 # 這會產生隨機port號
 
 spring:
   application:
