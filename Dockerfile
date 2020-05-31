@@ -4,4 +4,4 @@ EXPOSE 50609
 
 ENV application-name=ms-provider
 
-ENTRYPOINT ["java","-jar","/app.jar","--spring.application.name=$application-name"]
+ENTRYPOINT ["java","-jar","/app.jar","--spring.application.name=${application-name}"]
