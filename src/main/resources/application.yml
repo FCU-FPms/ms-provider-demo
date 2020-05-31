@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: ms-provider-test
+    name: ms-provider
 
 eureka:
   instance:
