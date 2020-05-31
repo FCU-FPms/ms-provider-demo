@@ -26,12 +26,12 @@ pipeline {
         stage('build image and remove old container') {
             steps {
                 sh 'docker build --no-cache -t="franky-ms-test-docker" .'
-                sh 'docker rm -f franky-ms-test-docker | true'
+                sh 'docker rm -f franky-ms-test-docker-$BRANCH_NAME | true'
             }
         }
         stage('use image run container') {
             steps {
-                sh 'docker run --name franky-ms-test-docker -d --memory 256MB --net=host franky-ms-test-docker'
+                sh 'docker run --name franky-ms-test-docker-$BRANCH_NAME -d --memory 256MB --net=host franky-ms-test-docker'
             }
         }
     }
