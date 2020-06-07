@@ -1,19 +1,20 @@
 package fcu.ms.data;
+import java.util.Date;
 
 public class Task {
     private int TaskID;
     private String TaskName;
     private String Message;
-    private String PostTime;
+    private Date PostTime;
     private int Salary;
     private String TypeName;
     private int ReleaseUserID;
-    private String ReleaseTime;
+    private Date ReleaseTime;
     private int ReceiveUserID;
-    private String ReceiveTime;
+    private Date ReceiveTime;
 
-    public Task(int taskID, String taskName, String message, String postTime, int salary,
-                String typeName, int releaseUserID, String releaseTime, int receiveUserID, String receiveTime) {
+    public Task(int taskID, String taskName, String message, Date postTime, int salary,
+                String typeName, int releaseUserID, Date releaseTime, int receiveUserID, Date receiveTime) {
         this.TaskID = taskID;
         this.TaskName = taskName;
         this.Message = message;
@@ -50,11 +51,11 @@ public class Task {
         Message = message;
     }
 
-    public String getPostTime() {
+    public Date getPostTime() {
         return PostTime;
     }
 
-    public void setPostTime(String postTime) {
+    public void setPostTime(Date postTime) {
         PostTime = postTime;
     }
 
@@ -82,11 +83,11 @@ public class Task {
         ReleaseUserID = releaseUserID;
     }
 
-    public String getReleaseTime() {
+    public Date getReleaseTime() {
         return ReleaseTime;
     }
 
-    public void setReleaseTime(String releaseTime) {
+    public void setReleaseTime(Date releaseTime) {
         ReleaseTime = releaseTime;
     }
 
@@ -98,11 +99,11 @@ public class Task {
         ReceiveUserID = receiveUserID;
     }
 
-    public String getReceiveTime() {
+    public Date getReceiveTime() {
         return ReceiveTime;
     }
 
-    public void setReceiveTime(String receiveTime) {
+    public void setReceiveTime(Date receiveTime) {
         ReceiveTime = receiveTime;
     }
 }
