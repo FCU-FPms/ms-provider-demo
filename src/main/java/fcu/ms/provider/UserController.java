@@ -29,6 +29,7 @@ public class UserController {
             int userId = user.getId();
             entity.put("name", user.getUserName());
             entity.put("phoneNumber", user.getPhoneNumber());
+            entity.put("userPassword", user.getUserPassword());
 
             entities.put(String.valueOf(userId), entity);
             return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
