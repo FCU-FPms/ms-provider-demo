@@ -16,9 +16,10 @@ public class UserDBTest {
     @Test
     public void getUser_TEST() {
         UserDB userDB = UserDB.getInstance();
-        User user = userDB.getUser("unitTest_username");
+        User user = userDB.getUser("testing123");
         assertEquals("0912345678", user.getPhoneNumber());
-        assertEquals("unitTest_username", user.getUserName());
+        assertEquals("testing123", user.getUserName());
+        System.out.println(user.getUserPassword());
     }
 
     @Test
