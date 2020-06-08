@@ -1,5 +1,7 @@
 package fcu.ms.provider;
 
+import fcu.ms.data.Task;
+import net.minidev.json.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,8 @@ import fcu.ms.db.TaskDB;
 
 import javax.websocket.server.PathParam;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value ="/tasks")
@@ -28,6 +32,28 @@ public class TaskController {
             return new ResponseEntity<String>(headers, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<String>("Error to build Task in DB", headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+    @GetMapping("/name/{taskName}")
+    public ResponseEntity<Object> getTaskByName(@PathVariable String taskName) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        Task task = taskDB.getTask(taskName);
+
+        Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
+        if(task != null) {
+            JSONObject entity = new JSONObject();
+            int taskId = task.getTaskID();
+            entity.put("taskName", task.getTaskName());
+            entity.put("Message", task.getMessage());
+            entity.put("postTime",task.getPostTime());
+            entity.put("Salary",task.getSalary());
+
+            entities.put(String.valueOf(taskId), entity);
+            return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<Object>(headers, HttpStatus.NOT_FOUND);
         }
     }
     @DeleteMapping(value = "/{taskName}")
