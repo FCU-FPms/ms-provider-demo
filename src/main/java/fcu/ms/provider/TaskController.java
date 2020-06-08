@@ -3,13 +3,11 @@ package fcu.ms.provider;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import fcu.ms.db.TaskDB;
 
+import javax.websocket.server.PathParam;
 import java.sql.Timestamp;
 
 @RestController
@@ -29,7 +27,21 @@ public class TaskController {
         if(is_success) {
             return new ResponseEntity<String>(headers, HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<String>("Error to build User in DB", headers, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("Error to build Task in DB", headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+    @DeleteMapping(value = "/{taskName}")
+    public ResponseEntity deleteTask(@PathVariable String taskName){
+        boolean is_success = taskDB.deleteTask(taskName);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        if(is_success){
+            return new ResponseEntity<String>(headers, HttpStatus.NO_CONTENT);
+        }
+        else{
+            return new ResponseEntity<String>("Error to delete Task in DB", headers, HttpStatus.BAD_REQUEST);
         }
     }
 
