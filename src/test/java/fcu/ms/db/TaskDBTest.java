@@ -11,15 +11,20 @@ public class TaskDBTest {
     @Test
     public void createTask_TEST() {
         TaskDB taskDB = TaskDB.getInstance();
-        assertTrue( taskDB.createTask("test111", "testing-message",new Timestamp(new Date().getTime()),500));
+        assertTrue( taskDB.createTask("unitTest_taskName", "testing-message",new Timestamp(new Date().getTime()),500));
     }
 
     @Test
     public void getTask_TEST() {
         TaskDB taskDB = TaskDB.getInstance();
-        Task task = taskDB.getTask("test111");
-        assertEquals("test111", task.getTaskName());
+        Task task = taskDB.getTask("unitTest_taskName");
+        assertEquals("unitTest_taskName", task.getTaskName());
         assertEquals("testing-message", task.getMessage());
         assertEquals(500,task.getSalary());
+    }
+    @Test
+    public void deleteTask_TEST() {
+        TaskDB taskDB = TaskDB.getInstance();
+        assertTrue(taskDB.deleteTask("unitTest_taskName"));
     }
 }

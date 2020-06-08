@@ -134,4 +134,20 @@ public class TaskDB {
         }
         return is_success;
     }
+    public boolean deleteTask(String name) {
+
+        boolean is_success = false;
+        Connection connection = mySqlConnection.getDBConnection();
+        String sqlString = "DELETE FROM `Task` WHERE TaskName=?";
+        try {
+            PreparedStatement preStmt = connection.prepareStatement(sqlString);
+            preStmt.setString(1, name);
+            preStmt.executeUpdate();
+            connection.close();
+            is_success = true;
+        } catch (Exception ex) {
+            System.out.println("Error: "+ex);
+        }
+        return is_success;
+    }
 }

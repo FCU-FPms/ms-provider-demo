@@ -18,7 +18,7 @@ public class TaskController {
     TaskDB taskDB = TaskDB.getInstance();
 
     @PostMapping(value = "")
-    public ResponseEntity<String> createUser(@RequestParam String taskName, @RequestParam String message,
+    public ResponseEntity<String> createTask(@RequestParam String taskName, @RequestParam String message,
                                              @RequestParam Timestamp postTime, @RequestParam int salary) {
         // postTime 在API中要打上 yyyy-mm-dd hh:mm:ss 格式
         boolean is_success = taskDB.createTask(taskName, message, postTime, salary);
