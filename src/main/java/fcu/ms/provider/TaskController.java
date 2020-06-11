@@ -12,10 +12,11 @@ import fcu.ms.db.TaskDB;
 import javax.websocket.server.PathParam;
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value ="/tasks")
+@RequestMapping(value ="/task")
 public class TaskController {
     TaskDB taskDB = TaskDB.getInstance();
 
@@ -34,7 +35,32 @@ public class TaskController {
             return new ResponseEntity<String>("Error to build Task in DB", headers, HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("/name/{taskName}")
+    @GetMapping("s")
+    public ResponseEntity<Object> getAllTask() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        List<Task> task = taskDB.getTasks();
+
+        Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
+        if(task != null) {
+            JSONObject entity = new JSONObject();
+
+            for(Task T: task) {
+                int taskId = T.getTaskID();
+                entity.put("taskName", T.getTaskName());
+                entity.put("Message", T.getMessage());
+                entity.put("postTime", T.getPostTime());
+                entity.put("Salary", T.getSalary());
+                entities.put(String.valueOf(taskId), entity);
+            }
+
+            return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<Object>(headers, HttpStatus.NOT_FOUND);
+        }
+    }
+    @GetMapping("/{taskName}")
     public ResponseEntity<Object> getTaskByName(@PathVariable String taskName) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
