@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.*;
 
 import fcu.ms.db.TaskDB;
 
+import javax.validation.constraints.Null;
 import javax.websocket.server.PathParam;
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -34,21 +36,49 @@ public class TaskController {
             return new ResponseEntity<String>("Error to build Task in DB", headers, HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("/name/{taskName}")
-    public ResponseEntity<Object> getTaskByName(@PathVariable String taskName) {
+    @GetMapping("")
+    public ResponseEntity<Object> getTasks() {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
 
-        Task task = taskDB.getTask(taskName);
+        List<Task> taskList = taskDB.getTasks();
+
+        System.out.println(taskList);
+
+        Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
+
+        for(Task task: taskList) {
+            JSONObject entity = new JSONObject();
+
+            int taskId = task.getTaskID();
+
+            entity.put("Salary", task.getSalary());
+            entity.put("postTime", task.getPostTime());
+            entity.put("Message", task.getMessage());
+            entity.put("taskName", task.getTaskName());
+
+
+            entities.put(String.valueOf(taskId), entity);
+        }
+
+        return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
+    }
+    @GetMapping("/{TaskID}")
+    public ResponseEntity<Object> getTaskByID(@PathVariable int TaskID) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        Task task = taskDB.getTask(TaskID);
 
         Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
         if(task != null) {
             JSONObject entity = new JSONObject();
             int taskId = task.getTaskID();
-            entity.put("taskName", task.getTaskName());
+
+            entity.put("Salary", task.getSalary());
+            entity.put("postTime", task.getPostTime());
             entity.put("Message", task.getMessage());
-            entity.put("postTime",task.getPostTime());
-            entity.put("Salary",task.getSalary());
+            entity.put("taskName", task.getTaskName());
 
             entities.put(String.valueOf(taskId), entity);
             return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
@@ -56,9 +86,9 @@ public class TaskController {
             return new ResponseEntity<Object>(headers, HttpStatus.NOT_FOUND);
         }
     }
-    @DeleteMapping(value = "/{taskName}")
-    public ResponseEntity deleteTask(@PathVariable String taskName){
-        boolean is_success = taskDB.deleteTask(taskName);
+    @DeleteMapping(value = "/{TaskID}")
+    public ResponseEntity deleteTaskByID(@PathVariable int TaskID){
+        boolean is_success = taskDB.deleteTask(TaskID);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
@@ -70,6 +100,4 @@ public class TaskController {
             return new ResponseEntity<String>("Error to delete Task in DB", headers, HttpStatus.BAD_REQUEST);
         }
     }
-
-
 }
