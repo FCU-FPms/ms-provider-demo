@@ -87,7 +87,7 @@ public class TaskController {
         }
     }
     @DeleteMapping(value = "/{TaskID}")
-    public ResponseEntity deleteTaskByID(@PathVariable int TaskID){
+    public ResponseEntity<String> deleteTaskByID(@PathVariable int TaskID){
         boolean is_success = taskDB.deleteTask(TaskID);
 
         HttpHeaders headers = new HttpHeaders();
