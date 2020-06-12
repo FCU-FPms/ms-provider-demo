@@ -23,6 +23,11 @@ public class TaskDBTest {
         assertEquals(500,task.getSalary());
     }
     @Test
+    public void setTask_TEST(){
+        TaskDB taskDB = TaskDB.getInstance();
+        assertTrue(taskDB.setTask(23,"Setting_test","Setting_Message_Test",new Timestamp(new Date().getTime()),850));
+    }
+    @Test
     public void deleteTask_TEST() {
         TaskDB taskDB = TaskDB.getInstance();
         assertTrue(taskDB.deleteTask("unitTest_taskName"));
