@@ -38,6 +38,33 @@ public class UserController {
         }
     }
 
+    @PostMapping(value = "")
+    public ResponseEntity<String> createUser(@RequestParam String userName, @RequestParam String userPhone,
+                                             @RequestParam String userPassword) {
+        boolean is_success = userDB.createUser(userName, userPhone, userPassword);
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
 
+        if(is_success) {
+            return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<String>("Error to build Task in DB", headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping(value = "/{userName}")
+    public ResponseEntity deleteUser(@PathVariable String userName){
+        boolean is_success = userDB.deleteUser(userName);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        if(is_success){
+            return new ResponseEntity<String>(headers, HttpStatus.NO_CONTENT);
+        }
+        else{
+            return new ResponseEntity<String>("Error to delete Task in DB", headers, HttpStatus.BAD_REQUEST);
+        }
+    }
 }

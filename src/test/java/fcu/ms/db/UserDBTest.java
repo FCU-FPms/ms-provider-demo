@@ -10,7 +10,7 @@ public class UserDBTest {
     @Test
     public void createUser_TEST() {
         UserDB userDB = UserDB.getInstance();
-        assertTrue( userDB.createUser("unitTest_username", "0912345678") );
+        assertTrue( userDB.createUser("testing123", "0912345678", "ppp12345678") );
     }
 
     @Test
@@ -19,13 +19,14 @@ public class UserDBTest {
         User user = userDB.getUser("testing123");
         assertEquals("0912345678", user.getPhoneNumber());
         assertEquals("testing123", user.getUserName());
+        assertEquals("ppp12345678", user.getUserPassword());
         System.out.println(user.getUserPassword());
     }
 
     @Test
     public void deleteUser_TEST() {
         UserDB userDB = UserDB.getInstance();
-        assertTrue(userDB.deleteUser("unitTest_username"));
+        assertTrue(userDB.deleteUser("testing123"));
     }
 
 }

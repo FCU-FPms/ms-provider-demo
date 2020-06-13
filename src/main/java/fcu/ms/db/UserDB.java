@@ -91,15 +91,16 @@ public class UserDB {
         return user;
     }
 
-    public boolean createUser(String name, String userPhone) {
+    public boolean createUser(String name, String userPhone, String userPassword) {
 
         boolean is_success = false;
         Connection connection = mySqlConnection.getDBConnection();
-        String sqlString = "INSERT INTO userData(userPhone,userName) VALUES(?, ?)";
+        String sqlString = "INSERT INTO userData(userPhone,userName,userPassword) VALUES(?, ?, ?)";
         try {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, userPhone);
             preStmt.setString(2, name);
+            preStmt.setString(3, userPassword);
             preStmt.executeUpdate();
             connection.close();
             is_success = true;

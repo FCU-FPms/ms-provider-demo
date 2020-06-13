@@ -30,6 +30,7 @@ public class TaskController {
             return new ResponseEntity<String>("Error to build Task in DB", headers, HttpStatus.BAD_REQUEST);
         }
     }
+
     @DeleteMapping(value = "/{taskName}")
     public ResponseEntity deleteTask(@PathVariable String taskName){
         boolean is_success = taskDB.deleteTask(taskName);
@@ -44,6 +45,5 @@ public class TaskController {
             return new ResponseEntity<String>("Error to delete Task in DB", headers, HttpStatus.BAD_REQUEST);
         }
     }
-
 
 }
