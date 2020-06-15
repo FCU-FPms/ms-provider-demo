@@ -53,9 +53,9 @@ public class UserController {
         }
     }
 
-    @DeleteMapping(value = "/{userName}")
-    public ResponseEntity deleteUser(@PathVariable String userName){
-        boolean is_success = userDB.deleteUser(userName);
+    @DeleteMapping(value = "/{userId}")
+    public ResponseEntity deleteUser(@PathVariable int userId){
+        boolean is_success = userDB.deleteUser(userId);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");

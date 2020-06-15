@@ -127,5 +127,20 @@ public class UserDB {
         return is_success;
     }
 
+    public boolean deleteUser(int userId) {
 
+        boolean is_success = false;
+        Connection connection = mySqlConnection.getDBConnection();
+        String sqlString = "DELETE FROM `userData` WHERE userId=?";
+        try {
+            PreparedStatement preStmt = connection.prepareStatement(sqlString);
+            preStmt.setInt(1, userId);
+            preStmt.executeUpdate();
+            connection.close();
+            is_success = true;
+        } catch (Exception ex) {
+            System.out.println("Error: "+ex);
+        }
+        return is_success;
+    }
 }
