@@ -57,13 +57,13 @@ public class TaskDB {
                 int id = rs.getInt("TaskID");
                 String TaskName = rs.getString("TaskName");
                 String Message = rs.getString("Message");
-                Date PostTime = rs.getDate("PostTime");
+                Timestamp PostTime = rs.getTimestamp("PostTime");
                 int Salary = rs.getInt("Salary");
                 String TypeName = rs.getString("TypeName");
                 int ReleaseUserID = rs.getInt("ReleaseUserID");
-                Date ReleaseTime = rs.getDate("ReleaseTime");
+                Timestamp ReleaseTime = rs.getTimestamp("ReleaseTime");
                 int ReceiveUserID = rs.getInt("ReceiveUserID");
-                Date ReceiveTime = rs.getDate("ReceiveTime");
+                Timestamp ReceiveTime = rs.getTimestamp("ReceiveTime");
                 Task task = new Task(id, TaskName, Message, PostTime, Salary, TypeName, ReleaseUserID, ReleaseTime, ReceiveUserID, ReceiveTime);
                 tasks.add(task);
             }
@@ -109,13 +109,13 @@ public class TaskDB {
                 int id = rs.getInt("TaskID");
                 String TaskName = rs.getString("TaskName");
                 String Message = rs.getString("Message");
-                Date PostTime = rs.getDate("PostTime");
+                Timestamp PostTime = rs.getTimestamp("PostTime");
                 int Salary = rs.getInt("Salary");
                 String TypeName = rs.getString("TypeName");
                 int ReleaseUserID = rs.getInt("ReleaseUserID");
-                Date ReleaseTime = rs.getDate("ReleaseTime");
+                Timestamp ReleaseTime = rs.getTimestamp("ReleaseTime");
                 int ReceiveUserID = rs.getInt("ReceiveUserID");
-                Date ReceiveTime = rs.getDate("ReceiveTime");
+                Timestamp ReceiveTime = rs.getTimestamp("ReceiveTime");
                 task = new Task(id, TaskName, Message, PostTime, Salary, TypeName, ReleaseUserID, ReleaseTime, ReceiveUserID, ReceiveTime);
             }
             connection.close();
