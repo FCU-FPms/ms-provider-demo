@@ -32,6 +32,7 @@ public class UserDB {
                 int id = rs.getInt("userID");
                 String userPhone = rs.getString("userPhone");
                 String userName = rs.getString("userName");
+                String userPassword = rs.getString("userPassword");
                 User user = new User(id, userPhone, userName);
                 users.add(user);
             }
@@ -55,6 +56,7 @@ public class UserDB {
                 int id = rs.getInt("userID");
                 String userPhone = rs.getString("userPhone");
                 String userName = rs.getString("userName");
+                String userPassword = rs.getString("userPassword");
                 user = new User(id, userPhone, userName);
             }
             connection.close();
@@ -78,6 +80,7 @@ public class UserDB {
                 int id = rs.getInt("userID");
                 String userPhone = rs.getString("userPhone");
                 String userName = rs.getString("userName");
+                String userPassword = rs.getString("userPassword");
                 user = new User(id, userPhone, userName);
             }
             connection.close();
@@ -89,15 +92,16 @@ public class UserDB {
 
     }
 
-    public boolean createUser(String name, String userPhone) {
+    public boolean createUser(String name, String userPhone, String userPassword) {
 
         boolean is_success = false;
         Connection connection = mySqlConnection.getDBConnection();
-        String sqlString = "INSERT INTO userData(userPhone,userName) VALUES(?, ?)";
+        String sqlString = "INSERT INTO userData(userPhone,userName,userPassword) VALUES(?, ?, ?)";
         try {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, userPhone);
             preStmt.setString(2, name);
+            preStmt.setString(3, userPassword);
             preStmt.executeUpdate();
             connection.close();
             is_success = true;
