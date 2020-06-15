@@ -37,6 +37,8 @@ public class TaskController {
             return new ResponseEntity<String>("Error to build Task in DB", headers, HttpStatus.BAD_REQUEST);
         }
     }
+
+
     @GetMapping("")
     public ResponseEntity<Object> getTasks() {
         HttpHeaders headers = new HttpHeaders();
@@ -62,6 +64,8 @@ public class TaskController {
 
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
+
+
     @GetMapping("/{TaskID}")
     public ResponseEntity<Object> getTaskByID(@PathVariable int TaskID) {
         HttpHeaders headers = new HttpHeaders();
@@ -85,11 +89,13 @@ public class TaskController {
             return new ResponseEntity<Object>(headers, HttpStatus.NOT_FOUND);
         }
     }
+
+
     @PatchMapping (value = "")
     public ResponseEntity<String> setTask(@RequestParam int TaskID,@RequestParam String taskName,
         @RequestParam String Message,@RequestParam Timestamp postTime,@RequestParam int Salary) {
 
-        boolean is_success = taskDB.setTask(TaskID,taskName,Message,postTime,Salary);
+        boolean is_success = taskDB.setTask(TaskID, taskName, Message, postTime, Salary);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");

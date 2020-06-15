@@ -6,30 +6,55 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 public class TaskDBTest {
+
+    TaskDB taskDB = TaskDB.getInstance();
+    String taskname = "unitTest_taskName";
     @Test
-    public void createTask_TEST() {
-        TaskDB taskDB = TaskDB.getInstance();
-        assertTrue( taskDB.createTask("unitTest_taskName", "testing-message",new Timestamp(new Date().getTime()),500));
+    public void createTask() {
+        assertTrue( taskDB.createTask(taskname, "testing-message",new Timestamp(new Date().getTime()),500));
+    }
+
+
+    @Test
+    void getTasks() {
+        List<Task> taskList = taskDB.getTasks();
+        assertTrue(taskList.size() > 0); // 如果沒資料會報錯
+    }
+
+
+    @Test
+    void getTaskIdByName() {
+        assertTrue(taskDB.getTaskIdByName(taskname) > 0);
+    }
+
+
+    @Test
+    void getTask() {
+        int id = taskDB.getTaskIdByName(taskname);
+        Task task =taskDB.getTask(id);
+        assertEquals(taskname, task.getTaskName());
     }
 
     @Test
-    public void getTask_TEST() {
-        TaskDB taskDB = TaskDB.getInstance();
-        Task task = taskDB.getTask("unitTest_taskName");
-        assertEquals("unitTest_taskName", task.getTaskName());
-        assertEquals("testing-message", task.getMessage());
-        assertEquals(500,task.getSalary());
+    public void setTask(){
+        int id = taskDB.getTaskIdByName(taskname);
+        assertTrue(taskDB.setTask(id,"Setting_test","Setting_Message_Test", new Timestamp(new Date().getTime()),850));
+        Task task =taskDB.getTask(id);
+        assertEquals("Setting_test", task.getTaskName());
+
+        //回復
+        assertTrue(taskDB.setTask(id, taskname,"Setting_Message_Test", new Timestamp(new Date().getTime()),850));
+        task =taskDB.getTask(id);
+        assertEquals(taskname, task.getTaskName());
     }
+
+
     @Test
-    public void setTask_TEST(){
-        TaskDB taskDB = TaskDB.getInstance();
-        assertTrue(taskDB.setTask(23,"Setting_test","Setting_Message_Test",new Timestamp(new Date().getTime()),850));
-    }
-    @Test
-    public void deleteTask_TEST() {
-        TaskDB taskDB = TaskDB.getInstance();
-        assertTrue(taskDB.deleteTask("unitTest_taskName"));
+    void deleteTask() {
+        int id = taskDB.getTaskIdByName(taskname);
+        assertTrue(taskDB.deleteTask(id));
     }
 }

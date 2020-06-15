@@ -2,16 +2,16 @@ package fcu.ms.data;
 import java.util.Date;
 
 public class Task {
-    private int TaskID;
-    private String TaskName;
-    private String Message;
-    private Date PostTime;
-    private int Salary;
-    private String TypeName;
-    private int ReleaseUserID;
-    private Date ReleaseTime;
-    private int ReceiveUserID;
-    private Date ReceiveTime;
+    private int TaskID = -1;
+    private String TaskName = "";
+    private String Message = "";
+    private Date PostTime = null;
+    private int Salary = 0;
+    private String TypeName = null;
+    private int ReleaseUserID = -1;
+    private Date ReleaseTime = null;
+    private int ReceiveUserID = -1;
+    private Date ReceiveTime = null;
 
     public Task(int taskID, String taskName, String message, Date postTime, int salary,
                 String typeName, int releaseUserID, Date releaseTime, int receiveUserID, Date receiveTime) {
@@ -25,6 +25,16 @@ public class Task {
         this.ReleaseTime = releaseTime;
         this.ReceiveUserID = receiveUserID;
         this.ReceiveTime = receiveTime;
+    }
+
+    public Task(int taskID, String taskName, String message, Date postTime, int salary,
+                String typeName) {
+        this.TaskID = taskID;
+        this.TaskName = taskName;
+        this.Message = message;
+        this.PostTime = postTime;
+        this.Salary = salary;
+        this.TypeName = typeName;
     }
 
     public int getTaskID() {
