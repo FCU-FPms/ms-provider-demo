@@ -33,7 +33,7 @@ public class UserDB {
                 String userPhone = rs.getString("userPhone");
                 String userName = rs.getString("userName");
                 String userPassword = rs.getString("userPassword");
-                User user = new User(id, userPhone, userName);
+                User user = new User(id, userPhone, userName, userPassword);
                 users.add(user);
             }
             connection.close();
@@ -57,7 +57,7 @@ public class UserDB {
                 String userPhone = rs.getString("userPhone");
                 String userName = rs.getString("userName");
                 String userPassword = rs.getString("userPassword");
-                user = new User(id, userPhone, userName);
+                user = new User(id, userPhone, userName, userPassword);
             }
             connection.close();
 
@@ -81,7 +81,7 @@ public class UserDB {
                 String userPhone = rs.getString("userPhone");
                 String userName = rs.getString("userName");
                 String userPassword = rs.getString("userPassword");
-                user = new User(id, userPhone, userName);
+                user = new User(id, userPhone, userName, userPassword);
             }
             connection.close();
 

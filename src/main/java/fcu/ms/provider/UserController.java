@@ -16,26 +16,6 @@ import java.util.Map;
 public class UserController {
     UserDB userDB = UserDB.getInstance();
 
-    @GetMapping("")
-    public ResponseEntity<Object> getUsers() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-
-        List<User> userList = userDB.getUsers();
-
-        Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
-        for(User user: userList) {
-            JSONObject entity = new JSONObject();
-            int userId = user.getId();
-            entity.put("name", user.getUserName());
-            entity.put("phoneNumber", user.getPhoneNumber());
-            entity.put("userPassword", user.getUserPassword());
-
-            entities.put(String.valueOf(userId), entity);
-        }
-        return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
-    }
-
     @GetMapping("/name/{userName}")
     public ResponseEntity<Object> getUserByName(@PathVariable String userName) {
         HttpHeaders headers = new HttpHeaders();
@@ -58,4 +38,33 @@ public class UserController {
         }
     }
 
+    @PostMapping(value = "")
+    public ResponseEntity<String> createUser(@RequestParam String userName, @RequestParam String userPhone,
+                                             @RequestParam String userPassword) {
+        boolean is_success = userDB.createUser(userName, userPhone, userPassword);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        if(is_success) {
+            return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<String>("Error to build User in DB", headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping(value = "/{userId}")
+    public ResponseEntity deleteUser(@PathVariable int userId){
+        boolean is_success = userDB.deleteUser(userId);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        if(is_success){
+            return new ResponseEntity<String>(headers, HttpStatus.NO_CONTENT);
+        }
+        else{
+            return new ResponseEntity<String>("Error to delete Task in DB", headers, HttpStatus.BAD_REQUEST);
+        }
+    }
 }

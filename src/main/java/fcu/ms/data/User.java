@@ -37,12 +37,8 @@ public class User {
         this.userName = userName;
     }
 
-    public String getUserPassword() {
-        return userPassword;
-    }
+    public String getUserPassword() { return userPassword; }
 
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
-    }
+    public void setUserPassword(String userPassword) { this.userPassword = userPassword; }
 }
 

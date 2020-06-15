@@ -10,7 +10,7 @@ public class UserDBTest {
     @Test
     public void createUser_TEST() {
         UserDB userDB = UserDB.getInstance();
-        assertTrue( userDB.createUser("unitTest_username", "0912345678", "test1111111") );
+        assertTrue( userDB.createUser("testing123", "0912345678", "ppp12345678") );
     }
 
     @Test
