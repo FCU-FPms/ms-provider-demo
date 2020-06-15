@@ -38,10 +38,10 @@ public class TaskDB {
                 int Salary = rs.getInt("Salary");
                 String TypeName = rs.getString("TypeName");
                 int ReleaseUserID = rs.getInt("ReleaseUserID");
-                Date ReleaseDate = rs.getDate("ReleaseDate");
+                Date ReleaseTime = rs.getDate("ReleaseTime");
                 int ReceiveUserID = rs.getInt("ReceiveUserID");
-                Date ReceiveDate = rs.getDate("ReceiveTime");
-                Task task = new Task(id, TaskName, Message,PostTime,Salary,TypeName,ReleaseUserID,ReleaseDate,ReceiveUserID,ReceiveDate);
+                Date ReceiveTime = rs.getDate("ReceiveTime");
+                Task task = new Task(id, TaskName, Message,PostTime,Salary,TypeName,ReleaseUserID,ReleaseTime,ReceiveUserID,ReceiveTime);
                 tasks.add(task);
             }
             connection.close();
@@ -134,14 +134,51 @@ public class TaskDB {
         }
         return is_success;
     }
-    public boolean deleteTask(String name) {
+    public boolean setTask(int TaskID, String TaskName, String Message, Timestamp PostTime, int Salary){
+        boolean is_success = false;
+        Connection connection = mySqlConnection.getDBConnection();
+        String sqlString =  "UPDATE Task SET TaskName = ?, Message = ?,PostTime = ?,Salary = ? WHERE TaskID = ?";
+        try {
+            PreparedStatement preStmt = connection.prepareStatement(sqlString);
+            preStmt.setString(1,TaskName);
+            preStmt.setString(2,Message);
+            preStmt.setTimestamp(3,PostTime);
+            preStmt.setInt(4,Salary);
+            preStmt.setInt(5,TaskID);
+            preStmt.executeUpdate();
+            connection.close();
+            is_success = true;
+
+        }catch (Exception ex){
+            System.out.println("Error: " + ex);
+            is_success = false;
+        }
+        return is_success;
+    }
+    public boolean deleteTask(int taskID) {
+
+        boolean is_success = false;
+        Connection connection = mySqlConnection.getDBConnection();
+        String sqlString = "DELETE FROM `Task` WHERE TaskID=?";
+        try {
+            PreparedStatement preStmt = connection.prepareStatement(sqlString);
+            preStmt.setInt(1, taskID);
+            preStmt.executeUpdate();
+            connection.close();
+            is_success = true;
+        } catch (Exception ex) {
+            System.out.println("Error: "+ex);
+        }
+        return is_success;
+    }
+    public boolean deleteTask(String TaskName) {
 
         boolean is_success = false;
         Connection connection = mySqlConnection.getDBConnection();
         String sqlString = "DELETE FROM `Task` WHERE TaskName=?";
         try {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
-            preStmt.setString(1, name);
+            preStmt.setString(1, TaskName);
             preStmt.executeUpdate();
             connection.close();
             is_success = true;
