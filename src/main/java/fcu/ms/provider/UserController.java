@@ -49,7 +49,7 @@ public class UserController {
         if(is_success) {
             return new ResponseEntity<String>(headers, HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<String>("Error to build Task in DB", headers, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("Error to build User in DB", headers, HttpStatus.BAD_REQUEST);
         }
     }
 
