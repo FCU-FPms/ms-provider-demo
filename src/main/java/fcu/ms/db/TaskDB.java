@@ -134,6 +134,27 @@ public class TaskDB {
         }
         return is_success;
     }
+    public boolean setTask(int TaskID, String TaskName, String Message, Timestamp PostTime, int Salary){
+        boolean is_success = false;
+        Connection connection = mySqlConnection.getDBConnection();
+        String sqlString =  "UPDATE Task SET TaskName = ?, Message = ?,PostTime = ?,Salary = ? WHERE TaskID = ?";
+        try {
+            PreparedStatement preStmt = connection.prepareStatement(sqlString);
+            preStmt.setString(1,TaskName);
+            preStmt.setString(2,Message);
+            preStmt.setTimestamp(3,PostTime);
+            preStmt.setInt(4,Salary);
+            preStmt.setInt(5,TaskID);
+            preStmt.executeUpdate();
+            connection.close();
+            is_success = true;
+
+        }catch (Exception ex){
+            System.out.println("Error: " + ex);
+            is_success = false;
+        }
+        return is_success;
+    }
     public boolean deleteTask(int taskID) {
 
         boolean is_success = false;
