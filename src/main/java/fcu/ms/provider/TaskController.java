@@ -11,6 +11,7 @@ import fcu.ms.db.TaskDB;
 
 import javax.validation.constraints.Null;
 import javax.websocket.server.PathParam;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
@@ -42,8 +43,6 @@ public class TaskController {
         headers.add("Content-Type", "application/json");
 
         List<Task> taskList = taskDB.getTasks();
-
-        System.out.println(taskList);
 
         Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
 
@@ -86,6 +85,22 @@ public class TaskController {
             return new ResponseEntity<Object>(headers, HttpStatus.NOT_FOUND);
         }
     }
+    @PatchMapping (value = "")
+    public ResponseEntity<String> setTask(@RequestParam int TaskID,@RequestParam String taskName,
+        @RequestParam String Message,@RequestParam Timestamp postTime,@RequestParam int Salary) {
+
+        boolean is_success = taskDB.setTask(TaskID,taskName,Message,postTime,Salary);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        if(is_success) {
+            return new ResponseEntity<String>(headers, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<String>("Error to SET Task in DB", headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @DeleteMapping(value = "/{TaskID}")
     public ResponseEntity<String> deleteTaskByID(@PathVariable int TaskID){
         boolean is_success = taskDB.deleteTask(TaskID);
