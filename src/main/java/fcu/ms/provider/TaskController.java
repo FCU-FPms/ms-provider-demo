@@ -23,10 +23,12 @@ public class TaskController {
     TaskDB taskDB = TaskDB.getInstance();
 
     @PostMapping(value = "")
-    public ResponseEntity<String> createTask(@RequestParam String taskName, @RequestParam String message,
-                                             @RequestParam Timestamp postTime, @RequestParam int salary) {
+    public ResponseEntity<String> createTask(@RequestParam String TaskName, @RequestParam String Message,
+                                             @RequestParam Timestamp PostTime, @RequestParam int Salary,
+                                             @RequestParam String TypeName, @RequestParam String TaskAddress,
+                                             @RequestParam int TaskCity) {
         // postTime 在API中要打上 yyyy-mm-dd hh:mm:ss 格式
-        boolean is_success = taskDB.createTask(taskName, message, postTime, salary);
+        boolean is_success = taskDB.createTask(TaskName, Message, PostTime, Salary, TypeName, TaskAddress, TaskCity);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
@@ -53,10 +55,17 @@ public class TaskController {
 
             int taskId = task.getTaskID();
 
-            entity.put("Salary", task.getSalary());
-            entity.put("postTime", task.getPostTime());
+            entity.put("TaskName", task.getTaskName());
             entity.put("Message", task.getMessage());
-            entity.put("taskName", task.getTaskName());
+            entity.put("PostTime", task.getPostTime());
+            entity.put("Salary", task.getSalary());
+            entity.put("ReleaseUserID",task.getReleaseUserID());
+            entity.put("ReleaseTime",task.getReleaseTime());
+            entity.put("ReceiveUserID",task.getReceiveUserID());
+            entity.put("ReceiveTime",task.getReceiveTime());
+            entity.put("TypeName",task.getTaskName());
+            entity.put("TaskAddress",task.getTaskAddress());
+            entity.put("TaskCity",task.getTaskCity());
 
 
             entities.put(String.valueOf(taskId), entity);
@@ -78,10 +87,17 @@ public class TaskController {
             JSONObject entity = new JSONObject();
             int taskId = task.getTaskID();
 
-            entity.put("Salary", task.getSalary());
-            entity.put("postTime", task.getPostTime());
+            entity.put("TaskName", task.getTaskName());
             entity.put("Message", task.getMessage());
-            entity.put("taskName", task.getTaskName());
+            entity.put("PostTime", task.getPostTime());
+            entity.put("Salary", task.getSalary());
+            entity.put("ReleaseUserID",task.getReleaseUserID());
+            entity.put("ReleaseTime",task.getReleaseTime());
+            entity.put("ReceiveUserID",task.getReceiveUserID());
+            entity.put("ReceiveTime",task.getReceiveTime());
+            entity.put("TypeName",task.getTaskName());
+            entity.put("TaskAddress",task.getTaskAddress());
+            entity.put("TaskCity",task.getTaskCity());
 
             entities.put(String.valueOf(taskId), entity);
             return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);

@@ -14,7 +14,8 @@ public class TaskDBTest {
     String taskname = "unitTest_taskName";
     @Test
     public void createTask() {
-        assertTrue( taskDB.createTask(taskname, "testing-message",new Timestamp(new Date().getTime()),500));
+        assertTrue( taskDB.createTask(taskname, "testing-message",
+                new Timestamp(new Date().getTime()),500,"EatTask","testing_Address",1));
     }
 
 

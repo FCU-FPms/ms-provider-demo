@@ -23,17 +23,22 @@ public class TaskDB {
 
     }
 
-    public boolean createTask(String TaskName, String Message,Timestamp PostTime , int Salary) {
+    public boolean createTask(String TaskName, String Message,Timestamp PostTime , int Salary, String TypeName,
+                              String TaskAddress, int TaskCity) {
 
         boolean is_success;
         Connection connection = mySqlConnection.getDBConnection();
-        String sqlString = "INSERT INTO Task(TaskName, Message, PostTime, Salary) VALUES(?, ?, ?, ?)";
+        String sqlString =
+                "INSERT INTO Task(TaskName, Message, PostTime, Salary, TypeName, TaskAddress, TaskCity) VALUES(?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, TaskName);
             preStmt.setString(2, Message);
             preStmt.setTimestamp(3, PostTime);
             preStmt.setInt(4, Salary);
+            preStmt.setString(5,TypeName);
+            preStmt.setString(6,TaskAddress);
+            preStmt.setInt(7,TaskCity);
             preStmt.executeUpdate();
             connection.close();
             is_success = true;
@@ -64,7 +69,9 @@ public class TaskDB {
                 Timestamp ReleaseTime = rs.getTimestamp("ReleaseTime");
                 int ReceiveUserID = rs.getInt("ReceiveUserID");
                 Timestamp ReceiveTime = rs.getTimestamp("ReceiveTime");
-                Task task = new Task(id, TaskName, Message, PostTime, Salary, TypeName, ReleaseUserID, ReleaseTime, ReceiveUserID, ReceiveTime);
+                String TaskAddress = rs.getString("TaskAddress");
+                int TaskCity = rs.getInt("TaskCity");
+                Task task = new Task(TaskName, Message, PostTime, Salary, TypeName, TaskAddress, TaskCity);
                 tasks.add(task);
             }
             connection.close();
@@ -116,7 +123,9 @@ public class TaskDB {
                 Timestamp ReleaseTime = rs.getTimestamp("ReleaseTime");
                 int ReceiveUserID = rs.getInt("ReceiveUserID");
                 Timestamp ReceiveTime = rs.getTimestamp("ReceiveTime");
-                task = new Task(id, TaskName, Message, PostTime, Salary, TypeName, ReleaseUserID, ReleaseTime, ReceiveUserID, ReceiveTime);
+                String TaskAddress = rs.getString("TaskAddress");
+                int TaskCity = rs.getInt("TaskCity");
+                task = new Task(TaskName, Message, PostTime, Salary, TypeName, TaskAddress, TaskCity);
             }
             connection.close();
 
