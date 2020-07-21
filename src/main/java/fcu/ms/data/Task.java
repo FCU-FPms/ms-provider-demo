@@ -7,11 +7,14 @@ public class Task {
     private String Message = "";
     private Date PostTime = null;
     private int Salary = 0;
-    private String TypeName = null;
+    private String TypeName = "";
     private int ReleaseUserID = -1;
     private Date ReleaseTime = null;
     private int ReceiveUserID = -1;
     private Date ReceiveTime = null;
+    private String TaskAddress = "";
+    private int TaskCit = -1;
+
 
     public Task(int taskID, String taskName, String message, Date postTime, int salary,
                 String typeName, int releaseUserID, Date releaseTime, int receiveUserID, Date receiveTime) {
