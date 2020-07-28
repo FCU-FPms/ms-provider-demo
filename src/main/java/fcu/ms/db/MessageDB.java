@@ -31,7 +31,8 @@ public class MessageDB {
                 String content = rs.getString("content");
                 int userID = rs.getInt("userID");
                 int receiverID = rs.getInt("receiverID");
-                Message message = new Message(id, content, userID, receiverID);
+                Timestamp postTime = rs.getTimestamp("postTime");
+                Message message = new Message(id, content, userID, receiverID, postTime);
                 messages.add(message);
             }
             connection.close();
@@ -54,8 +55,9 @@ public class MessageDB {
                 int id = rs.getInt("messageID");
                 String content = rs.getString("content");
                 int userID = rs.getInt("userID");
-                int recieverID = rs.getInt("receiverID");
-                message = new Message(id, content, userID, recieverID);
+                int receiverID = rs.getInt("receiverID");
+                Timestamp postTime = rs.getTimestamp("postTime");
+                message = new Message(id, content, userID, receiverID, postTime);
             }
             connection.close();
 
@@ -66,16 +68,17 @@ public class MessageDB {
 
     }
 
-    public boolean createMessage(String content, int userID, int receiverID) {
+    public boolean createMessage(String content, int userID, int receiverID, Timestamp postTime) {
 
         boolean is_success = false;
         Connection connection = mySqlConnection.getDBConnection();
-        String sqlString = "INSERT INTO Message(messageID,content,userID,receiverID) VALUES(?, ?, ?, ?)";
+        String sqlString = "INSERT INTO Message(content,userID,receiverID,postTime) VALUES( ?, ?, ?, ?)";
         try {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, content);
             preStmt.setInt(2, userID);
             preStmt.setInt(3, receiverID);
+            preStmt.setTimestamp(4, postTime);
             preStmt.executeUpdate();
             connection.close();
             is_success = true;
