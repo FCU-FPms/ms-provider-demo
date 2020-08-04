@@ -16,8 +16,9 @@ public class Task {
     private int TaskCity = -1;
 
 
-    public Task(String taskName, String message, Date postTime, int salary,
+    public Task(int taskID,String taskName, String message, Date postTime, int salary,
                 String typeName, String TaskAddress, int TaskCity) {
+        this.TaskID = taskID;
         this.TaskName = taskName;
         this.Message = message;
         this.PostTime = postTime;

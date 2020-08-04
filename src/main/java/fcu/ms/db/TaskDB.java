@@ -71,7 +71,7 @@ public class TaskDB {
                 Timestamp ReceiveTime = rs.getTimestamp("ReceiveTime");
                 String TaskAddress = rs.getString("TaskAddress");
                 int TaskCity = rs.getInt("TaskCity");
-                Task task = new Task(TaskName, Message, PostTime, Salary, TypeName, TaskAddress, TaskCity);
+                Task task = new Task(id, TaskName, Message, PostTime, Salary, TypeName, TaskAddress, TaskCity);
                 tasks.add(task);
             }
             connection.close();
@@ -125,7 +125,7 @@ public class TaskDB {
                 Timestamp ReceiveTime = rs.getTimestamp("ReceiveTime");
                 String TaskAddress = rs.getString("TaskAddress");
                 int TaskCity = rs.getInt("TaskCity");
-                task = new Task(TaskName, Message, PostTime, Salary, TypeName, TaskAddress, TaskCity);
+                task = new Task(id, TaskName, Message, PostTime, Salary, TypeName, TaskAddress, TaskCity);
             }
             connection.close();
 
