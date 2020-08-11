@@ -28,7 +28,34 @@ public class MessageDB {
             ResultSet rs = preStmt.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("messageID");
-                String content = rs.getString("content");
+                String Content = rs.getString("Content");
+                int userID = rs.getInt("userID");
+                int receiverID = rs.getInt("receiverID");
+                Timestamp postTime = rs.getTimestamp("postTime");
+                Message message = new Message(id, Content, userID, receiverID, postTime);
+                messages.add(message);
+            }
+            connection.close();
+
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
+        }
+        return messages;
+    }
+
+    public List<Message> getMessageByID(int userId, int receiverId) {
+        List<Message> messages = new ArrayList<Message>();
+
+        Connection connection = mySqlConnection.getDBConnection();
+        String sqlString = "SELECT `messageID` FROM Message where `userId` = ? AND `receiverId`=  ?";
+        try {
+            PreparedStatement preStmt = connection.prepareStatement(sqlString);
+            preStmt.setInt(1, userId);
+            preStmt.setInt(2, receiverId);
+            ResultSet rs = preStmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("messageID");
+                String content = rs.getString("Content");
                 int userID = rs.getInt("userID");
                 int receiverID = rs.getInt("receiverID");
                 Timestamp postTime = rs.getTimestamp("postTime");
@@ -53,7 +80,7 @@ public class MessageDB {
             ResultSet rs = preStmt.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("messageID");
-                String content = rs.getString("content");
+                String content = rs.getString("Content");
                 int userID = rs.getInt("userID");
                 int receiverID = rs.getInt("receiverID");
                 Timestamp postTime = rs.getTimestamp("postTime");
@@ -104,6 +131,29 @@ public class MessageDB {
         }
         return is_success;
     }
+    public Message getMessageByID2(int userID, int receiverID) {
+        Message message = null;
+        Connection connection = mySqlConnection.getDBConnection();
+        String sqlString = "SELECT `messageID` FROM Message where `userId` = ? AND `receiverId`=  ?";
+        try {
+            PreparedStatement preStmt = connection.prepareStatement(sqlString);
+            preStmt.setInt(1, userID);
+            preStmt.setInt(2, receiverID);
+            ResultSet rs = preStmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("messageID");
+                String content = rs.getString("Content");
+                int userId = rs.getInt("userID");
+                int receiverId = rs.getInt("receiverID");
+                Timestamp postTime = rs.getTimestamp("postTime");
+                message = new Message(id, content, userID, receiverID, postTime);
+            }
+            connection.close();
 
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
+        }
+        return message;
+    }
 
 }
