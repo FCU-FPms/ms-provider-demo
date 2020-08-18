@@ -37,7 +37,7 @@ public class MessageTest {
     }
 
     @Test
-    void getMessageByID() {
+    void getMessageByID_TEST() {
         MessageDB messageDB = MessageDB.getInstance();
         List<Message> message = messageDB.getMessageByID(1,33);
         System.out.println(message);

@@ -47,7 +47,7 @@ public class MessageDB {
         List<Message> messages = new ArrayList<Message>();
 
         Connection connection = mySqlConnection.getDBConnection();
-        String sqlString = "SELECT `messageID` FROM Message where `userId` = ? AND `receiverId`=  ?";
+        String sqlString = "SELECT * FROM Message where `userId` = ? AND `receiverId`=  ?";
         try {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, userId);
