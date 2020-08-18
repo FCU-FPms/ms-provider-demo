@@ -55,4 +55,5 @@ public class Message {
     public void setPostTime(Date postTime) {
         this.postTime = postTime;
     }
+
 }
