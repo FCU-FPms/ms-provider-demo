@@ -7,34 +7,25 @@ public class Task {
     private String Message = "";
     private Date PostTime = null;
     private int Salary = 0;
-    private String TypeName = null;
+    private String TypeName = "";
     private int ReleaseUserID = -1;
     private Date ReleaseTime = null;
     private int ReceiveUserID = -1;
     private Date ReceiveTime = null;
+    private String TaskAddress = "";
+    private int TaskCity = -1;
 
-    public Task(int taskID, String taskName, String message, Date postTime, int salary,
-                String typeName, int releaseUserID, Date releaseTime, int receiveUserID, Date receiveTime) {
+
+    public Task(int taskID,String taskName, String message, Date postTime, int salary,
+                String typeName, String TaskAddress, int TaskCity) {
         this.TaskID = taskID;
         this.TaskName = taskName;
         this.Message = message;
         this.PostTime = postTime;
         this.Salary = salary;
         this.TypeName = typeName;
-        this.ReleaseUserID = releaseUserID;
-        this.ReleaseTime = releaseTime;
-        this.ReceiveUserID = receiveUserID;
-        this.ReceiveTime = receiveTime;
-    }
-
-    public Task(int taskID, String taskName, String message, Date postTime, int salary,
-                String typeName) {
-        this.TaskID = taskID;
-        this.TaskName = taskName;
-        this.Message = message;
-        this.PostTime = postTime;
-        this.Salary = salary;
-        this.TypeName = typeName;
+        this.TaskAddress = TaskAddress;
+        this.TaskCity = TaskCity;
     }
 
     public int getTaskID() {
@@ -47,6 +38,22 @@ public class Task {
 
     public String getTaskName() {
         return TaskName;
+    }
+
+    public String getTaskAddress() {
+        return TaskAddress;
+    }
+
+    public void setTaskAddress(String taskAddress) {
+        TaskAddress = taskAddress;
+    }
+
+    public int getTaskCity() {
+        return TaskCity;
+    }
+
+    public void setTaskCity(int taskCity) {
+        TaskCity = taskCity;
     }
 
     public void setTaskName(String taskName) {
