@@ -32,7 +32,8 @@ public class MessageDB {
                 int userID = rs.getInt("userID");
                 int receiverID = rs.getInt("receiverID");
                 Timestamp postTime = rs.getTimestamp("postTime");
-                Message message = new Message(id, Content, userID, receiverID, postTime);
+                int taskID = rs.getInt("taskID");
+                Message message = new Message(id, Content, userID, receiverID, postTime, taskID);
                 messages.add(message);
             }
             connection.close();
@@ -43,15 +44,16 @@ public class MessageDB {
         return messages;
     }
 
-    public List<Message> getMessageByID(int userId, int receiverId) {
+    public List<Message> getMessageByID(int userId, int receiverId, int taskId) {
         List<Message> messages = new ArrayList<Message>();
 
         Connection connection = mySqlConnection.getDBConnection();
-        String sqlString = "SELECT * FROM Message where `userId` = ? AND `receiverId`=  ?";
+        String sqlString = "SELECT * FROM Message where `userId` = ? AND `receiverId`=  ? AND `taskId`=  ?";
         try {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, userId);
             preStmt.setInt(2, receiverId);
+            preStmt.setInt(3, taskId);
             ResultSet rs = preStmt.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("messageID");
@@ -59,7 +61,8 @@ public class MessageDB {
                 int userID = rs.getInt("userID");
                 int receiverID = rs.getInt("receiverID");
                 Timestamp postTime = rs.getTimestamp("postTime");
-                Message message = new Message(id, content, userID, receiverID, postTime);
+                int taskID = rs.getInt("taskID");
+                Message message = new Message(id, content, userID, receiverID, postTime, taskID);
                 messages.add(message);
             }
             connection.close();
@@ -84,7 +87,8 @@ public class MessageDB {
                 int userID = rs.getInt("userID");
                 int receiverID = rs.getInt("receiverID");
                 Timestamp postTime = rs.getTimestamp("postTime");
-                message = new Message(id, content, userID, receiverID, postTime);
+                int taskID = rs.getInt("taskID");
+                message = new Message(id, content, userID, receiverID, postTime, taskID);
             }
             connection.close();
 
@@ -95,17 +99,18 @@ public class MessageDB {
 
     }
 
-    public boolean createMessage(String content, int userID, int receiverID, Timestamp postTime) {
+    public boolean createMessage(String content, int userID, int receiverID, Timestamp postTime, int taskID) {
 
         boolean is_success = false;
         Connection connection = mySqlConnection.getDBConnection();
-        String sqlString = "INSERT INTO Message(content,userID,receiverID,postTime) VALUES( ?, ?, ?, ?)";
+        String sqlString = "INSERT INTO Message(content,userID,receiverID,postTime,taskID) VALUES( ?, ?, ?, ?, ?)";
         try {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, content);
             preStmt.setInt(2, userID);
             preStmt.setInt(3, receiverID);
             preStmt.setTimestamp(4, postTime);
+            preStmt.setInt(5, taskID);
             preStmt.executeUpdate();
             connection.close();
             is_success = true;
@@ -131,6 +136,7 @@ public class MessageDB {
         }
         return is_success;
     }
+
     public Message getMessageByID2(int userID, int receiverID) {
         Message message = null;
         Connection connection = mySqlConnection.getDBConnection();
@@ -146,7 +152,8 @@ public class MessageDB {
                 int userId = rs.getInt("userID");
                 int receiverId = rs.getInt("receiverID");
                 Timestamp postTime = rs.getTimestamp("postTime");
-                message = new Message(id, content, userID, receiverID, postTime);
+                int taskID = rs.getInt("taskID");
+                message = new Message(id, content, userID, receiverID, postTime, taskID);
             }
             connection.close();
 

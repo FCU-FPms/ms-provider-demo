@@ -7,13 +7,15 @@ public class Message {
     private int userID;
     private int receiverID;
     private Date postTime = null;
+    private int taskID;
 
-    public Message(int id, String content, int userID, int receiverID, Date postTime){
+    public Message(int id, String content, int userID, int receiverID, Date postTime, int taskID){
         this.id = id;
         this.content = content;
         this.userID = userID;
         this.receiverID = receiverID;
         this.postTime = postTime;
+        this.taskID = taskID;
     }
 
     public int getId() {
@@ -56,4 +58,11 @@ public class Message {
         this.postTime = postTime;
     }
 
+    public int getTaskID() {
+        return taskID;
+    }
+
+    public void setTaskID(int taskID) {
+        this.taskID = taskID;
+    }
 }

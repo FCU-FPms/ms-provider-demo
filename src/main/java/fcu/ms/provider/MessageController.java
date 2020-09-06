@@ -3,6 +3,7 @@ package fcu.ms.provider;
 
 
 import fcu.ms.data.Message;
+import fcu.ms.data.Task;
 import fcu.ms.db.MessageDB;
 
 import net.minidev.json.JSONObject;
@@ -25,8 +26,8 @@ public class MessageController {
 
     @PostMapping(value = "")
     public ResponseEntity<String> createMessage(@RequestParam String Content, @RequestParam int UserID,
-                                                @RequestParam int ReceiverID, @RequestParam Timestamp postTime) {
-        boolean is_success = messageDB.createMessage(Content, UserID, ReceiverID, postTime);
+                                                @RequestParam int ReceiverID, @RequestParam Timestamp postTime, @RequestParam int taskID) {
+        boolean is_success = messageDB.createMessage(Content, UserID, ReceiverID, postTime, taskID);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
@@ -53,6 +54,31 @@ public class MessageController {
         }
     }
 
+    @GetMapping(value = "/conversation/{UserID}/{ReceiverID}/{TaskID}")
+    public ResponseEntity<Object> getMessageByID(@PathVariable int UserID, @PathVariable int ReceiverID, @PathVariable int TaskID) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
 
+        List<Message> messages = messageDB.getMessageByID(UserID, ReceiverID, TaskID);
+
+        Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
+
+
+        for (Message message : messages) {
+            JSONObject entity = new JSONObject();
+
+            int userID = message.getUserID();
+
+            entity.put("messageID", message.getId());
+            entity.put("Content", message.getContent());
+            entity.put("postTime", message.getPostTime());
+            entity.put("receiverId", message.getReceiverID());
+            entity.put("taskID", message.getTaskID());
+
+            entities.put(String.valueOf(userID), entity);
+        }
+
+        return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
+    }
 
 }
