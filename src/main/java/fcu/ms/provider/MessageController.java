@@ -67,15 +67,15 @@ public class MessageController {
         for (Message message : messages) {
             JSONObject entity = new JSONObject();
 
-            int userID = message.getUserID();
+            int messageID = message.getId();
 
-            entity.put("messageID", message.getId());
             entity.put("Content", message.getContent());
             entity.put("postTime", message.getPostTime());
+            entity.put("userID", message.getUserID());
             entity.put("receiverId", message.getReceiverID());
             entity.put("taskID", message.getTaskID());
 
-            entities.put(String.valueOf(userID), entity);
+            entities.put(String.valueOf(messageID), entity);
         }
 
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
