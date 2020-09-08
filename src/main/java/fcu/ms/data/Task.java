@@ -5,7 +5,8 @@ public class Task {
     private int TaskID = -1;
     private String TaskName = "";
     private String Message = "";
-    private Date PostTime = null;
+    private Date StartPostTime = null;
+    private  Date EndPostTime = null;
     private int Salary = 0;
     private String TypeName = "";
     private int ReleaseUserID = -1;
@@ -16,12 +17,13 @@ public class Task {
     private int TaskCity = -1;
 
 
-    public Task(int taskID,String taskName, String message, Date postTime, int salary,
+    public Task(int taskID,String taskName, String message, Date StartPostTime, Date EndPostTime, int salary,
                 String typeName, String TaskAddress, int TaskCity) {
         this.TaskID = taskID;
         this.TaskName = taskName;
         this.Message = message;
-        this.PostTime = postTime;
+        this.StartPostTime = StartPostTime;
+        this.EndPostTime = EndPostTime;
         this.Salary = salary;
         this.TypeName = typeName;
         this.TaskAddress = TaskAddress;
@@ -68,12 +70,16 @@ public class Task {
         Message = message;
     }
 
-    public Date getPostTime() {
-        return PostTime;
+    public Date getStartPostTime() { return StartPostTime; }
+
+    public void setStartPostTime(Date startPostTime) { StartPostTime = startPostTime; }
+
+    public Date getEndPostTime() {
+        return EndPostTime;
     }
 
-    public void setPostTime(Date postTime) {
-        PostTime = postTime;
+    public void setEndPostTime(Date endPostTime) {
+        EndPostTime = endPostTime;
     }
 
     public int getSalary() {

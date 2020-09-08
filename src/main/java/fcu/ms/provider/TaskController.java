@@ -24,11 +24,11 @@ public class TaskController {
 
     @PostMapping(value = "")
     public ResponseEntity<String> createTask(@RequestParam String TaskName, @RequestParam String Message,
-                                             @RequestParam Timestamp PostTime, @RequestParam int Salary,
-                                             @RequestParam String TypeName, @RequestParam String TaskAddress,
-                                             @RequestParam int TaskCity) {
+                                             @RequestParam Timestamp StartPostTime,@RequestParam Timestamp EndPostTime,
+                                             @RequestParam int Salary, @RequestParam String TypeName,
+                                             @RequestParam String TaskAddress, @RequestParam int TaskCity) {
         // postTime 在API中要打上 yyyy-mm-dd hh:mm:ss 格式
-        boolean is_success = taskDB.createTask(TaskName, Message, PostTime, Salary, TypeName, TaskAddress, TaskCity);
+        boolean is_success = taskDB.createTask(TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, TaskAddress, TaskCity);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
@@ -57,7 +57,8 @@ public class TaskController {
 
             entity.put("TaskName", task.getTaskName());
             entity.put("Message", task.getMessage());
-            entity.put("PostTime", task.getPostTime());
+            entity.put("StartPostTime", task.getStartPostTime());
+            entity.put("EndPostTime", task.getEndPostTime());
             entity.put("Salary", task.getSalary());
             entity.put("ReleaseUserID",task.getReleaseUserID());
             entity.put("ReleaseTime",task.getReleaseTime());
@@ -92,7 +93,8 @@ public class TaskController {
 
             entity.put("TaskName", task.getTaskName());
             entity.put("Message", task.getMessage());
-            entity.put("PostTime", task.getPostTime());
+            entity.put("StartPostTime", task.getStartPostTime());
+            entity.put("EndPostTime", task.getEndPostTime());
             entity.put("Salary", task.getSalary());
             entity.put("ReleaseUserID",task.getReleaseUserID());
             entity.put("ReleaseTime",task.getReleaseTime());
@@ -112,9 +114,9 @@ public class TaskController {
 
     @PatchMapping (value = "")
     public ResponseEntity<String> setTask(@RequestParam int TaskID,@RequestParam String taskName,
-        @RequestParam String Message,@RequestParam Timestamp postTime,@RequestParam int Salary) {
+        @RequestParam String Message,@RequestParam Timestamp StartPostTime, @RequestParam Timestamp EndPostTime, @RequestParam int Salary) {
 
-        boolean is_success = taskDB.setTask(TaskID, taskName, Message, postTime, Salary);
+        boolean is_success = taskDB.setTask(TaskID, taskName, Message, StartPostTime, EndPostTime, Salary);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
