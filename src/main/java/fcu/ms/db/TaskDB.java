@@ -23,22 +23,24 @@ public class TaskDB {
 
     }
 
-    public boolean createTask(String TaskName, String Message,Timestamp PostTime , int Salary, String TypeName,
+    public boolean createTask(String TaskName, String Message, Timestamp StartPostTime, Timestamp EndPostTime, int Salary, String TypeName,
                               String TaskAddress, int TaskCity) {
 
         boolean is_success;
         Connection connection = mySqlConnection.getDBConnection();
         String sqlString =
-                "INSERT INTO Task(TaskName, Message, PostTime, Salary, TypeName, TaskAddress, TaskCity) VALUES(?, ?, ?, ?, ?, ?, ?)";
+                "INSERT INTO Task(TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, TaskAddress, TaskCity) " +
+                        "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, TaskName);
             preStmt.setString(2, Message);
-            preStmt.setTimestamp(3, PostTime);
-            preStmt.setInt(4, Salary);
-            preStmt.setString(5,TypeName);
-            preStmt.setString(6,TaskAddress);
-            preStmt.setInt(7,TaskCity);
+            preStmt.setTimestamp(3, StartPostTime);
+            preStmt.setTimestamp(4,EndPostTime);
+            preStmt.setInt(5, Salary);
+            preStmt.setString(6,TypeName);
+            preStmt.setString(7,TaskAddress);
+            preStmt.setInt(8,TaskCity);
             preStmt.executeUpdate();
             connection.close();
             is_success = true;
@@ -62,7 +64,8 @@ public class TaskDB {
                 int id = rs.getInt("TaskID");
                 String TaskName = rs.getString("TaskName");
                 String Message = rs.getString("Message");
-                Timestamp PostTime = rs.getTimestamp("PostTime");
+                Timestamp StartPostTime = rs.getTimestamp("StartPostTime");
+                Timestamp EndPostTime = rs.getTimestamp("EndPostTime");
                 int Salary = rs.getInt("Salary");
                 String TypeName = rs.getString("TypeName");
                 int ReleaseUserID = rs.getInt("ReleaseUserID");
@@ -71,7 +74,7 @@ public class TaskDB {
                 Timestamp ReceiveTime = rs.getTimestamp("ReceiveTime");
                 String TaskAddress = rs.getString("TaskAddress");
                 int TaskCity = rs.getInt("TaskCity");
-                Task task = new Task(id, TaskName, Message, PostTime, Salary, TypeName, TaskAddress, TaskCity);
+                Task task = new Task(id, TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, TaskAddress, TaskCity);
                 tasks.add(task);
             }
             connection.close();
@@ -116,7 +119,8 @@ public class TaskDB {
                 int id = rs.getInt("TaskID");
                 String TaskName = rs.getString("TaskName");
                 String Message = rs.getString("Message");
-                Timestamp PostTime = rs.getTimestamp("PostTime");
+                Timestamp StartPostTime = rs.getTimestamp("StartPostTime");
+                Timestamp EndPostTime = rs.getTimestamp("EndPostTime");
                 int Salary = rs.getInt("Salary");
                 String TypeName = rs.getString("TypeName");
                 int ReleaseUserID = rs.getInt("ReleaseUserID");
@@ -125,7 +129,7 @@ public class TaskDB {
                 Timestamp ReceiveTime = rs.getTimestamp("ReceiveTime");
                 String TaskAddress = rs.getString("TaskAddress");
                 int TaskCity = rs.getInt("TaskCity");
-                task = new Task(id, TaskName, Message, PostTime, Salary, TypeName, TaskAddress, TaskCity);
+                task = new Task(id, TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, TaskAddress, TaskCity);
             }
             connection.close();
 
@@ -137,17 +141,18 @@ public class TaskDB {
     }
 
 
-    public boolean setTask(int TaskID, String TaskName, String Message, Timestamp PostTime, int Salary){
+    public boolean setTask(int TaskID, String TaskName, String Message, Timestamp StartPostTime, Timestamp EndPostTime,int Salary){
         boolean is_success;
         Connection connection = mySqlConnection.getDBConnection();
-        String sqlString =  "UPDATE Task SET TaskName = ?, Message = ?, PostTime = ?, Salary = ? WHERE TaskID = ?";
+        String sqlString =  "UPDATE Task SET TaskName = ?, Message = ?, StartPostTime = ?, EndPostTime = ?, Salary = ? WHERE TaskID = ?";
         try {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, TaskName);
             preStmt.setString(2, Message);
-            preStmt.setTimestamp(3, PostTime);
-            preStmt.setInt(4, Salary);
-            preStmt.setInt(5, TaskID);
+            preStmt.setTimestamp(3, StartPostTime);
+            preStmt.setTimestamp(4,EndPostTime);
+            preStmt.setInt(5, Salary);
+            preStmt.setInt(6, TaskID);
             preStmt.executeUpdate();
             connection.close();
             is_success = true;
