@@ -10,10 +10,11 @@ public class MySqlConnection {
         Connection con = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            Properties props = get_db_properties("/jdbc.properties");
+            Properties dbUrl = get_db_properties("/jdbc-url.properties");
+            Properties dbSecret = get_db_properties("/jdbc.properties");
 
-            con = DriverManager.getConnection(props.getProperty("db.url") + "?useSSL=false",
-                    props.getProperty("db.user"), props.getProperty("db.password") );
+            con = DriverManager.getConnection(dbUrl.getProperty("db.url") + "?useSSL=false",
+                    dbSecret.getProperty("db.user"), dbSecret.getProperty("db.password") );
 
         } catch(Exception ex){
             System.out.println("Error: "+ex);
