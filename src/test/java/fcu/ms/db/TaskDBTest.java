@@ -1,18 +1,24 @@
 package fcu.ms.db;
 
 import fcu.ms.data.Task;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TaskDBTest {
 
-    TaskDB taskDB = TaskDB.getInstance();
-    String taskname = "unitTest_taskName";
-    @Test
+    static final TaskDB taskDB = TaskDB.getInstance();
+    static final String taskname = "unitTest_taskName";
+
+    @BeforeAll
     public void createTask() {
         assertTrue( taskDB.createTask(taskname, "testing-message",
                 new Timestamp(new Date().getTime()), new Timestamp(new Date().getTime()),
@@ -56,7 +62,7 @@ public class TaskDBTest {
     }
 
 
-    @Test
+    @AfterAll
     void deleteTask() {
         int id = taskDB.getTaskIdByName(taskname);
         assertTrue(taskDB.deleteTask(id));
