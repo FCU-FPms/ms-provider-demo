@@ -51,14 +51,13 @@ public class TaskDBTest {
     @Test
     public void setTask(){
         int id = taskDB.getTaskIdByName(taskname);
-        assertTrue(taskDB.setTask(id,"Setting_test","Setting_Message_Test", new Timestamp(new Date().getTime()),
-                new Timestamp(new Date().getTime()),850));
+        Timestamp currentTime = new Timestamp (new Date().getTime());
+        assertTrue(taskDB.setTask(id,"Setting_test","Setting_Message_Test", currentTime, currentTime,850));
         Task task =taskDB.getTask(id);
         assertEquals("Setting_test", task.getTaskName());
 
         //回復
-        assertTrue(taskDB.setTask(id, taskname,"Setting_Message_Test", new Timestamp(new Date().getTime()),
-                new Timestamp(new Date().getTime()),850));
+        assertTrue(taskDB.setTask(id, taskname,"Setting_Message_Test", currentTime, currentTime,850));
         task =taskDB.getTask(id);
         assertEquals(taskname, task.getTaskName());
     }
