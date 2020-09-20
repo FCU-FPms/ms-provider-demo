@@ -23,36 +23,37 @@ public class TaskDB {
     }
 
     public boolean createTask(Task task) {
-        String TaskName = task.getTaskName();
-        String Message = task.getMessage();
-        Timestamp StartPostTime = (Timestamp) task.getStartPostTime();
-        Timestamp EndPostTime = (Timestamp) task.getEndPostTime();
-        int Salary = task.getSalary();
-        String TypeName = task.getTypeName();
-        String TaskAddress = task.getTaskAddress();
-        int TaskCity = task.getTaskCity();
-        return createTask(TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, TaskAddress, TaskCity);
+        String taskName = task.getTaskName();
+        String message = task.getMessage();
+        Timestamp startPostTime = (Timestamp) task.getStartPostTime();
+        Timestamp endPostTime = (Timestamp) task.getEndPostTime();
+        int salary = task.getSalary();
+        String typeName = task.getTypeName();
+        String taskAddress = task.getTaskAddress();
+        int taskCity = task.getTaskCity();
+
+        return createTask(taskName, message, startPostTime, endPostTime, salary, typeName, taskAddress, taskCity);
     }
 
-    public boolean createTask(String TaskName, String Message, Timestamp StartPostTime, Timestamp EndPostTime, int Salary, String TypeName,
-                              String TaskAddress, int TaskCity) {
+    public boolean createTask(String taskName, String message, Timestamp startPostTime, Timestamp endPostTime, int salary,
+                              String typeName, String taskAddress, int taskCity) {
         String sqlString =
                 "INSERT INTO Task(TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, TaskAddress, TaskCity) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
         boolean is_success;
         try {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
-            preStmt.setString(1, TaskName);
-            preStmt.setString(2, Message);
-            preStmt.setTimestamp(3, StartPostTime);
-            preStmt.setTimestamp(4,EndPostTime);
-            preStmt.setInt(5, Salary);
-            preStmt.setString(6,TypeName);
-            preStmt.setString(7,TaskAddress);
-            preStmt.setInt(8,TaskCity);
+            preStmt.setString(1, taskName);
+            preStmt.setString(2, message);
+            preStmt.setTimestamp(3, startPostTime);
+            preStmt.setTimestamp(4,endPostTime);
+            preStmt.setInt(5, salary);
+            preStmt.setString(6,typeName);
+            preStmt.setString(7,taskAddress);
+            preStmt.setInt(8,taskCity);
             preStmt.executeUpdate();
             is_success = true;
         } catch (Exception ex) {
-            System.out.println("Error: "+ex);
+            System.out.println("Error: " + ex);
             is_success = false;
         }
         return is_success;
@@ -67,20 +68,7 @@ public class TaskDB {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             ResultSet rs = preStmt.executeQuery();
             while (rs.next()) {
-                int id = rs.getInt("TaskID");
-                String TaskName = rs.getString("TaskName");
-                String Message = rs.getString("Message");
-                Timestamp StartPostTime = rs.getTimestamp("StartPostTime");
-                Timestamp EndPostTime = rs.getTimestamp("EndPostTime");
-                int Salary = rs.getInt("Salary");
-                String TypeName = rs.getString("TypeName");
-                int ReleaseUserID = rs.getInt("ReleaseUserID");
-                Timestamp ReleaseTime = rs.getTimestamp("ReleaseTime");
-                int ReceiveUserID = rs.getInt("ReceiveUserID");
-                Timestamp ReceiveTime = rs.getTimestamp("ReceiveTime");
-                String TaskAddress = rs.getString("TaskAddress");
-                int TaskCity = rs.getInt("TaskCity");
-                Task task = new Task(id, TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, TaskAddress, TaskCity);
+                Task task = parseTaskFromDbColumn(rs);
                 tasks.add(task);
             }
 
@@ -103,7 +91,7 @@ public class TaskDB {
             }
 
         } catch (Exception ex) {
-            System.out.println("Error: "+ex);
+            System.out.println("Error: " + ex);
         }
 
         return id;
@@ -118,24 +106,11 @@ public class TaskDB {
             preStmt.setInt(1, taskId);
             ResultSet rs = preStmt.executeQuery();
             while (rs.next()) {
-                int id = rs.getInt("TaskID");
-                String TaskName = rs.getString("TaskName");
-                String Message = rs.getString("Message");
-                Timestamp StartPostTime = rs.getTimestamp("StartPostTime");
-                Timestamp EndPostTime = rs.getTimestamp("EndPostTime");
-                int Salary = rs.getInt("Salary");
-                String TypeName = rs.getString("TypeName");
-                int ReleaseUserID = rs.getInt("ReleaseUserID");
-                Timestamp ReleaseTime = rs.getTimestamp("ReleaseTime");
-                int ReceiveUserID = rs.getInt("ReceiveUserID");
-                Timestamp ReceiveTime = rs.getTimestamp("ReceiveTime");
-                String TaskAddress = rs.getString("TaskAddress");
-                int TaskCity = rs.getInt("TaskCity");
-                task = new Task(id, TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, TaskAddress, TaskCity);
+                task = parseTaskFromDbColumn(rs);
             }
 
         } catch (Exception ex) {
-            System.out.println("Error: "+ex);
+            System.out.println("Error: " + ex);
         }
         return task;
 
@@ -174,9 +149,32 @@ public class TaskDB {
             preStmt.executeUpdate();
             is_success = true;
         } catch (Exception ex) {
-            System.out.println("Error: "+ex);
+            System.out.println("Error: " + ex);
             is_success = false;
         }
         return is_success;
+    }
+    private Task parseTaskFromDbColumn(ResultSet dbResult) {
+        try {
+            int id = dbResult.getInt("TaskID");
+            String TaskName = dbResult.getString("TaskName");
+            String Message = dbResult.getString("Message");
+            Timestamp StartPostTime = dbResult.getTimestamp("StartPostTime");
+            Timestamp EndPostTime = dbResult.getTimestamp("EndPostTime");
+            int Salary = dbResult.getInt("Salary");
+            String TypeName = dbResult.getString("TypeName");
+            int ReleaseUserID = dbResult.getInt("ReleaseUserID");
+            Timestamp ReleaseTime = dbResult.getTimestamp("ReleaseTime");
+            int ReceiveUserID = dbResult.getInt("ReceiveUserID");
+            Timestamp ReceiveTime = dbResult.getTimestamp("ReceiveTime");
+            String TaskAddress = dbResult.getString("TaskAddress");
+            int TaskCity = dbResult.getInt("TaskCity");
+
+            Task task = new Task(id, TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, TaskAddress, TaskCity);
+            return task;
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
+            return null;
+        }
     }
 }

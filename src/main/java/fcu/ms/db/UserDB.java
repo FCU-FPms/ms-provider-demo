@@ -37,7 +37,7 @@ public class UserDB {
             }
 
         } catch (Exception ex) {
-            System.out.println("Error: "+ex);
+            System.out.println("Error: " + ex);
         }
         return users;
     }
@@ -58,7 +58,7 @@ public class UserDB {
             }
 
         } catch (Exception ex) {
-            System.out.println("Error: "+ex);
+            System.out.println("Error: " + ex);
         }
         return user;
 
@@ -80,7 +80,7 @@ public class UserDB {
             }
 
         } catch (Exception ex) {
-            System.out.println("Error: "+ex);
+            System.out.println("Error: " + ex);
         }
         return user;
     }
@@ -97,7 +97,7 @@ public class UserDB {
             preStmt.executeUpdate();
             is_success = true;
         } catch (Exception ex) {
-            System.out.println("Error: "+ex);
+            System.out.println("Error: " + ex);
         }
         return is_success;
     }
@@ -112,7 +112,7 @@ public class UserDB {
             preStmt.executeUpdate();
             is_success = true;
         } catch (Exception ex) {
-            System.out.println("Error: "+ex);
+            System.out.println("Error: " + ex);
         }
         return is_success;
     }
@@ -127,7 +127,7 @@ public class UserDB {
             preStmt.executeUpdate();
             is_success = true;
         } catch (Exception ex) {
-            System.out.println("Error: "+ex);
+            System.out.println("Error: " + ex);
         }
         return is_success;
     }
