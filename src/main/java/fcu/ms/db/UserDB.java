@@ -65,24 +65,26 @@ public class UserDB {
     }
 
     public User getUser(String name) {
-        User user = null;
+
         String sqlString = "select * from userData where userName=?";
         try {
+            User user = null;
+
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, name);
             ResultSet rs = preStmt.executeQuery();
-            while (rs.next()) {
+            while ( rs.next() ) {
                 int id = rs.getInt("userID");
                 String userPhone = rs.getString("userPhone");
                 String userName = rs.getString("userName");
                 String userPassword = rs.getString("userPassword");
                 user = new User(id, userPhone, userName, userPassword);
             }
-
+            return user;
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
+            return null;
         }
-        return user;
     }
 
     public boolean createUser(String name, String userPhone, String userPassword) {

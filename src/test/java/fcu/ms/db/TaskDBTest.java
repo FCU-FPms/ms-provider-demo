@@ -20,9 +20,11 @@ public class TaskDBTest {
 
     @BeforeAll
     public void createTask() {
-        assertTrue( taskDB.createTask(taskname, "testing-message",
-                new Timestamp(new Date().getTime()), new Timestamp(new Date().getTime()),
-                500,"EatTask","testing_Address",1));
+        Timestamp currentTime = new Timestamp (new Date().getTime());
+
+        Task task = new Task(taskname, "testing-message", currentTime, currentTime,
+                500,"EatTask","testing_Address",1);
+        assertTrue( taskDB.createTask(task));
     }
 
 
