@@ -20,7 +20,6 @@ public class UserDBTest {
         assertEquals("0912345678", user.getPhoneNumber());
         assertEquals("testing123", user.getUserName());
         assertEquals("ppp12345678", user.getUserPassword());
-        System.out.println(user.getUserPassword());
     }
 
     @Test
