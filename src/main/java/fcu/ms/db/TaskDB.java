@@ -7,30 +7,38 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
 public class TaskDB {
     private static final TaskDB taskDB = new TaskDB();
-    private static final MySqlConnection mySqlConnection = new MySqlConnection();
+    private static final Connection connection = MySqlConnection.getSingletonConnection();
 
     public static TaskDB getInstance() {
         return taskDB;
     }
 
-    private TaskDB(){
+    private TaskDB() {
 
+    }
+
+    public boolean createTask(Task task) {
+        String TaskName = task.getTaskName();
+        String Message = task.getMessage();
+        Timestamp StartPostTime = (Timestamp) task.getStartPostTime();
+        Timestamp EndPostTime = (Timestamp) task.getEndPostTime();
+        int Salary = task.getSalary();
+        String TypeName = task.getTypeName();
+        String TaskAddress = task.getTaskAddress();
+        int TaskCity = task.getTaskCity();
+        return createTask(TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, TaskAddress, TaskCity);
     }
 
     public boolean createTask(String TaskName, String Message, Timestamp StartPostTime, Timestamp EndPostTime, int Salary, String TypeName,
                               String TaskAddress, int TaskCity) {
-
-        boolean is_success;
-        Connection connection = mySqlConnection.getDBConnection();
         String sqlString =
-                "INSERT INTO Task(TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, TaskAddress, TaskCity) " +
-                        "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+                "INSERT INTO Task(TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, TaskAddress, TaskCity) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        boolean is_success;
         try {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, TaskName);
@@ -42,7 +50,6 @@ public class TaskDB {
             preStmt.setString(7,TaskAddress);
             preStmt.setInt(8,TaskCity);
             preStmt.executeUpdate();
-            connection.close();
             is_success = true;
         } catch (Exception ex) {
             System.out.println("Error: "+ex);
@@ -55,7 +62,6 @@ public class TaskDB {
     public List<Task> getTasks() {
         List<Task> tasks = new ArrayList<Task>();
 
-        Connection connection = mySqlConnection.getDBConnection();
         String sqlString = "select * from Task";
         try {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
@@ -77,7 +83,6 @@ public class TaskDB {
                 Task task = new Task(id, TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, TaskAddress, TaskCity);
                 tasks.add(task);
             }
-            connection.close();
 
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
@@ -87,7 +92,6 @@ public class TaskDB {
 
     public int getTaskIdByName(String taskName) {
         int id = -1;
-        Connection connection = mySqlConnection.getDBConnection();
         String sqlString = "SELECT `TaskID` FROM Task where `TaskName` = ?";
         try {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
@@ -97,7 +101,6 @@ public class TaskDB {
             while (rs.next()) {
                 id = rs.getInt("TaskID");
             }
-            connection.close();
 
         } catch (Exception ex) {
             System.out.println("Error: "+ex);
@@ -109,7 +112,6 @@ public class TaskDB {
 
     public Task getTask(int taskId) {
         Task task = null;
-        Connection connection = mySqlConnection.getDBConnection();
         String sqlString = "SELECT * FROM Task where taskID=?";
         try {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
@@ -131,7 +133,6 @@ public class TaskDB {
                 int TaskCity = rs.getInt("TaskCity");
                 task = new Task(id, TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, TaskAddress, TaskCity);
             }
-            connection.close();
 
         } catch (Exception ex) {
             System.out.println("Error: "+ex);
@@ -143,7 +144,6 @@ public class TaskDB {
 
     public boolean setTask(int TaskID, String TaskName, String Message, Timestamp StartPostTime, Timestamp EndPostTime,int Salary){
         boolean is_success;
-        Connection connection = mySqlConnection.getDBConnection();
         String sqlString =  "UPDATE Task SET TaskName = ?, Message = ?, StartPostTime = ?, EndPostTime = ?, Salary = ? WHERE TaskID = ?";
         try {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
@@ -154,7 +154,6 @@ public class TaskDB {
             preStmt.setInt(5, Salary);
             preStmt.setInt(6, TaskID);
             preStmt.executeUpdate();
-            connection.close();
             is_success = true;
 
         }catch (Exception ex){
@@ -168,13 +167,11 @@ public class TaskDB {
     public boolean deleteTask(int taskID) {
 
         boolean is_success;
-        Connection connection = mySqlConnection.getDBConnection();
         String sqlString = "DELETE FROM `Task` WHERE TaskID=?";
         try {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, taskID);
             preStmt.executeUpdate();
-            connection.close();
             is_success = true;
         } catch (Exception ex) {
             System.out.println("Error: "+ex);
