@@ -1,6 +1,7 @@
 package fcu.ms.db;
 
 import fcu.ms.data.Task;
+import fcu.ms.dbUtil.MySqlBoneCP;
 import fcu.ms.dbUtil.MySqlConnection;
 
 import java.sql.Connection;
@@ -12,7 +13,6 @@ import java.util.List;
 
 public class TaskDB {
     private static final TaskDB taskDB = new TaskDB();
-    private static final Connection connection = MySqlConnection.getSingletonConnection();
 
     public static TaskDB getInstance() {
         return taskDB;
@@ -41,6 +41,7 @@ public class TaskDB {
                 "INSERT INTO Task(TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, TaskAddress, TaskCity) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
         boolean is_success;
         try {
+            Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, taskName);
             preStmt.setString(2, message);
@@ -52,6 +53,8 @@ public class TaskDB {
             preStmt.setInt(8,taskCity);
             preStmt.executeUpdate();
             preStmt.close();
+            connection.close();
+
             is_success = true;
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
@@ -66,13 +69,16 @@ public class TaskDB {
 
         String sqlString = "select * from Task";
         try {
+            Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             ResultSet rs = preStmt.executeQuery();
             while (rs.next()) {
                 Task task = parseTaskFromDbColumn(rs);
                 tasks.add(task);
             }
+            rs.close();
             preStmt.close();
+            connection.close();
 
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
@@ -84,6 +90,7 @@ public class TaskDB {
         int id = -1;
         String sqlString = "SELECT `TaskID` FROM Task where `TaskName` = ?";
         try {
+            Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, taskName);
             ResultSet rs = preStmt.executeQuery();
@@ -91,7 +98,9 @@ public class TaskDB {
             while (rs.next()) {
                 id = rs.getInt("TaskID");
             }
+            rs.close();
             preStmt.close();
+            connection.close();
 
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
@@ -105,13 +114,16 @@ public class TaskDB {
         Task task = null;
         String sqlString = "SELECT * FROM Task where taskID=?";
         try {
+            Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, taskId);
             ResultSet rs = preStmt.executeQuery();
             while (rs.next()) {
                 task = parseTaskFromDbColumn(rs);
             }
+            rs.close();
             preStmt.close();
+            connection.close();
 
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
@@ -125,6 +137,7 @@ public class TaskDB {
         boolean is_success;
         String sqlString =  "UPDATE Task SET TaskName = ?, Message = ?, StartPostTime = ?, EndPostTime = ?, Salary = ? WHERE TaskID = ?";
         try {
+            Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, TaskName);
             preStmt.setString(2, Message);
@@ -134,6 +147,7 @@ public class TaskDB {
             preStmt.setInt(6, TaskID);
             preStmt.executeUpdate();
             preStmt.close();
+            connection.close();
             is_success = true;
 
         }catch (Exception ex){
@@ -149,10 +163,12 @@ public class TaskDB {
         boolean is_success;
         String sqlString = "DELETE FROM `Task` WHERE TaskID=?";
         try {
+            Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, taskID);
             preStmt.executeUpdate();
             preStmt.close();
+            connection.close();
             is_success = true;
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
