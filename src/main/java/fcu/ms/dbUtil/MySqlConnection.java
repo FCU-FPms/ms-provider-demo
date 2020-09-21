@@ -8,25 +8,13 @@ import java.util.Properties;
 
 public class MySqlConnection {
     private static final MySqlConnection mySqlConnection = new MySqlConnection();
-    private static Connection connection = getDBConnection();
+    private static Connection connection;
 
     public static Connection getSingletonConnection() {
-        if ( connection != null ) {
-            return connection;
-        } else {
-            connection = getDBConnection();
-            return connection;
-        }
-
+        return mySqlConnection.connection;
     }
 
     private MySqlConnection() {
-
-    }
-
-
-
-    private static Connection getDBConnection() {
         Connection con = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -39,7 +27,7 @@ public class MySqlConnection {
         } catch(Exception ex){
             System.out.println("Error: "+ex);
         }
-        return con;
+        connection = con;
     }
 
     private static Properties get_db_properties(String file_path) {
