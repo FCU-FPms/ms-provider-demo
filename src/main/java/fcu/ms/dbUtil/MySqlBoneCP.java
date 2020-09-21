@@ -12,7 +12,7 @@ import com.jolbox.bonecp.BoneCPConfig;
 
 public class MySqlBoneCP {
     private static MySqlBoneCP instance = new MySqlBoneCP();
-    private static BoneCP connectionPool;
+    private BoneCP connectionPool;
 
     private MySqlBoneCP() {
         try {
