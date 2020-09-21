@@ -51,6 +51,7 @@ public class TaskDB {
             preStmt.setString(7,taskAddress);
             preStmt.setInt(8,taskCity);
             preStmt.executeUpdate();
+            preStmt.close();
             is_success = true;
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
@@ -71,6 +72,7 @@ public class TaskDB {
                 Task task = parseTaskFromDbColumn(rs);
                 tasks.add(task);
             }
+            preStmt.close();
 
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
@@ -89,6 +91,7 @@ public class TaskDB {
             while (rs.next()) {
                 id = rs.getInt("TaskID");
             }
+            preStmt.close();
 
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
@@ -108,6 +111,7 @@ public class TaskDB {
             while (rs.next()) {
                 task = parseTaskFromDbColumn(rs);
             }
+            preStmt.close();
 
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
@@ -129,6 +133,7 @@ public class TaskDB {
             preStmt.setInt(5, Salary);
             preStmt.setInt(6, TaskID);
             preStmt.executeUpdate();
+            preStmt.close();
             is_success = true;
 
         }catch (Exception ex){
@@ -147,6 +152,7 @@ public class TaskDB {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, taskID);
             preStmt.executeUpdate();
+            preStmt.close();
             is_success = true;
         } catch (Exception ex) {
             System.out.println("Error: " + ex);

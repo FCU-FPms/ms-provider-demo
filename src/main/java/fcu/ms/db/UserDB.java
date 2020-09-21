@@ -27,6 +27,7 @@ public class UserDB {
         try {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             ResultSet rs = preStmt.executeQuery();
+            preStmt.close();
             while (rs.next()) {
                 int id = rs.getInt("userID");
                 String userPhone = rs.getString("userPhone");
@@ -49,6 +50,7 @@ public class UserDB {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, userId);
             ResultSet rs = preStmt.executeQuery();
+            preStmt.close();
             while (rs.next()) {
                 int id = rs.getInt("userID");
                 String userPhone = rs.getString("userPhone");
@@ -80,6 +82,7 @@ public class UserDB {
                 String userPassword = rs.getString("userPassword");
                 user = new User(id, userPhone, userName, userPassword);
             }
+            preStmt.close();
             return user;
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
@@ -97,6 +100,7 @@ public class UserDB {
             preStmt.setString(2, name);
             preStmt.setString(3, userPassword);
             preStmt.executeUpdate();
+            preStmt.close();
             is_success = true;
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
@@ -112,6 +116,7 @@ public class UserDB {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, name);
             preStmt.executeUpdate();
+            preStmt.close();
             is_success = true;
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
@@ -127,6 +132,7 @@ public class UserDB {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, userId);
             preStmt.executeUpdate();
+            preStmt.close();
             is_success = true;
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
