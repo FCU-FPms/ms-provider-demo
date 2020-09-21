@@ -41,7 +41,7 @@ public class MySqlBoneCP {
     private static Properties get_db_properties(String file_path) {
         Properties props = new Properties();
         try {
-            InputStream in = MySqlConnection.class.getResourceAsStream(file_path);
+            InputStream in = MySqlBoneCP.class.getResourceAsStream(file_path);
             props.load(in);
             return props;
         } catch (Exception ex) {

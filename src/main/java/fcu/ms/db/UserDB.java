@@ -5,7 +5,6 @@ import java.util.List;
 
 import fcu.ms.data.User;
 import fcu.ms.dbUtil.MySqlBoneCP;
-import fcu.ms.dbUtil.MySqlConnection;
 
 public class UserDB {
 

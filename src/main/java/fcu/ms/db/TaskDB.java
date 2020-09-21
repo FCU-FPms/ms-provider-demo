@@ -2,7 +2,6 @@ package fcu.ms.db;
 
 import fcu.ms.data.Task;
 import fcu.ms.dbUtil.MySqlBoneCP;
-import fcu.ms.dbUtil.MySqlConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
