@@ -26,6 +26,9 @@ public class MySqlBoneCP {
             config.setUsername(dbSecret.getProperty("db.user"));
             config.setPassword(dbSecret.getProperty("db.password"));
 
+            config.setMinConnectionsPerPartition(1);
+            config.setMaxConnectionsPerPartition(10);
+
             connectionPool = new BoneCP(config);
 
         } catch (Exception e) {
