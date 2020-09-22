@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fcu.ms.data.User;
-import fcu.ms.dbUtil.MySqlConnection;
+import fcu.ms.dbUtil.MySqlBoneCP;
 
 public class UserDB {
 
     private static final UserDB userDB = new UserDB();
-    private static final Connection connection = MySqlConnection.getSingletonConnection();
 
     public static UserDB getInstance() {
         return userDB;
@@ -25,8 +24,10 @@ public class UserDB {
 
         String sqlString = "select * from userData";
         try {
+            Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             ResultSet rs = preStmt.executeQuery();
+
             while (rs.next()) {
                 int id = rs.getInt("userID");
                 String userPhone = rs.getString("userPhone");
@@ -35,6 +36,10 @@ public class UserDB {
                 User user = new User(id, userPhone, userName, userPassword);
                 users.add(user);
             }
+            rs.close();
+            preStmt.close();
+            connection.close();
+
 
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
@@ -46,9 +51,11 @@ public class UserDB {
         User user = null;
         String sqlString = "select * from userData where userID=?";
         try {
+            Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, userId);
             ResultSet rs = preStmt.executeQuery();
+
             while (rs.next()) {
                 int id = rs.getInt("userID");
                 String userPhone = rs.getString("userPhone");
@@ -56,6 +63,9 @@ public class UserDB {
                 String userPassword = rs.getString("userPassword");
                 user = new User(id, userPhone, userName, userPassword);
             }
+            rs.close();
+            preStmt.close();
+            connection.close();
 
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
@@ -69,7 +79,7 @@ public class UserDB {
         String sqlString = "select * from userData where userName=?";
         try {
             User user = null;
-
+            Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, name);
             ResultSet rs = preStmt.executeQuery();
@@ -80,6 +90,10 @@ public class UserDB {
                 String userPassword = rs.getString("userPassword");
                 user = new User(id, userPhone, userName, userPassword);
             }
+            rs.close();
+            preStmt.close();
+            connection.close();
+
             return user;
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
@@ -92,11 +106,14 @@ public class UserDB {
         boolean is_success = false;
         String sqlString = "INSERT INTO userData(userPhone,userName,userPassword) VALUES(?, ?, ?)";
         try {
+            Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, userPhone);
             preStmt.setString(2, name);
             preStmt.setString(3, userPassword);
             preStmt.executeUpdate();
+            preStmt.close();
+            connection.close();
             is_success = true;
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
@@ -109,9 +126,12 @@ public class UserDB {
         boolean is_success = false;
         String sqlString = "DELETE FROM `userData` WHERE userName=?";
         try {
+            Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, name);
             preStmt.executeUpdate();
+            preStmt.close();
+            connection.close();
             is_success = true;
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
@@ -124,9 +144,12 @@ public class UserDB {
         boolean is_success = false;
         String sqlString = "DELETE FROM `userData` WHERE userId=?";
         try {
+            Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, userId);
             preStmt.executeUpdate();
+            preStmt.close();
+            connection.close();
             is_success = true;
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
