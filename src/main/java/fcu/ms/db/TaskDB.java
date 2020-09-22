@@ -132,9 +132,11 @@ public class TaskDB {
     }
 
 
-    public boolean setTask(int TaskID, String TaskName, String Message, Timestamp StartPostTime, Timestamp EndPostTime,int Salary){
+    public boolean setTask(int TaskID, String TaskName, String Message, Timestamp StartPostTime, Timestamp EndPostTime
+                            , int Salary, String TypeName, String TaskAddress, int TaskCity){
         boolean is_success;
-        String sqlString =  "UPDATE Task SET TaskName = ?, Message = ?, StartPostTime = ?, EndPostTime = ?, Salary = ? WHERE TaskID = ?";
+        String sqlString =  "UPDATE Task SET TaskName = ?, Message = ?, StartPostTime = ?, EndPostTime = ?, Salary = ?, " +
+                "TypeName = ?,TaskAddress = ?,TaskCity = ? WHERE TaskID = ?";
         try {
             Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
@@ -143,7 +145,10 @@ public class TaskDB {
             preStmt.setTimestamp(3, StartPostTime);
             preStmt.setTimestamp(4,EndPostTime);
             preStmt.setInt(5, Salary);
-            preStmt.setInt(6, TaskID);
+            preStmt.setString(6,TypeName);
+            preStmt.setString(7,TaskAddress);
+            preStmt.setInt(8,TaskCity);
+            preStmt.setInt(9, TaskID);
             preStmt.executeUpdate();
             preStmt.close();
             connection.close();

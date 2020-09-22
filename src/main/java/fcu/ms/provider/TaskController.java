@@ -11,6 +11,7 @@ import fcu.ms.db.TaskDB;
 
 import javax.validation.constraints.Null;
 import javax.websocket.server.PathParam;
+import java.lang.reflect.Type;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -82,10 +83,12 @@ public class TaskController {
 
 
     @PatchMapping (value = "")
-    public ResponseEntity<String> setTask(@RequestParam int TaskID,@RequestParam String taskName,
-        @RequestParam String Message,@RequestParam Timestamp StartPostTime, @RequestParam Timestamp EndPostTime, @RequestParam int Salary) {
+    public ResponseEntity<String> setTask(@RequestParam int TaskID, @RequestParam String TaskName, @RequestParam String Message,
+                                          @RequestParam Timestamp StartPostTime,@RequestParam Timestamp EndPostTime,
+                                          @RequestParam int Salary, @RequestParam String TypeName,
+                                          @RequestParam String TaskAddress, @RequestParam int TaskCity) {
 
-        boolean is_success = taskDB.setTask(TaskID, taskName, Message, StartPostTime, EndPostTime, Salary);
+        boolean is_success = taskDB.setTask(TaskID, TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, TaskAddress, TaskCity);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
