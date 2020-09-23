@@ -16,7 +16,7 @@ import java.util.List;
 public class TaskDBTest {
 
     static final TaskDB taskDB = TaskDB.getInstance();
-    static final String taskname = "unitTest_taskName";
+    static final String taskname = "中文";
 
     @BeforeAll
     public void createTask() {

@@ -22,7 +22,7 @@ public class MySqlBoneCP {
             Properties dbSecret = get_db_properties("/jdbc.properties");
 
             BoneCPConfig config = new BoneCPConfig();
-            config.setJdbcUrl(dbUrl.getProperty("db.url") + "?autoReconnect=true&useSSL=false");
+            config.setJdbcUrl(dbUrl.getProperty("db.url") + "?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf-8");
             config.setUsername(dbSecret.getProperty("db.user"));
             config.setPassword(dbSecret.getProperty("db.password"));
 
