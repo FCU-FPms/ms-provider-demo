@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fcu.ms.data.Message;
-import fcu.ms.dbUtil.MySqlConnection;
+import fcu.ms.dbUtil.MySqlBoneCP;
+
 
 public class MessageDB {
     private static final MessageDB messageDB = new MessageDB();
-    private static final MySqlConnection mySqlConnection = new MySqlConnection();
 
     public static MessageDB getInstance() {
         return messageDB;
@@ -21,9 +21,9 @@ public class MessageDB {
     public List<Message> getMessage() {
         List<Message> messages = new ArrayList<Message>();
 
-        Connection connection = mySqlConnection.getDBConnection();
         String sqlString = "select * from Message";
         try {
+            Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             ResultSet rs = preStmt.executeQuery();
             while (rs.next()) {
@@ -47,9 +47,10 @@ public class MessageDB {
     public List<Message> getMessageByID(int userId, int receiverId, int taskId) {
         List<Message> messages = new ArrayList<Message>();
 
-        Connection connection = mySqlConnection.getDBConnection();
+
         String sqlString = "SELECT * FROM Message where `userId` = ? AND `receiverId`=  ? AND `taskId`=  ?";
         try {
+            Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, userId);
             preStmt.setInt(2, receiverId);
@@ -75,9 +76,10 @@ public class MessageDB {
 
     public Message getMessage(int messageID) {
         Message message = null;
-        Connection connection = mySqlConnection.getDBConnection();
+
         String sqlString = "select * from Message where messageId=?";
         try {
+            Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, messageID);
             ResultSet rs = preStmt.executeQuery();
@@ -102,9 +104,10 @@ public class MessageDB {
     public boolean createMessage(String content, int userID, int receiverID, Timestamp postTime, int taskID) {
 
         boolean is_success = false;
-        Connection connection = mySqlConnection.getDBConnection();
+
         String sqlString = "INSERT INTO Message(content,userID,receiverID,postTime,taskID) VALUES( ?, ?, ?, ?, ?)";
         try {
+            Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, content);
             preStmt.setInt(2, userID);
@@ -123,9 +126,10 @@ public class MessageDB {
     public boolean deleteMessage(int messageID) {
 
         boolean is_success = false;
-        Connection connection = mySqlConnection.getDBConnection();
+
         String sqlString = "DELETE FROM `Message` WHERE messageID=?";
         try {
+            Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, messageID);
             preStmt.executeUpdate();
@@ -139,9 +143,10 @@ public class MessageDB {
 
     public Message getMessageByID2(int userID, int receiverID) {
         Message message = null;
-        Connection connection = mySqlConnection.getDBConnection();
+
         String sqlString = "SELECT `messageID` FROM Message where `userId` = ? AND `receiverId`=  ?";
         try {
+            Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, userID);
             preStmt.setInt(2, receiverID);
