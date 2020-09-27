@@ -1,5 +1,9 @@
 package fcu.ms.provider;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatchException;
 import fcu.ms.data.Task;
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpHeaders;
@@ -16,11 +20,13 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.github.fge.jsonpatch.JsonPatch;
 
 @RestController
 @RequestMapping(value ="/tasks")
 public class TaskController {
     TaskDB taskDB = TaskDB.getInstance();
+    ObjectMapper objectMapper = new ObjectMapper();
 
     @PostMapping(value = "")
     public ResponseEntity<String> createTask(@RequestParam String TaskName, @RequestParam String Message,
@@ -97,6 +103,33 @@ public class TaskController {
         }
     }
 
+
+    @PatchMapping (path = "/{taskId}", consumes = "application/json-patch+json")
+    public ResponseEntity<String> updateTask(@PathVariable int taskId, @RequestBody JsonPatch patch) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        try {
+            Task task = taskDB.getTask(taskId);
+            System.out.println("franky-test task");
+            System.out.println(task.getTaskID());
+            System.out.println(task.getMessage());
+
+            Task taskPatched = applyPatchToTask(patch, task);
+            System.out.println("franky-test taskPatched");
+            System.out.println(taskPatched.getTaskID());
+            System.out.println(taskPatched.getMessage()); // 查看新的task的值
+            return new ResponseEntity<String>(headers, HttpStatus.OK);
+
+        } catch (JsonPatchException e) {
+            e.printStackTrace();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity<String>("Error to SET Task in DB", headers, HttpStatus.BAD_REQUEST);
+    }
+
     @DeleteMapping(value = "/{TaskID}")
     public ResponseEntity<String> deleteTaskByID(@PathVariable int TaskID){
         boolean is_success = taskDB.deleteTask(TaskID);
@@ -127,6 +160,12 @@ public class TaskController {
         entity.put("TaskAddress",task.getTaskAddress());
         entity.put("TaskCity",task.getTaskCity());
         return entity;
+    }
+
+    private Task applyPatchToTask(
+            JsonPatch patch, Task targetTask) throws JsonPatchException, JsonProcessingException {
+        JsonNode patched = patch.apply(objectMapper.convertValue(targetTask, JsonNode.class)); //這可以自動轉換task
+        return objectMapper.treeToValue(patched, Task.class);
     }
 
 }

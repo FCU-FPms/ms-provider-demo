@@ -16,6 +16,10 @@ public class Task {
     private String taskAddress = "";
     private int taskCity = -1;
 
+    public Task(){
+        // 需要這個做反序列化, 跟 import com.fasterxml.jackson.databind.ObjectMapper; 的 convertValue 有關
+    }
+
     public Task(String taskName, String message, Date startPostTime, Date endPostTime, int salary,
                 String typeName, String taskAddress, int taskCity) {
         this.taskID = taskID;
