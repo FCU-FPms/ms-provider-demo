@@ -44,4 +44,11 @@ public class MessageTest {
         System.out.println(message);
     }
 
+    @Test
+    void getMessageByTaskID_TEST() {  /* 根據 taskID 來抓 message */
+        MessageDB messageDB = MessageDB.getInstance();
+        List<Message> message = messageDB.getMessageByTaskId(99);
+        System.out.println(message);
+    }
+
 }

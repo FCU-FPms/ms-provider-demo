@@ -81,4 +81,31 @@ public class MessageController {
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/conversation/{TaskID}")
+    public ResponseEntity<Object> getMessageByTaskID(@PathVariable int TaskID) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        List<Message> messages = messageDB.getMessageByTaskId(TaskID);
+
+        Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
+
+
+        for (Message message : messages) {
+            JSONObject entity = new JSONObject();
+
+            int messageID = message.getId();
+
+            entity.put("Content", message.getContent());
+            entity.put("postTime", message.getPostTime());
+            entity.put("userID", message.getUserID());
+            entity.put("receiverId", message.getReceiverID());
+            entity.put("taskID", message.getTaskID());
+
+            entities.put(String.valueOf(messageID), entity);
+        }
+
+        return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
+    }
+
 }

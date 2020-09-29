@@ -141,31 +141,32 @@ public class MessageDB {
         return is_success;
     }
 
-    public Message getMessageByID2(int userID, int receiverID) {
-        Message message = null;
+    public List<Message> getMessageByTaskId(int taskId) {
+        List<Message> messages = new ArrayList<Message>();
 
-        String sqlString = "SELECT `messageID` FROM Message where `userId` = ? AND `receiverId`=  ?";
+
+        String sqlString = "SELECT * FROM Message where `taskId`=  ?";
         try {
             Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
-            preStmt.setInt(1, userID);
-            preStmt.setInt(2, receiverID);
+            preStmt.setInt(1, taskId);
             ResultSet rs = preStmt.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("messageID");
                 String content = rs.getString("Content");
-                int userId = rs.getInt("userID");
-                int receiverId = rs.getInt("receiverID");
+                int userID = rs.getInt("userID");
+                int receiverID = rs.getInt("receiverID");
                 Timestamp postTime = rs.getTimestamp("postTime");
                 int taskID = rs.getInt("taskID");
-                message = new Message(id, content, userID, receiverID, postTime, taskID);
+                Message message = new Message(id, content, userID, receiverID, postTime, taskID);
+                messages.add(message);
             }
             connection.close();
 
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
         }
-        return message;
+        return messages;
     }
 
 }
