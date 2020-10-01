@@ -145,7 +145,7 @@ public class MessageDB {
         List<Message> messages = new ArrayList<Message>();
 
 
-        String sqlString = "SELECT * FROM Message where `taskId`=  ?";
+        String sqlString = "SELECT * FROM Message WHERE `taskId`=  ? ORDER BY postTime ASC" ;
         try {
             Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);

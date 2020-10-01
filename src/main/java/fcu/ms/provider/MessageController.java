@@ -25,9 +25,9 @@ public class MessageController {
 
 
     @PostMapping(value = "")
-    public ResponseEntity<String> createMessage(@RequestParam String Content, @RequestParam int UserID,
-                                                @RequestParam int ReceiverID, @RequestParam Timestamp postTime, @RequestParam int taskID) {
-        boolean is_success = messageDB.createMessage(Content, UserID, ReceiverID, postTime, taskID);
+    public ResponseEntity<String> createMessage(@RequestParam String content, @RequestParam int userID,
+                                                @RequestParam int receiverID, @RequestParam Timestamp postTime, @RequestParam int taskID) {
+        boolean is_success = messageDB.createMessage(content, userID, receiverID, postTime, taskID);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
@@ -55,11 +55,11 @@ public class MessageController {
     }
 
     @GetMapping(value = "/conversation/{UserID}/{ReceiverID}/{TaskID}")
-    public ResponseEntity<Object> getMessageByID(@PathVariable int UserID, @PathVariable int ReceiverID, @PathVariable int TaskID) {
+    public ResponseEntity<Object> getMessageByID(@PathVariable int userID, @PathVariable int receiverID, @PathVariable int taskID) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
 
-        List<Message> messages = messageDB.getMessageByID(UserID, ReceiverID, TaskID);
+        List<Message> messages = messageDB.getMessageByID(userID, receiverID, taskID);
 
         Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
 
@@ -69,7 +69,7 @@ public class MessageController {
 
             int messageID = message.getId();
 
-            entity.put("Content", message.getContent());
+            entity.put("content", message.getContent());
             entity.put("postTime", message.getPostTime());
             entity.put("userID", message.getUserID());
             entity.put("receiverId", message.getReceiverID());
@@ -82,11 +82,11 @@ public class MessageController {
     }
 
     @GetMapping(value = "/conversation/{TaskID}")
-    public ResponseEntity<Object> getMessageByTaskID(@PathVariable int TaskID) {
+    public ResponseEntity<Object> getMessageByTaskID(@PathVariable int taskID) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
 
-        List<Message> messages = messageDB.getMessageByTaskId(TaskID);
+        List<Message> messages = messageDB.getMessageByTaskId(taskID);
 
         Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
 
@@ -96,7 +96,7 @@ public class MessageController {
 
             int messageID = message.getId();
 
-            entity.put("Content", message.getContent());
+            entity.put("content", message.getContent());
             entity.put("postTime", message.getPostTime());
             entity.put("userID", message.getUserID());
             entity.put("receiverId", message.getReceiverID());
