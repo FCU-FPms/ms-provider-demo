@@ -1,5 +1,10 @@
 package fcu.ms.provider;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatchException;
+
 import fcu.ms.data.Task;
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpHeaders;
@@ -16,11 +21,13 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.github.fge.jsonpatch.JsonPatch;
 
 @RestController
 @RequestMapping(value ="/tasks")
 public class TaskController {
     TaskDB taskDB = TaskDB.getInstance();
+    ObjectMapper objectMapper = new ObjectMapper();
 
     @PostMapping(value = "")
     public ResponseEntity<String> createTask(@RequestParam String TaskName, @RequestParam String Message,
@@ -80,15 +87,19 @@ public class TaskController {
         }
     }
 
-
-    @PatchMapping (value = "")
-    public ResponseEntity<String> setTask(@RequestParam int TaskID,@RequestParam String taskName,
-        @RequestParam String Message,@RequestParam Timestamp StartPostTime, @RequestParam Timestamp EndPostTime, @RequestParam int Salary) {
-
-        boolean is_success = taskDB.setTask(TaskID, taskName, Message, StartPostTime, EndPostTime, Salary);
-
+    @PatchMapping (path = "/{taskId}", consumes = "application/json-patch+json")
+    public ResponseEntity<String> updateTask(@PathVariable int taskId, @RequestBody JsonPatch patch) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
+        boolean is_success = false;
+
+        try {
+            Task task = taskDB.getTask(taskId);
+            Task taskPatched = applyPatchToTask(patch, task);
+            is_success = taskDB.setTask(taskPatched);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if(is_success) {
             return new ResponseEntity<String>(headers, HttpStatus.OK);
@@ -127,6 +138,11 @@ public class TaskController {
         entity.put("TaskAddress",task.getTaskAddress());
         entity.put("TaskCity",task.getTaskCity());
         return entity;
+    }
+
+    private Task applyPatchToTask(JsonPatch patch, Task targetTask) throws JsonPatchException, JsonProcessingException {
+        JsonNode patched = patch.apply(objectMapper.convertValue(targetTask, JsonNode.class)); //這可以自動轉換task
+        return objectMapper.treeToValue(patched, Task.class);
     }
 
 }

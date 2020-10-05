@@ -1,6 +1,7 @@
 package fcu.ms.db;
 
 import fcu.ms.data.Task;
+import fcu.ms.data.User;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -18,12 +19,12 @@ public class TaskDBTest {
     static final TaskDB taskDB = TaskDB.getInstance();
     static final String taskname = "中文";
 
-    @BeforeAll
+    @Test
     public void createTask() {
         Timestamp currentTime = new Timestamp (new Date().getTime());
 
         Task task = new Task(taskname, "testing-message", currentTime, currentTime,
-                500,"EatTask","testing_Address",1);
+                500,"EatTask", 20, currentTime, 20, currentTime, "testing_Address",1);
         assertTrue( taskDB.createTask(task));
     }
 
@@ -52,18 +53,15 @@ public class TaskDBTest {
     public void setTask(){
         int id = taskDB.getTaskIdByName(taskname);
         Timestamp currentTime = new Timestamp (new Date().getTime());
-        assertTrue(taskDB.setTask(id,"Setting_test","Setting_Message_Test", currentTime, currentTime,850));
-        Task task =taskDB.getTask(id);
-        assertEquals("Setting_test", task.getTaskName());
 
-        //回復
-        assertTrue(taskDB.setTask(id, taskname,"Setting_Message_Test", currentTime, currentTime,850));
-        task =taskDB.getTask(id);
-        assertEquals(taskname, task.getTaskName());
+        Task task = new Task(id, taskname, "changr-message", currentTime, currentTime,
+                600,"ChangeTask", 10, currentTime, 10, currentTime, "change_Address",2);
+
+        assertTrue(taskDB.setTask(task));
     }
 
 
-    @AfterAll
+    @Test
     void deleteTask() {
         int id = taskDB.getTaskIdByName(taskname);
         assertTrue(taskDB.deleteTask(id));

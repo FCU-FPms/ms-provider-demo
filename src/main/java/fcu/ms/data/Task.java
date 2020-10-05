@@ -1,24 +1,63 @@
 package fcu.ms.data;
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class Task {
     private int taskID = -1;
-    private String taskName = "";
-    private String message = "";
-    private Date startPostTime = null;
-    private  Date endPostTime = null;
-    private int salary = 0;
-    private String typeName = "";
+    private String taskName;
+    private String message;
+    private Timestamp startPostTime;
+    private Timestamp endPostTime;
+    private int salary;
+    private String typeName;
     private int releaseUserID = -1;
-    private Date releaseTime = null;
+    private Timestamp releaseTime;
     private int receiveUserID = -1;
-    private Date receiveTime = null;
-    private String taskAddress = "";
-    private int taskCity = -1;
+    private Timestamp receiveTime;
+    private String taskAddress;
+    private int taskCity;
 
-    public Task(String taskName, String message, Date startPostTime, Date endPostTime, int salary,
-                String typeName, String taskAddress, int taskCity) {
+    public Task(){
+        // 需要這個做反序列化, 跟 import com.fasterxml.jackson.databind.ObjectMapper; 的 convertValue 有關
+    }
+
+    public Task(String taskName, String message, Timestamp startPostTime, Timestamp endPostTime, // 新增資料表用的 不用填ID
+                int salary, String typeName, int releaseUserID, Timestamp releaseTime, int receiveUserID,
+                Timestamp receiveTime, String taskAddress, int taskCity) {
+        this.taskName = taskName;
+        this.message = message;
+        this.startPostTime = startPostTime;
+        this.endPostTime = endPostTime;
+        this.salary = salary;
+        this.typeName = typeName;
+        this.releaseUserID = releaseUserID;
+        this.releaseTime = releaseTime;
+        this.receiveUserID = receiveUserID;
+        this.receiveTime = receiveTime;
+        this.taskAddress = taskAddress;
+        this.taskCity = taskCity;
+    }
+
+    public Task(int taskID, String taskName, String message, Timestamp startPostTime, Timestamp endPostTime, // 用來從資料表拿Task
+                int salary, String typeName, int releaseUserID, Timestamp releaseTime, int receiveUserID,
+                Timestamp receiveTime, String taskAddress, int taskCity) {
         this.taskID = taskID;
+        this.taskName = taskName;
+        this.message = message;
+        this.startPostTime = startPostTime;
+        this.endPostTime = endPostTime;
+        this.salary = salary;
+        this.typeName = typeName;
+        this.releaseUserID = releaseUserID;
+        this.releaseTime = releaseTime;
+        this.receiveUserID = receiveUserID;
+        this.receiveTime = receiveTime;
+        this.taskAddress = taskAddress;
+        this.taskCity = taskCity;
+    }
+
+    public Task(String taskName, String message, Timestamp startPostTime, Timestamp endPostTime, int salary,
+                String typeName, String taskAddress, int taskCity) {
         this.taskName = taskName;
         this.message = message;
         this.startPostTime = startPostTime;
@@ -30,7 +69,7 @@ public class Task {
     }
 
 
-    public Task(int taskID,String taskName, String message, Date startPostTime, Date endPostTime, int salary,
+    public Task(int taskID, String taskName, String message, Timestamp startPostTime, Timestamp endPostTime, int salary,
                 String typeName, String taskAddress, int taskCity) {
         this.taskID = taskID;
         this.taskName = taskName;
@@ -83,15 +122,15 @@ public class Task {
         this.message = message;
     }
 
-    public Date getStartPostTime() { return startPostTime; }
+    public Timestamp getStartPostTime() { return startPostTime; }
 
-    public void setStartPostTime(Date startPostTime) { this.startPostTime = startPostTime; }
+    public void setStartPostTime(Timestamp startPostTime) { this.startPostTime = startPostTime; }
 
-    public Date getEndPostTime() {
+    public Timestamp getEndPostTime() {
         return endPostTime;
     }
 
-    public void setEndPostTime(Date endPostTime) {
+    public void setEndPostTime(Timestamp endPostTime) {
         this.endPostTime = endPostTime;
     }
 
@@ -119,11 +158,11 @@ public class Task {
         this.releaseUserID = releaseUserID;
     }
 
-    public Date getReleaseTime() {
+    public Timestamp getReleaseTime() {
         return releaseTime;
     }
 
-    public void setReleaseTime(Date releaseTime) {
+    public void setReleaseTime(Timestamp releaseTime) {
         this.releaseTime = releaseTime;
     }
 
@@ -135,11 +174,11 @@ public class Task {
         this.receiveUserID = receiveUserID;
     }
 
-    public Date getReceiveTime() {
+    public Timestamp getReceiveTime() {
         return receiveTime;
     }
 
-    public void setReceiveTime(Date receiveTime) {
+    public void setReceiveTime(Timestamp receiveTime) {
         this.receiveTime = receiveTime;
     }
 }
