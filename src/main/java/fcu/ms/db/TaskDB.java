@@ -45,13 +45,13 @@ public class TaskDB {
             preStmt.setString(1, task.getTaskName());
             preStmt.setString(2, task.getMessage());
             preStmt.setTimestamp(3, Timestamp.valueOf(task.getStartPostTime()));
-            preStmt.setTimestamp(4, task.getEndPostTime());
+            preStmt.setTimestamp(4, Timestamp.valueOf(task.getEndPostTime()));
             preStmt.setInt(5, task.getSalary());
             preStmt.setString(6,task.getTypeName());
             preStmt.setInt(7,task.getReleaseUserID());
-            preStmt.setTimestamp(8, task.getReleaseTime());
+            preStmt.setTimestamp(8, Timestamp.valueOf(task.getReleaseTime()));
             preStmt.setInt(9,task.getReceiveUserID());
-            preStmt.setTimestamp(10, task.getReceiveTime());
+            preStmt.setTimestamp(10, Timestamp.valueOf(task.getReceiveTime()));
             preStmt.setString(11,task.getTaskAddress());
             preStmt.setInt(12,task.getTaskCity());
 
@@ -234,11 +234,11 @@ public class TaskDB {
         connection.close();
     }
 
-    private void setTaskReceiveTime(Timestamp receiveTime, int taskID) throws Exception {
+    private void setTaskReceiveTime(LocalDateTime receiveTime, int taskID) throws Exception {
         Connection connection = MySqlBoneCP.getConnection();
         String sqlString = "UPDATE `Task` SET `ReceiveTime` = ? WHERE `TaskID` = ?";
         PreparedStatement preStmt = connection.prepareStatement(sqlString);
-        preStmt.setTimestamp(1, receiveTime);
+        preStmt.setTimestamp(1, Timestamp.valueOf(receiveTime));
         preStmt.setInt(2, taskID);
 
         preStmt.executeUpdate();
@@ -293,13 +293,13 @@ public class TaskDB {
         String TaskName = dbResult.getString("TaskName");
         String Message = dbResult.getString("Message");
         LocalDateTime StartPostTime = dbResult.getTimestamp("StartPostTime").toLocalDateTime();
-        Timestamp EndPostTime = dbResult.getTimestamp("EndPostTime");
+        LocalDateTime EndPostTime = dbResult.getTimestamp("EndPostTime").toLocalDateTime();
         int Salary = dbResult.getInt("Salary");
         String TypeName = dbResult.getString("TypeName");
         int ReleaseUserID = dbResult.getInt("ReleaseUserID");
-        Timestamp ReleaseTime = dbResult.getTimestamp("ReleaseTime");
+        LocalDateTime ReleaseTime = dbResult.getTimestamp("ReleaseTime").toLocalDateTime();
         int ReceiveUserID = dbResult.getInt("ReceiveUserID");
-        Timestamp ReceiveTime = dbResult.getTimestamp("ReceiveTime");
+        LocalDateTime ReceiveTime = dbResult.getTimestamp("ReceiveTime").toLocalDateTime();
         String TaskAddress = dbResult.getString("TaskAddress");
         int TaskCity = dbResult.getInt("TaskCity");
 

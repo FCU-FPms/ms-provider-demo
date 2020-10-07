@@ -20,9 +20,8 @@ public class TaskDBTest {
 
     @Test
     public void createTask() {
-        Timestamp currentTime = new Timestamp (new Date().getTime());
-        LocalDateTime test_currentTime = LocalDateTime.now();
-        Task task = new Task(taskname, "testing-message", test_currentTime, currentTime,
+        LocalDateTime currentTime = LocalDateTime.now();
+        Task task = new Task(taskname, "testing-message", currentTime, currentTime,
                 500,"EatTask", 20, currentTime, 20, currentTime, "testing_Address",1);
         assertTrue( taskDB.createTask(task) );
     }
