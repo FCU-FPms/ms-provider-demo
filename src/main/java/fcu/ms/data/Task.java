@@ -1,11 +1,17 @@
 package fcu.ms.data;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class Task {
     private int taskID = -1;
     private String taskName;
     private String message;
-    private Timestamp startPostTime;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime startPostTime;
+
     private Timestamp endPostTime;
     private int salary;
     private String typeName;
@@ -20,7 +26,7 @@ public class Task {
         // 需要這個做反序列化, 跟 import com.fasterxml.jackson.databind.ObjectMapper; 的 convertValue 有關
     }
 
-    public Task(String taskName, String message, Timestamp startPostTime, Timestamp endPostTime, // 新增資料表用的 不用填ID
+    public Task(String taskName, String message, LocalDateTime startPostTime, Timestamp endPostTime, // 新增資料表用的 不用填ID
                 int salary, String typeName, int releaseUserID, Timestamp releaseTime, int receiveUserID,
                 Timestamp receiveTime, String taskAddress, int taskCity) {
         this.taskName = taskName;
@@ -38,7 +44,7 @@ public class Task {
     }
 
     // API新增資料用的 不用填ID 與 receiveUserID, receiveTime
-    public Task(String taskName, String message, Timestamp startPostTime, Timestamp endPostTime,
+    public Task(String taskName, String message, LocalDateTime startPostTime, Timestamp endPostTime,
                 int salary, String typeName, int releaseUserID, Timestamp releaseTime, String taskAddress, int taskCity) {
         this.taskName = taskName;
         this.message = message;
@@ -52,7 +58,7 @@ public class Task {
         this.taskCity = taskCity;
     }
 
-    public Task(int taskID, String taskName, String message, Timestamp startPostTime, Timestamp endPostTime, // 用來從資料表拿Task
+    public Task(int taskID, String taskName, String message, LocalDateTime startPostTime, Timestamp endPostTime, // 用來從資料表拿Task
                 int salary, String typeName, int releaseUserID, Timestamp releaseTime, int receiveUserID,
                 Timestamp receiveTime, String taskAddress, int taskCity) {
         this.taskID = taskID;
@@ -110,9 +116,9 @@ public class Task {
         this.message = message;
     }
 
-    public Timestamp getStartPostTime() { return startPostTime; }
+    public LocalDateTime getStartPostTime() { return startPostTime; }
 
-    public void setStartPostTime(Timestamp startPostTime) { this.startPostTime = startPostTime; }
+    public void setStartPostTime(LocalDateTime startPostTime) { this.startPostTime = startPostTime; }
 
     public Timestamp getEndPostTime() {
         return endPostTime;

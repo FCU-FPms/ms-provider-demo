@@ -27,16 +27,37 @@ public class TaskController {
     TaskDB taskDB = TaskDB.getInstance();
     ObjectMapper objectMapper = new ObjectMapper();
 
-    @PostMapping(value = "") // 這邊變數都應該要是小寫, 但如果改掉前後端都要修正, 所以先不改
-    public ResponseEntity<String> createTask(@RequestParam String TaskName, @RequestParam String Message,
-                                             @RequestParam Timestamp StartPostTime,@RequestParam Timestamp EndPostTime,
-                                             @RequestParam int Salary, @RequestParam String TypeName, @RequestParam int ReleaseUserID,
-                                             @RequestParam String TaskAddress, @RequestParam int TaskCity) {
-        // postTime 在API中要打上 yyyy-mm-dd hh:mm:ss 格式
-        Timestamp ReleaseTime = new Timestamp(new Date().getTime()); // 會自動填入發布時的時間點
+//    @PostMapping(value = "") // 這邊變數都應該要是小寫, 但如果改掉前後端都要修正, 所以先不改
+//    public ResponseEntity<String> createTask(@RequestParam String TaskName, @RequestParam String Message,
+//                                             @RequestParam Timestamp StartPostTime,@RequestParam Timestamp EndPostTime,
+//                                             @RequestParam int Salary, @RequestParam String TypeName, @RequestParam int ReleaseUserID,
+//                                             @RequestParam String TaskAddress, @RequestParam int TaskCity) {
+//        // postTime 在API中要打上 yyyy-mm-dd hh:mm:ss 格式
+//        Timestamp ReleaseTime = new Timestamp(new Date().getTime()); // 會自動填入發布時的時間點
+//
+//        Task task = new Task(TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, ReleaseUserID,
+//                ReleaseTime, TaskAddress, TaskCity);
+//
+//        boolean is_success = taskDB.createTask(task);
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Content-Type", "application/json");
+//
+//        if(is_success) {
+//            return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+//        } else {
+//            return new ResponseEntity<String>("Error to build Task in DB", headers, HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
-        Task task = new Task(TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, ReleaseUserID,
-                ReleaseTime, TaskAddress, TaskCity);
+    @PostMapping(value = "")
+    public ResponseEntity<String> createTask(@RequestBody Task task) {
+        // postTime 在API中要打上 yyyy-mm-dd hh:mm:ss 格式
+        System.out.println("franky-test-task");
+        System.out.println(task.getTaskName());
+        System.out.println(task.getMessage());
+        System.out.println(task.getStartPostTime());
+        Timestamp ReleaseTime = new Timestamp(new Date().getTime()); // 會自動填入發布時的時間點
 
         boolean is_success = taskDB.createTask(task);
 

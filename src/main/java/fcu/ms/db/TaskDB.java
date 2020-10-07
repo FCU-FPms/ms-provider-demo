@@ -6,6 +6,7 @@ import fcu.ms.dbUtil.MySqlBoneCP;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.sql.Timestamp;
 import java.util.List;
@@ -43,7 +44,7 @@ public class TaskDB {
 
             preStmt.setString(1, task.getTaskName());
             preStmt.setString(2, task.getMessage());
-            preStmt.setTimestamp(3, task.getStartPostTime());
+            preStmt.setTimestamp(3, Timestamp.valueOf(task.getStartPostTime()));
             preStmt.setTimestamp(4, task.getEndPostTime());
             preStmt.setInt(5, task.getSalary());
             preStmt.setString(6,task.getTypeName());
@@ -183,11 +184,11 @@ public class TaskDB {
         connection.close();
     }
 
-    private void setTaskStartPostTime(Timestamp taskStartPostTime, int taskID) throws Exception {
+    private void setTaskStartPostTime(LocalDateTime taskStartPostTime, int taskID) throws Exception {
         Connection connection = MySqlBoneCP.getConnection();
         String sqlString = "UPDATE `Task` SET `StartPostTime` = ? WHERE `TaskID` = ?";
         PreparedStatement preStmt = connection.prepareStatement(sqlString);
-        preStmt.setTimestamp(1, taskStartPostTime);
+        preStmt.setTimestamp(1, Timestamp.valueOf(taskStartPostTime));
         preStmt.setInt(2, taskID);
 
         preStmt.executeUpdate();
@@ -195,11 +196,11 @@ public class TaskDB {
         connection.close();
     }
 
-    private void setTaskEndPostTime(Timestamp taskEndPostTime, int taskID) throws Exception {
+    private void setTaskEndPostTime(LocalDateTime taskEndPostTime, int taskID) throws Exception {
         Connection connection = MySqlBoneCP.getConnection();
         String sqlString = "UPDATE `Task` SET `EndPostTime` = ? WHERE `TaskID` = ?";
         PreparedStatement preStmt = connection.prepareStatement(sqlString);
-        preStmt.setTimestamp(1, taskEndPostTime);
+        preStmt.setTimestamp(1, Timestamp.valueOf(taskEndPostTime));
         preStmt.setInt(2, taskID);
 
         preStmt.executeUpdate();
@@ -291,7 +292,7 @@ public class TaskDB {
         int id = dbResult.getInt("TaskID");
         String TaskName = dbResult.getString("TaskName");
         String Message = dbResult.getString("Message");
-        Timestamp StartPostTime = dbResult.getTimestamp("StartPostTime");
+        LocalDateTime StartPostTime = dbResult.getTimestamp("StartPostTime").toLocalDateTime();
         Timestamp EndPostTime = dbResult.getTimestamp("EndPostTime");
         int Salary = dbResult.getInt("Salary");
         String TypeName = dbResult.getString("TypeName");
