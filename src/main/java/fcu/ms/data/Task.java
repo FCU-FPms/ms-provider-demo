@@ -1,6 +1,5 @@
 package fcu.ms.data;
 import java.sql.Timestamp;
-import java.util.Date;
 
 public class Task {
     private int taskID = -1;
@@ -38,6 +37,21 @@ public class Task {
         this.taskCity = taskCity;
     }
 
+    // API新增資料用的 不用填ID 與 receiveUserID, receiveTime
+    public Task(String taskName, String message, Timestamp startPostTime, Timestamp endPostTime,
+                int salary, String typeName, int releaseUserID, Timestamp releaseTime, String taskAddress, int taskCity) {
+        this.taskName = taskName;
+        this.message = message;
+        this.startPostTime = startPostTime;
+        this.endPostTime = endPostTime;
+        this.salary = salary;
+        this.typeName = typeName;
+        this.releaseUserID = releaseUserID;
+        this.releaseTime = releaseTime;
+        this.taskAddress = taskAddress;
+        this.taskCity = taskCity;
+    }
+
     public Task(int taskID, String taskName, String message, Timestamp startPostTime, Timestamp endPostTime, // 用來從資料表拿Task
                 int salary, String typeName, int releaseUserID, Timestamp releaseTime, int receiveUserID,
                 Timestamp receiveTime, String taskAddress, int taskCity) {
@@ -52,32 +66,6 @@ public class Task {
         this.releaseTime = releaseTime;
         this.receiveUserID = receiveUserID;
         this.receiveTime = receiveTime;
-        this.taskAddress = taskAddress;
-        this.taskCity = taskCity;
-    }
-
-    public Task(String taskName, String message, Timestamp startPostTime, Timestamp endPostTime, int salary,
-                String typeName, String taskAddress, int taskCity) {
-        this.taskName = taskName;
-        this.message = message;
-        this.startPostTime = startPostTime;
-        this.endPostTime = endPostTime;
-        this.salary = salary;
-        this.typeName = typeName;
-        this.taskAddress = taskAddress;
-        this.taskCity = taskCity;
-    }
-
-
-    public Task(int taskID, String taskName, String message, Timestamp startPostTime, Timestamp endPostTime, int salary,
-                String typeName, String taskAddress, int taskCity) {
-        this.taskID = taskID;
-        this.taskName = taskName;
-        this.message = message;
-        this.startPostTime = startPostTime;
-        this.endPostTime = endPostTime;
-        this.salary = salary;
-        this.typeName = typeName;
         this.taskAddress = taskAddress;
         this.taskCity = taskCity;
     }

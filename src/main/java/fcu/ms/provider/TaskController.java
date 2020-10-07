@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import fcu.ms.db.TaskDB;
 
-import javax.validation.constraints.Null;
-import javax.websocket.server.PathParam;
-import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,13 +27,17 @@ public class TaskController {
     TaskDB taskDB = TaskDB.getInstance();
     ObjectMapper objectMapper = new ObjectMapper();
 
-    @PostMapping(value = "")
+    @PostMapping(value = "") // 這邊變數都應該要是小寫, 但如果改掉前後端都要修正, 所以先不改
     public ResponseEntity<String> createTask(@RequestParam String TaskName, @RequestParam String Message,
                                              @RequestParam Timestamp StartPostTime,@RequestParam Timestamp EndPostTime,
-                                             @RequestParam int Salary, @RequestParam String TypeName,
+                                             @RequestParam int Salary, @RequestParam String TypeName, @RequestParam int ReleaseUserID,
                                              @RequestParam String TaskAddress, @RequestParam int TaskCity) {
         // postTime 在API中要打上 yyyy-mm-dd hh:mm:ss 格式
-        Task task = new Task(TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, TaskAddress, TaskCity);
+        Timestamp ReleaseTime = new Timestamp(new Date().getTime()); // 會自動填入發布時的時間點
+
+        Task task = new Task(TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, ReleaseUserID,
+                ReleaseTime, TaskAddress, TaskCity);
+
         boolean is_success = taskDB.createTask(task);
 
         HttpHeaders headers = new HttpHeaders();
@@ -58,7 +60,7 @@ public class TaskController {
 
         Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
 
-        for(Task task: taskList) {
+        for (Task task : taskList) {
             int taskId = task.getTaskID();
             JSONObject entity = getTaskEntity(task);
 

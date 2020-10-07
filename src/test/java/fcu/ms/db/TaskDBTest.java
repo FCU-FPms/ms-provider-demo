@@ -25,7 +25,7 @@ public class TaskDBTest {
 
         Task task = new Task(taskname, "testing-message", currentTime, currentTime,
                 500,"EatTask", 20, currentTime, 20, currentTime, "testing_Address",1);
-        assertTrue( taskDB.createTask(task));
+        assertTrue( taskDB.createTask(task) );
     }
 
 
