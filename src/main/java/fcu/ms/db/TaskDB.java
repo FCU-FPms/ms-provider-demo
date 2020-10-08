@@ -24,18 +24,18 @@ public class TaskDB {
 
     public boolean createTask(Task task) {
         String sqlString = "INSERT INTO `Task`(`TaskName`," +
-                                             " `Message`," +
-                                             " `StartPostTime`," +
-                                             " `EndPostTime`," +
-                                             " `Salary`," +
-                                             " `TypeName`," +
-                                             " `ReleaseUserID`," +
-                                             " `ReleaseTime`," +
-                                             " `ReceiveUserID`," +
-                                             " `ReceiveTime`," +
-                                             " `TaskAddress`," +
-                                             " `TaskCity`)" +
-                                             " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                " `Message`," +
+                " `StartPostTime`," +
+                " `EndPostTime`," +
+                " `Salary`," +
+                " `TypeName`," +
+                " `ReleaseUserID`," +
+                " `ReleaseTime`," +
+                " `ReceiveUserID`," +
+                " `ReceiveTime`," +
+                " `TaskAddress`," +
+                " `TaskCity`)" +
+                " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         boolean is_success;
         try {
@@ -304,6 +304,6 @@ public class TaskDB {
         int TaskCity = dbResult.getInt("TaskCity");
 
         return new Task(id, TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, ReleaseUserID,
-                        ReleaseTime, ReceiveUserID, ReceiveTime, TaskAddress, TaskCity);
+                ReleaseTime, ReceiveUserID, ReceiveTime, TaskAddress, TaskCity);
     }
 }
