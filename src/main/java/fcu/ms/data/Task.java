@@ -1,41 +1,73 @@
 package fcu.ms.data;
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.time.LocalDateTime;
 
 public class Task {
     private int taskID = -1;
-    private String taskName = "";
-    private String message = "";
-    private Date startPostTime = null;
-    private  Date endPostTime = null;
-    private int salary = 0;
-    private String typeName = "";
+    private String taskName;
+    private String message;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime startPostTime;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime endPostTime;
+
+    private int salary;
+    private String typeName;
     private int releaseUserID = -1;
-    private Date releaseTime = null;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime releaseTime;
+
     private int receiveUserID = -1;
-    private Date receiveTime = null;
-    private String taskAddress = "";
-    private int taskCity = -1;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime receiveTime;
+
+    private String taskAddress;
+    private int taskCity;
 
     public Task(){
         // 需要這個做反序列化, 跟 import com.fasterxml.jackson.databind.ObjectMapper; 的 convertValue 有關
     }
 
-    public Task(String taskName, String message, Date startPostTime, Date endPostTime, int salary,
-                String typeName, String taskAddress, int taskCity) {
-        this.taskID = taskID;
+    public Task(String taskName, String message, LocalDateTime startPostTime, LocalDateTime endPostTime, // 新增資料表用的 不用填ID
+                int salary, String typeName, int releaseUserID, LocalDateTime releaseTime, int receiveUserID,
+                LocalDateTime receiveTime, String taskAddress, int taskCity) {
         this.taskName = taskName;
         this.message = message;
         this.startPostTime = startPostTime;
         this.endPostTime = endPostTime;
         this.salary = salary;
         this.typeName = typeName;
+        this.releaseUserID = releaseUserID;
+        this.releaseTime = releaseTime;
+        this.receiveUserID = receiveUserID;
+        this.receiveTime = receiveTime;
         this.taskAddress = taskAddress;
         this.taskCity = taskCity;
     }
 
+    // API新增資料用的 不用填ID 與 receiveUserID, receiveTime
+    public Task(String taskName, String message, LocalDateTime startPostTime, LocalDateTime endPostTime,
+                int salary, String typeName, int releaseUserID, LocalDateTime releaseTime, String taskAddress, int taskCity) {
+        this.taskName = taskName;
+        this.message = message;
+        this.startPostTime = startPostTime;
+        this.endPostTime = endPostTime;
+        this.salary = salary;
+        this.typeName = typeName;
+        this.releaseUserID = releaseUserID;
+        this.releaseTime = releaseTime;
+        this.taskAddress = taskAddress;
+        this.taskCity = taskCity;
+    }
 
-    public Task(int taskID,String taskName, String message, Date startPostTime, Date endPostTime, int salary,
-                String typeName, String taskAddress, int taskCity) {
+    public Task(int taskID, String taskName, String message, LocalDateTime startPostTime, LocalDateTime endPostTime, // 用來從資料表拿Task
+                int salary, String typeName, int releaseUserID, LocalDateTime releaseTime, int receiveUserID,
+                LocalDateTime receiveTime, String taskAddress, int taskCity) {
         this.taskID = taskID;
         this.taskName = taskName;
         this.message = message;
@@ -43,6 +75,10 @@ public class Task {
         this.endPostTime = endPostTime;
         this.salary = salary;
         this.typeName = typeName;
+        this.releaseUserID = releaseUserID;
+        this.releaseTime = releaseTime;
+        this.receiveUserID = receiveUserID;
+        this.receiveTime = receiveTime;
         this.taskAddress = taskAddress;
         this.taskCity = taskCity;
     }
@@ -87,15 +123,15 @@ public class Task {
         this.message = message;
     }
 
-    public Date getStartPostTime() { return startPostTime; }
+    public LocalDateTime getStartPostTime() { return startPostTime; }
 
-    public void setStartPostTime(Date startPostTime) { this.startPostTime = startPostTime; }
+    public void setStartPostTime(LocalDateTime startPostTime) { this.startPostTime = startPostTime; }
 
-    public Date getEndPostTime() {
+    public LocalDateTime getEndPostTime() {
         return endPostTime;
     }
 
-    public void setEndPostTime(Date endPostTime) {
+    public void setEndPostTime(LocalDateTime endPostTime) {
         this.endPostTime = endPostTime;
     }
 
@@ -123,11 +159,11 @@ public class Task {
         this.releaseUserID = releaseUserID;
     }
 
-    public Date getReleaseTime() {
+    public LocalDateTime getReleaseTime() {
         return releaseTime;
     }
 
-    public void setReleaseTime(Date releaseTime) {
+    public void setReleaseTime(LocalDateTime releaseTime) {
         this.releaseTime = releaseTime;
     }
 
@@ -139,11 +175,11 @@ public class Task {
         this.receiveUserID = receiveUserID;
     }
 
-    public Date getReceiveTime() {
+    public LocalDateTime getReceiveTime() {
         return receiveTime;
     }
 
-    public void setReceiveTime(Date receiveTime) {
+    public void setReceiveTime(LocalDateTime receiveTime) {
         this.receiveTime = receiveTime;
     }
 }

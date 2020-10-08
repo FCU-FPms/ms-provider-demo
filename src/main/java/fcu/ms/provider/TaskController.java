@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatchException;
+
 import fcu.ms.data.Task;
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpHeaders;
@@ -13,11 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import fcu.ms.db.TaskDB;
 
-import javax.validation.constraints.Null;
-import javax.websocket.server.PathParam;
-import java.lang.reflect.Type;
-import java.sql.Time;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,12 +27,14 @@ public class TaskController {
     ObjectMapper objectMapper = new ObjectMapper();
 
     @PostMapping(value = "")
-    public ResponseEntity<String> createTask(@RequestParam String TaskName, @RequestParam String Message,
-                                             @RequestParam Timestamp StartPostTime,@RequestParam Timestamp EndPostTime,
-                                             @RequestParam int Salary, @RequestParam String TypeName,
-                                             @RequestParam String TaskAddress, @RequestParam int TaskCity) {
+    public ResponseEntity<String> createTask(@RequestBody Task task) {
         // postTime 在API中要打上 yyyy-mm-dd hh:mm:ss 格式
-        Task task = new Task(TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, TaskAddress, TaskCity);
+
+        if(task.getReleaseTime() == null) {
+            LocalDateTime releaseTime = LocalDateTime.now(); // 會自動填入發布時的時間點
+            task.setReleaseTime(releaseTime);
+        }
+
         boolean is_success = taskDB.createTask(task);
 
         HttpHeaders headers = new HttpHeaders();
@@ -58,7 +57,7 @@ public class TaskController {
 
         Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
 
-        for(Task task: taskList) {
+        for (Task task : taskList) {
             int taskId = task.getTaskID();
             JSONObject entity = getTaskEntity(task);
 
@@ -87,50 +86,25 @@ public class TaskController {
         }
     }
 
-
-    @PatchMapping (value = "")
-    public ResponseEntity<String> setTask(@RequestParam int TaskID, @RequestParam String TaskName, @RequestParam String Message,
-                                          @RequestParam Timestamp StartPostTime,@RequestParam Timestamp EndPostTime,
-                                          @RequestParam int Salary, @RequestParam String TypeName,
-                                          @RequestParam String TaskAddress, @RequestParam int TaskCity) {
-
-        boolean is_success = taskDB.setTask(TaskID, TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, TaskAddress, TaskCity);
-
+    @PatchMapping (path = "/{taskId}", consumes = "application/json-patch+json")
+    public ResponseEntity<String> updateTask(@PathVariable int taskId, @RequestBody JsonPatch patch) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
+        boolean is_success = false;
+
+        try {
+            Task task = taskDB.getTask(taskId);
+            Task taskPatched = applyPatchToTask(patch, task);
+            is_success = taskDB.setTask(taskPatched);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if(is_success) {
             return new ResponseEntity<String>(headers, HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("Error to SET Task in DB", headers, HttpStatus.BAD_REQUEST);
         }
-    }
-
-
-    @PatchMapping (path = "/{taskId}", consumes = "application/json-patch+json")
-    public ResponseEntity<String> updateTask(@PathVariable int taskId, @RequestBody JsonPatch patch) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-
-        try {
-            Task task = taskDB.getTask(taskId);
-            System.out.println("franky-test task");
-            System.out.println(task.getTaskID());
-            System.out.println(task.getMessage());
-
-            Task taskPatched = applyPatchToTask(patch, task);
-            System.out.println("franky-test taskPatched");
-            System.out.println(taskPatched.getTaskID());
-            System.out.println(taskPatched.getMessage()); // 查看新的task的值
-            return new ResponseEntity<String>(headers, HttpStatus.OK);
-
-        } catch (JsonPatchException e) {
-            e.printStackTrace();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        return new ResponseEntity<String>("Error to SET Task in DB", headers, HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping(value = "/{TaskID}")
@@ -155,18 +129,17 @@ public class TaskController {
         entity.put("StartPostTime", task.getStartPostTime());
         entity.put("EndPostTime", task.getEndPostTime());
         entity.put("Salary", task.getSalary());
-        entity.put("ReleaseUserID",task.getReleaseUserID());
-        entity.put("ReleaseTime",task.getReleaseTime());
-        entity.put("ReceiveUserID",task.getReceiveUserID());
-        entity.put("ReceiveTime",task.getReceiveTime());
-        entity.put("TypeName",task.getTaskName());
-        entity.put("TaskAddress",task.getTaskAddress());
-        entity.put("TaskCity",task.getTaskCity());
+        entity.put("ReleaseUserID", task.getReleaseUserID());
+        entity.put("ReleaseTime", task.getReleaseTime());
+        entity.put("ReceiveUserID", task.getReceiveUserID());
+        entity.put("ReceiveTime", task.getReceiveTime());
+        entity.put("TypeName", task.getTaskName());
+        entity.put("TaskAddress", task.getTaskAddress());
+        entity.put("TaskCity", task.getTaskCity());
         return entity;
     }
 
-    private Task applyPatchToTask(
-            JsonPatch patch, Task targetTask) throws JsonPatchException, JsonProcessingException {
+    private Task applyPatchToTask(JsonPatch patch, Task targetTask) throws JsonPatchException, JsonProcessingException {
         JsonNode patched = patch.apply(objectMapper.convertValue(targetTask, JsonNode.class)); //這可以自動轉換task
         return objectMapper.treeToValue(patched, Task.class);
     }
