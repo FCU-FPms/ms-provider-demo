@@ -6,11 +6,19 @@ public class Message {
     private String content;
     private int userID;
     private int receiverID;
-    private Date postTime = null;
+    private Date postTime;
     private int taskID;
 
-    public Message(int id, String content, int userID, int receiverID, Date postTime, int taskID){
+    public Message(int id, String content, int userID, int receiverID, Date postTime, int taskID) {
         this.id = id;
+        this.content = content;
+        this.userID = userID;
+        this.receiverID = receiverID;
+        this.postTime = postTime;
+        this.taskID = taskID;
+    }
+
+    public Message(String content, int userID, int receiverID, Date postTime, int taskID) { // 新增資料用的 無id
         this.content = content;
         this.userID = userID;
         this.receiverID = receiverID;

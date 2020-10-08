@@ -1,7 +1,4 @@
 package fcu.ms.provider;
-
-
-
 import fcu.ms.data.Message;
 import fcu.ms.data.Task;
 import fcu.ms.db.MessageDB;
@@ -21,7 +18,6 @@ import java.util.Map;
 @RequestMapping(value ="/message")
 public class MessageController {
     MessageDB messageDB = MessageDB.getInstance();
-
 
 
     @PostMapping(value = "")

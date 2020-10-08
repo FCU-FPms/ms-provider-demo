@@ -1,9 +1,11 @@
 package fcu.ms.db;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import fcu.ms.data.Message;
+import fcu.ms.data.Task;
 import fcu.ms.dbUtil.MySqlBoneCP;
 
 
@@ -21,21 +23,17 @@ public class MessageDB {
     public List<Message> getMessage() {
         List<Message> messages = new ArrayList<Message>();
 
-        String sqlString = "select * from Message";
+        String sqlString = "SELECT * FROM Message";
         try {
             Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             ResultSet rs = preStmt.executeQuery();
             while (rs.next()) {
-                int id = rs.getInt("messageID");
-                String Content = rs.getString("Content");
-                int userID = rs.getInt("userID");
-                int receiverID = rs.getInt("receiverID");
-                Timestamp postTime = rs.getTimestamp("postTime");
-                int taskID = rs.getInt("taskID");
-                Message message = new Message(id, Content, userID, receiverID, postTime, taskID);
+                Message message = parseMessageFromDbColumn(rs);
                 messages.add(message);
             }
+            rs.close();
+            preStmt.close();
             connection.close();
 
         } catch (Exception ex) {
@@ -48,7 +46,7 @@ public class MessageDB {
         List<Message> messages = new ArrayList<Message>();
 
 
-        String sqlString = "SELECT * FROM Message where `userId` = ? AND `receiverId`=  ? AND `taskId`=  ?";
+        String sqlString = "SELECT * FROM Message WHERE `userId` = ? AND `receiverId`=  ? AND `taskId`=  ?";
         try {
             Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
@@ -57,15 +55,11 @@ public class MessageDB {
             preStmt.setInt(3, taskId);
             ResultSet rs = preStmt.executeQuery();
             while (rs.next()) {
-                int id = rs.getInt("messageID");
-                String content = rs.getString("Content");
-                int userID = rs.getInt("userID");
-                int receiverID = rs.getInt("receiverID");
-                Timestamp postTime = rs.getTimestamp("postTime");
-                int taskID = rs.getInt("taskID");
-                Message message = new Message(id, content, userID, receiverID, postTime, taskID);
+                Message message = parseMessageFromDbColumn(rs);
                 messages.add(message);
             }
+            rs.close();
+            preStmt.close();
             connection.close();
 
         } catch (Exception ex) {
@@ -77,21 +71,17 @@ public class MessageDB {
     public Message getMessage(int messageID) {
         Message message = null;
 
-        String sqlString = "select * from Message where messageId=?";
+        String sqlString = "SELECT * FROM Message WHERE messageId=?";
         try {
             Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, messageID);
             ResultSet rs = preStmt.executeQuery();
             while (rs.next()) {
-                int id = rs.getInt("messageID");
-                String content = rs.getString("Content");
-                int userID = rs.getInt("userID");
-                int receiverID = rs.getInt("receiverID");
-                Timestamp postTime = rs.getTimestamp("postTime");
-                int taskID = rs.getInt("taskID");
-                message = new Message(id, content, userID, receiverID, postTime, taskID);
+                message = parseMessageFromDbColumn(rs);
             }
+            rs.close();
+            preStmt.close();
             connection.close();
 
         } catch (Exception ex) {
@@ -115,6 +105,8 @@ public class MessageDB {
             preStmt.setTimestamp(4, postTime);
             preStmt.setInt(5, taskID);
             preStmt.executeUpdate();
+
+            preStmt.close();
             connection.close();
             is_success = true;
         } catch (Exception ex) {
@@ -133,6 +125,8 @@ public class MessageDB {
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, messageID);
             preStmt.executeUpdate();
+
+            preStmt.close();
             connection.close();
             is_success = true;
         } catch (Exception ex) {
@@ -145,22 +139,19 @@ public class MessageDB {
         List<Message> messages = new ArrayList<Message>();
 
 
-        String sqlString = "SELECT * FROM Message WHERE `taskId`=  ? ORDER BY postTime ASC" ;
+        String sqlString = "SELECT * FROM Message WHERE `taskId`= ? ORDER BY postTime ASC" ;
         try {
             Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, taskId);
             ResultSet rs = preStmt.executeQuery();
             while (rs.next()) {
-                int id = rs.getInt("messageID");
-                String content = rs.getString("Content");
-                int userID = rs.getInt("userID");
-                int receiverID = rs.getInt("receiverID");
-                Timestamp postTime = rs.getTimestamp("postTime");
-                int taskID = rs.getInt("taskID");
-                Message message = new Message(id, content, userID, receiverID, postTime, taskID);
+                Message message = parseMessageFromDbColumn(rs);
                 messages.add(message);
             }
+
+            rs.close();
+            preStmt.close();
             connection.close();
 
         } catch (Exception ex) {
@@ -168,5 +159,17 @@ public class MessageDB {
         }
         return messages;
     }
+
+    private Message parseMessageFromDbColumn(ResultSet dbResult) throws Exception {
+        int id = dbResult.getInt("id");
+        String content = dbResult.getString("content");
+        int userID = dbResult.getInt("userID");
+        int receiverID = dbResult.getInt("receiverID");
+        Timestamp postTime = dbResult.getTimestamp("postTime");
+        int taskID = dbResult.getInt("taskID");
+        return new Message(id, content, userID, receiverID, postTime, taskID);
+    }
+
+
 
 }

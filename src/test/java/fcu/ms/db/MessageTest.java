@@ -17,7 +17,7 @@ public class MessageTest {
     @Test
     public void createMessage_TEST() {   /* 創建一個新的 message */
         MessageDB messageDB = MessageDB.getInstance();
-        assertTrue( messageDB.createMessage("testing321", 41, 48,new Timestamp(new Date().getTime()), 99) );
+        assertTrue( messageDB.createMessage("testing321", 1, 1,new Timestamp(new Date().getTime()), 200) );
     }
 
     @Test
