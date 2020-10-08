@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fcu.ms.data.Message;
-import fcu.ms.data.Task;
 import fcu.ms.dbUtil.MySqlBoneCP;
 
 
@@ -68,14 +67,14 @@ public class MessageDB {
         return messages;
     }
 
-    public Message getMessage(int messageID) {
+    public Message getMessage(int id) {
         Message message = null;
 
-        String sqlString = "SELECT * FROM Message WHERE messageId=?";
+        String sqlString = "SELECT * FROM Message WHERE id=?";
         try {
             Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
-            preStmt.setInt(1, messageID);
+            preStmt.setInt(1, id);
             ResultSet rs = preStmt.executeQuery();
             while (rs.next()) {
                 message = parseMessageFromDbColumn(rs);
@@ -91,19 +90,18 @@ public class MessageDB {
 
     }
 
-    public boolean createMessage(String content, int userID, int receiverID, Timestamp postTime, int taskID) {
-
+    public boolean createMessage(Message message) {
         boolean is_success = false;
 
-        String sqlString = "INSERT INTO Message(content,userID,receiverID,postTime,taskID) VALUES( ?, ?, ?, ?, ?)";
+        String sqlString = "INSERT INTO Message(content, userID, receiverID, postTime, taskID) VALUES( ?, ?, ?, ?, ?)";
         try {
             Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
-            preStmt.setString(1, content);
-            preStmt.setInt(2, userID);
-            preStmt.setInt(3, receiverID);
-            preStmt.setTimestamp(4, postTime);
-            preStmt.setInt(5, taskID);
+            preStmt.setString(1, message.getContent());
+            preStmt.setInt(2, message.getUserID());
+            preStmt.setInt(3, message.getReceiverID());
+            preStmt.setTimestamp(4, Timestamp.valueOf(message.getPostTime()));
+            preStmt.setInt(5, message.getTaskID());
             preStmt.executeUpdate();
 
             preStmt.close();
@@ -115,15 +113,15 @@ public class MessageDB {
         return is_success;
     }
 
-    public boolean deleteMessage(int messageID) {
+    public boolean deleteMessage(int id) {
 
         boolean is_success = false;
 
-        String sqlString = "DELETE FROM `Message` WHERE messageID=?";
+        String sqlString = "DELETE FROM `Message` WHERE id=?";
         try {
             Connection connection = MySqlBoneCP.getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
-            preStmt.setInt(1, messageID);
+            preStmt.setInt(1, id);
             preStmt.executeUpdate();
 
             preStmt.close();
@@ -165,11 +163,8 @@ public class MessageDB {
         String content = dbResult.getString("content");
         int userID = dbResult.getInt("userID");
         int receiverID = dbResult.getInt("receiverID");
-        Timestamp postTime = dbResult.getTimestamp("postTime");
+        LocalDateTime postTime = dbResult.getTimestamp("postTime").toLocalDateTime();
         int taskID = dbResult.getInt("taskID");
         return new Message(id, content, userID, receiverID, postTime, taskID);
     }
-
-
-
 }

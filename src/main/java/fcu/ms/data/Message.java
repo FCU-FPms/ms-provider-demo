@@ -1,15 +1,24 @@
 package fcu.ms.data;
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.time.LocalDateTime;
 
 public class Message {
     private int id;
     private String content;
     private int userID;
     private int receiverID;
-    private Date postTime;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime postTime;
+
     private int taskID;
 
-    public Message(int id, String content, int userID, int receiverID, Date postTime, int taskID) {
+    public Message() {
+        // 反序列化用
+    }
+
+    public Message(int id, String content, int userID, int receiverID, LocalDateTime postTime, int taskID) {
         this.id = id;
         this.content = content;
         this.userID = userID;
@@ -18,7 +27,7 @@ public class Message {
         this.taskID = taskID;
     }
 
-    public Message(String content, int userID, int receiverID, Date postTime, int taskID) { // 新增資料用的 無id
+    public Message(String content, int userID, int receiverID, LocalDateTime postTime, int taskID) { // 新增資料用的 無id
         this.content = content;
         this.userID = userID;
         this.receiverID = receiverID;
@@ -58,11 +67,11 @@ public class Message {
         this.receiverID = receiverID;
     }
 
-    public Date getPostTime() {
+    public LocalDateTime getPostTime() {
         return postTime;
     }
 
-    public void setPostTime(Date postTime) {
+    public void setPostTime(LocalDateTime postTime) {
         this.postTime = postTime;
     }
 

@@ -1,6 +1,6 @@
--- MySQL dump 10.13  Distrib 8.0.17, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.21, for Win64 (x86_64)
 --
--- Host: 140.134.26.71    Database: release-1-0-1
+-- Host: 140.134.26.71    Database: release-1-0-2
 -- ------------------------------------------------------
 -- Server version	5.7.18
 
@@ -31,6 +31,15 @@ CREATE TABLE `EatTask` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `EatTask`
+--
+
+LOCK TABLES `EatTask` WRITE;
+/*!40000 ALTER TABLE `EatTask` DISABLE KEYS */;
+/*!40000 ALTER TABLE `EatTask` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `HouseworkTask`
 --
 
@@ -47,6 +56,15 @@ CREATE TABLE `HouseworkTask` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `HouseworkTask`
+--
+
+LOCK TABLES `HouseworkTask` WRITE;
+/*!40000 ALTER TABLE `HouseworkTask` DISABLE KEYS */;
+/*!40000 ALTER TABLE `HouseworkTask` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `Message`
 --
 
@@ -54,21 +72,31 @@ DROP TABLE IF EXISTS `Message`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Message` (
-  `messageID` int(11) NOT NULL AUTO_INCREMENT,
-  `Content` varchar(45) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` varchar(45) DEFAULT NULL,
   `userID` int(11) NOT NULL,
   `receiverID` int(11) NOT NULL,
   `postTime` datetime DEFAULT NULL,
   `taskID` int(11) NOT NULL,
-  PRIMARY KEY (`messageID`),
+  PRIMARY KEY (`id`),
   KEY `u_fk_idx` (`userID`),
   KEY `reciever_fk_idx` (`receiverID`),
   KEY `task_fk_idx` (`taskID`),
   CONSTRAINT `receiver_fk` FOREIGN KEY (`receiverID`) REFERENCES `userData` (`userID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `task_fk` FOREIGN KEY (`taskID`) REFERENCES `Task` (`TaskID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `user_fk` FOREIGN KEY (`userID`) REFERENCES `userData` (`userID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Message`
+--
+
+LOCK TABLES `Message` WRITE;
+/*!40000 ALTER TABLE `Message` DISABLE KEYS */;
+INSERT INTO `Message` VALUES (2,'testing321',1,1,'2020-10-08 10:55:33',200),(3,'testing321',1,1,'2020-10-08 10:55:38',200),(4,'testing321',1,1,'2020-10-08 10:58:10',200),(5,'testing321',1,1,'2020-10-08 10:58:16',200),(6,'testing321',1,1,'2020-10-08 10:58:20',200),(7,'testing321',1,1,'2020-10-08 10:58:24',200),(8,'testing321',1,1,'2020-10-08 11:06:31',200),(9,'franky',1,1,'2020-10-07 12:15:00',200);
+/*!40000 ALTER TABLE `Message` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `Task`
@@ -92,8 +120,18 @@ CREATE TABLE `Task` (
   `TaskAddress` varchar(255) DEFAULT NULL,
   `TaskCity` int(11) DEFAULT NULL,
   PRIMARY KEY (`TaskID`)
-) ENGINE=InnoDB AUTO_INCREMENT=200 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=201 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Task`
+--
+
+LOCK TABLES `Task` WRITE;
+/*!40000 ALTER TABLE `Task` DISABLE KEYS */;
+INSERT INTO `Task` VALUES (200,'中文','testing-message','2020-10-08 09:55:15','2020-10-08 09:55:15',500,'EatTask',20,'2020-10-08 09:55:15',20,'2020-10-08 09:55:15','testing_Address',1);
+/*!40000 ALTER TABLE `Task` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `TaskState`
@@ -108,6 +146,15 @@ CREATE TABLE `TaskState` (
   PRIMARY KEY (`TaskStateID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `TaskState`
+--
+
+LOCK TABLES `TaskState` WRITE;
+/*!40000 ALTER TABLE `TaskState` DISABLE KEYS */;
+/*!40000 ALTER TABLE `TaskState` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `Task_TaskState`
@@ -125,6 +172,15 @@ CREATE TABLE `Task_TaskState` (
   PRIMARY KEY (`Task_TaskStateID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Task_TaskState`
+--
+
+LOCK TABLES `Task_TaskState` WRITE;
+/*!40000 ALTER TABLE `Task_TaskState` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Task_TaskState` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `userComment`
@@ -146,6 +202,15 @@ CREATE TABLE `userComment` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `userComment`
+--
+
+LOCK TABLES `userComment` WRITE;
+/*!40000 ALTER TABLE `userComment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `userComment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `userData`
 --
 
@@ -160,6 +225,16 @@ CREATE TABLE `userData` (
   PRIMARY KEY (`userID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `userData`
+--
+
+LOCK TABLES `userData` WRITE;
+/*!40000 ALTER TABLE `userData` DISABLE KEYS */;
+INSERT INTO `userData` VALUES (1,'franky','0912345678','12341234');
+/*!40000 ALTER TABLE `userData` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -170,4 +245,4 @@ CREATE TABLE `userData` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-10-08  9:09:28
+-- Dump completed on 2020-10-08 11:34:17

@@ -1,6 +1,5 @@
 package fcu.ms.provider;
 import fcu.ms.data.Message;
-import fcu.ms.data.Task;
 import fcu.ms.db.MessageDB;
 
 import net.minidev.json.JSONObject;
@@ -9,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +20,14 @@ public class MessageController {
 
 
     @PostMapping(value = "")
-    public ResponseEntity<String> createMessage(@RequestParam String content, @RequestParam int userID,
-                                                @RequestParam int receiverID, @RequestParam Timestamp postTime, @RequestParam int taskID) {
-        boolean is_success = messageDB.createMessage(content, userID, receiverID, postTime, taskID);
+    public ResponseEntity<String> createMessage(@RequestBody Message message) {
+
+        if(message.getPostTime() == null) { // 會自動填入傳送訊息時的時間點
+            LocalDateTime postTime = LocalDateTime.now();
+            message.setPostTime(postTime);
+        }
+
+        boolean is_success = messageDB.createMessage(message);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
@@ -33,6 +37,27 @@ public class MessageController {
         } else {
             return new ResponseEntity<String>("Error to build Message in DB", headers, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping(value = "/conversation/{taskID}")
+    public ResponseEntity<Object> getMessageByTaskID(@PathVariable int taskID) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        List<Message> messages = messageDB.getMessageByTaskId(taskID);
+        Map<String, JSONObject> entities = getEachMessage(messages);
+        return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/conversation/{userID}/{receiverID}/{taskID}")
+    public ResponseEntity<Object> getMessageByID(@PathVariable int userID, @PathVariable int receiverID, @PathVariable int taskID) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        List<Message> messages = messageDB.getMessageByID(userID, receiverID, taskID);
+
+        Map<String, JSONObject> entities = getEachMessage(messages);
+        return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{messageID}")
@@ -50,58 +75,26 @@ public class MessageController {
         }
     }
 
-    @GetMapping(value = "/conversation/{UserID}/{ReceiverID}/{TaskID}")
-    public ResponseEntity<Object> getMessageByID(@PathVariable int userID, @PathVariable int receiverID, @PathVariable int taskID) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-
-        List<Message> messages = messageDB.getMessageByID(userID, receiverID, taskID);
-
-        Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
-
-
-        for (Message message : messages) {
-            JSONObject entity = new JSONObject();
-
-            int messageID = message.getId();
-
-            entity.put("content", message.getContent());
-            entity.put("postTime", message.getPostTime());
-            entity.put("userID", message.getUserID());
-            entity.put("receiverId", message.getReceiverID());
-            entity.put("taskID", message.getTaskID());
-
-            entities.put(String.valueOf(messageID), entity);
-        }
-
-        return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
+    private JSONObject getMessageEntity(Message message) {
+        JSONObject entity = new JSONObject();
+        entity.put("content", message.getContent());
+        entity.put("postTime", message.getPostTime());
+        entity.put("userID", message.getUserID());
+        entity.put("receiverId", message.getReceiverID());
+        entity.put("taskID", message.getTaskID());
+        return entity;
     }
 
-    @GetMapping(value = "/conversation/{TaskID}")
-    public ResponseEntity<Object> getMessageByTaskID(@PathVariable int taskID) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
+    private Map<String, JSONObject> getEachMessage(List<Message> messages) {
 
-        List<Message> messages = messageDB.getMessageByTaskId(taskID);
-
-        Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
-
+        Map<String, JSONObject> entities = new HashMap<>();
 
         for (Message message : messages) {
-            JSONObject entity = new JSONObject();
-
             int messageID = message.getId();
-
-            entity.put("content", message.getContent());
-            entity.put("postTime", message.getPostTime());
-            entity.put("userID", message.getUserID());
-            entity.put("receiverId", message.getReceiverID());
-            entity.put("taskID", message.getTaskID());
-
+            JSONObject entity = getMessageEntity(message);
             entities.put(String.valueOf(messageID), entity);
         }
-
-        return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
+        return entities;
     }
 
 }
