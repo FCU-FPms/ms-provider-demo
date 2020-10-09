@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: ms-provider
+    name: local-test # 防止多人測試時 註冊到其它服務
 
 eureka:
   instance:
