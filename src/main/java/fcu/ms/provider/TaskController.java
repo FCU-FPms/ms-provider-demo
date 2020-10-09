@@ -3,6 +3,9 @@ package fcu.ms.provider;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import com.github.fge.jsonpatch.JsonPatchException;
 
 import fcu.ms.data.Task;
@@ -24,7 +27,6 @@ import com.github.fge.jsonpatch.JsonPatch;
 @RequestMapping(value ="/tasks")
 public class TaskController {
     TaskDB taskDB = TaskDB.getInstance();
-    ObjectMapper objectMapper = new ObjectMapper();
 
     @PostMapping(value = "")
     public ResponseEntity<String> createTask(@RequestBody Task task) {
@@ -140,6 +142,14 @@ public class TaskController {
     }
 
     private Task applyPatchToTask(JsonPatch patch, Task targetTask) throws JsonPatchException, JsonProcessingException {
+        // 參考 https://github.com/FasterXML/jackson-modules-java8
+        // 為了支持java8的新型別, 像是localTime
+        ObjectMapper objectMapper = new ObjectMapper() // Todo 這裡應該用靜態的 還需要改
+                .registerModule(new ParameterNamesModule())
+                .registerModule(new Jdk8Module())
+                .registerModule(new JavaTimeModule()); // new module, NOT JSR310Module
+
+
         JsonNode patched = patch.apply(objectMapper.convertValue(targetTask, JsonNode.class)); //這可以自動轉換task
         return objectMapper.treeToValue(patched, Task.class);
     }
