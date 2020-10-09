@@ -44,14 +44,14 @@ public class TaskDB {
 
             preStmt.setString(1, task.getTaskName());
             preStmt.setString(2, task.getMessage());
-            preStmt.setTimestamp(3, Timestamp.valueOf(task.getStartPostTime()));
-            preStmt.setTimestamp(4, Timestamp.valueOf(task.getEndPostTime()));
+            preStmt.setTimestamp(3, transitLocalDateTime(task.getStartPostTime()));
+            preStmt.setTimestamp(4, transitLocalDateTime(task.getEndPostTime()));
             preStmt.setInt(5, task.getSalary());
             preStmt.setString(6,task.getTypeName());
             preStmt.setInt(7,task.getReleaseUserID());
-            preStmt.setTimestamp(8, Timestamp.valueOf(task.getReleaseTime()));
+            preStmt.setTimestamp(8, transitLocalDateTime(task.getReleaseTime()));
             preStmt.setInt(9,task.getReceiveUserID());
-            preStmt.setTimestamp(10, Timestamp.valueOf(task.getReceiveTime()));
+            preStmt.setTimestamp(10, transitLocalDateTime(task.getReceiveTime()));
             preStmt.setString(11,task.getTaskAddress());
             preStmt.setInt(12,task.getTaskCity());
 
@@ -188,7 +188,7 @@ public class TaskDB {
         Connection connection = MySqlBoneCP.getConnection();
         String sqlString = "UPDATE `Task` SET `StartPostTime` = ? WHERE `TaskID` = ?";
         PreparedStatement preStmt = connection.prepareStatement(sqlString);
-        preStmt.setTimestamp(1, Timestamp.valueOf(taskStartPostTime));
+        preStmt.setTimestamp(1, transitLocalDateTime(taskStartPostTime));
         preStmt.setInt(2, taskID);
 
         preStmt.executeUpdate();
@@ -200,7 +200,7 @@ public class TaskDB {
         Connection connection = MySqlBoneCP.getConnection();
         String sqlString = "UPDATE `Task` SET `EndPostTime` = ? WHERE `TaskID` = ?";
         PreparedStatement preStmt = connection.prepareStatement(sqlString);
-        preStmt.setTimestamp(1, Timestamp.valueOf(taskEndPostTime));
+        preStmt.setTimestamp(1, transitLocalDateTime(taskEndPostTime));
         preStmt.setInt(2, taskID);
 
         preStmt.executeUpdate();
@@ -238,7 +238,7 @@ public class TaskDB {
         Connection connection = MySqlBoneCP.getConnection();
         String sqlString = "UPDATE `Task` SET `ReceiveTime` = ? WHERE `TaskID` = ?";
         PreparedStatement preStmt = connection.prepareStatement(sqlString);
-        preStmt.setTimestamp(1, Timestamp.valueOf(receiveTime));
+        preStmt.setTimestamp(1, transitLocalDateTime(receiveTime));
         preStmt.setInt(2, taskID);
 
         preStmt.executeUpdate();
@@ -292,18 +292,34 @@ public class TaskDB {
         int id = dbResult.getInt("TaskID");
         String TaskName = dbResult.getString("TaskName");
         String Message = dbResult.getString("Message");
-        LocalDateTime StartPostTime = dbResult.getTimestamp("StartPostTime").toLocalDateTime();
-        LocalDateTime EndPostTime = dbResult.getTimestamp("EndPostTime").toLocalDateTime();
+        LocalDateTime StartPostTime = transitTimestamp(dbResult.getTimestamp("StartPostTime"));
+        LocalDateTime EndPostTime = transitTimestamp(dbResult.getTimestamp("EndPostTime"));
         int Salary = dbResult.getInt("Salary");
         String TypeName = dbResult.getString("TypeName");
         int ReleaseUserID = dbResult.getInt("ReleaseUserID");
-        LocalDateTime ReleaseTime = dbResult.getTimestamp("ReleaseTime").toLocalDateTime();
+        LocalDateTime ReleaseTime = transitTimestamp(dbResult.getTimestamp("ReleaseTime"));
         int ReceiveUserID = dbResult.getInt("ReceiveUserID");
-        LocalDateTime ReceiveTime = dbResult.getTimestamp("ReceiveTime").toLocalDateTime();
+        LocalDateTime ReceiveTime = transitTimestamp(dbResult.getTimestamp("ReceiveTime"));
         String TaskAddress = dbResult.getString("TaskAddress");
         int TaskCity = dbResult.getInt("TaskCity");
 
         return new Task(id, TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, ReleaseUserID,
                 ReleaseTime, ReceiveUserID, ReceiveTime, TaskAddress, TaskCity);
+    }
+
+    private Timestamp transitLocalDateTime(LocalDateTime localDateTime) { // 如果是null 會回傳null
+        if(localDateTime != null) {
+            return Timestamp.valueOf(localDateTime);
+        } else {
+            return null;
+        }
+    }
+
+    private LocalDateTime transitTimestamp(Timestamp timestamp) { // 如果是null 會回傳null
+        if(timestamp != null) {
+            return timestamp.toLocalDateTime();
+        } else {
+            return null;
+        }
     }
 }
