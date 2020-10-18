@@ -38,9 +38,13 @@ public class TaskDB {
                 " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         boolean is_success;
+
+        Connection connection = null;
+        PreparedStatement preStmt = null;
+
         try {
-            Connection connection = MySqlBoneCP.getInstance().getConnection();
-            PreparedStatement preStmt = connection.prepareStatement(sqlString);
+            connection = MySqlBoneCP.getInstance().getConnection();
+            preStmt = connection.prepareStatement(sqlString);
 
             preStmt.setString(1, task.getTaskName());
             preStmt.setString(2, task.getMessage());
@@ -56,14 +60,20 @@ public class TaskDB {
             preStmt.setInt(12,task.getTaskCity());
 
             preStmt.executeUpdate();
-            preStmt.close();
-            connection.close();
 
             is_success = true;
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
             is_success = false;
         }
+
+        try {
+            preStmt.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return is_success;
     }
 
@@ -92,21 +102,31 @@ public class TaskDB {
     public int getTaskIdByName(String taskName) {
         int id = -1;
         String sqlString = "SELECT `TaskID` FROM `Task` WHERE `TaskName` = ?";
+
+        Connection connection = null;
+        PreparedStatement preStmt = null;
+        ResultSet rs = null;
+
         try {
-            Connection connection = MySqlBoneCP.getInstance().getConnection();
-            PreparedStatement preStmt = connection.prepareStatement(sqlString);
+            connection = MySqlBoneCP.getInstance().getConnection();
+            preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, taskName);
-            ResultSet rs = preStmt.executeQuery();
+            rs = preStmt.executeQuery();
 
             while (rs.next()) {
                 id = rs.getInt("TaskID");
             }
-            rs.close();
-            preStmt.close();
-            connection.close();
 
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
+        }
+
+        try {
+            rs.close();
+            preStmt.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return id;
@@ -116,21 +136,33 @@ public class TaskDB {
     public Task getTask(int taskId) {
         Task task = null;
         String sqlString = "SELECT * FROM `Task` WHERE `taskID` = ?";
+
+        Connection connection = null;
+        PreparedStatement preStmt = null;
+        ResultSet rs = null;
+
         try {
-            Connection connection = MySqlBoneCP.getInstance().getConnection();
-            PreparedStatement preStmt = connection.prepareStatement(sqlString);
+            connection = MySqlBoneCP.getInstance().getConnection();
+            preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, taskId);
-            ResultSet rs = preStmt.executeQuery();
+            rs = preStmt.executeQuery();
             while (rs.next()) {
                 task = parseTaskFromDbColumn(rs);
             }
-            rs.close();
-            preStmt.close();
-            connection.close();
+
 
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
         }
+
+        try {
+            rs.close();
+            preStmt.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return task;
 
     }
@@ -160,131 +192,263 @@ public class TaskDB {
         return is_success;
     }
 
-    private void setTaskName(String taskName, int taskID) throws Exception {
-        Connection connection = MySqlBoneCP.getInstance().getConnection();
-        String sqlString = "UPDATE `Task` SET `TaskName` = ? WHERE `TaskID` = ?";
-        PreparedStatement preStmt = connection.prepareStatement(sqlString);
-        preStmt.setString(1, taskName);
-        preStmt.setInt(2, taskID);
+    private void setTaskName(String taskName, int taskID) {
+        Connection connection = null;
+        PreparedStatement preStmt = null;
 
-        preStmt.executeUpdate();
-        preStmt.close();
-        connection.close();
+        try {
+            connection = MySqlBoneCP.getInstance().getConnection();
+            String sqlString = "UPDATE `Task` SET `TaskName` = ? WHERE `TaskID` = ?";
+
+            preStmt = connection.prepareStatement(sqlString);
+            preStmt.setString(1, taskName);
+            preStmt.setInt(2, taskID);
+            preStmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            preStmt.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private void setTaskMessage(String taskMessage, int taskID) throws Exception {
-        Connection connection = MySqlBoneCP.getInstance().getConnection();
-        String sqlString = "UPDATE `Task` SET `Message` = ? WHERE `TaskID` = ?";
-        PreparedStatement preStmt = connection.prepareStatement(sqlString);
-        preStmt.setString(1, taskMessage);
-        preStmt.setInt(2, taskID);
+    private void setTaskMessage(String taskMessage, int taskID) {
+        Connection connection = null;
+        PreparedStatement preStmt = null;
 
-        preStmt.executeUpdate();
-        preStmt.close();
-        connection.close();
+        try {
+            connection = MySqlBoneCP.getInstance().getConnection();
+            String sqlString = "UPDATE `Task` SET `Message` = ? WHERE `TaskID` = ?";
+            preStmt = connection.prepareStatement(sqlString);
+            preStmt.setString(1, taskMessage);
+            preStmt.setInt(2, taskID);
+
+            preStmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            preStmt.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
-    private void setTaskStartPostTime(LocalDateTime taskStartPostTime, int taskID) throws Exception {
-        Connection connection = MySqlBoneCP.getInstance().getConnection();
-        String sqlString = "UPDATE `Task` SET `StartPostTime` = ? WHERE `TaskID` = ?";
-        PreparedStatement preStmt = connection.prepareStatement(sqlString);
-        preStmt.setTimestamp(1, transitLocalDateTime(taskStartPostTime));
-        preStmt.setInt(2, taskID);
+    private void setTaskStartPostTime(LocalDateTime taskStartPostTime, int taskID) {
+        Connection connection = null;
+        PreparedStatement preStmt = null;
 
-        preStmt.executeUpdate();
-        preStmt.close();
-        connection.close();
+        try {
+            connection = MySqlBoneCP.getInstance().getConnection();
+            String sqlString = "UPDATE `Task` SET `StartPostTime` = ? WHERE `TaskID` = ?";
+            preStmt = connection.prepareStatement(sqlString);
+            preStmt.setTimestamp(1, transitLocalDateTime(taskStartPostTime));
+            preStmt.setInt(2, taskID);
+
+            preStmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            preStmt.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private void setTaskEndPostTime(LocalDateTime taskEndPostTime, int taskID) throws Exception {
-        Connection connection = MySqlBoneCP.getInstance().getConnection();
-        String sqlString = "UPDATE `Task` SET `EndPostTime` = ? WHERE `TaskID` = ?";
-        PreparedStatement preStmt = connection.prepareStatement(sqlString);
-        preStmt.setTimestamp(1, transitLocalDateTime(taskEndPostTime));
-        preStmt.setInt(2, taskID);
+    private void setTaskEndPostTime(LocalDateTime taskEndPostTime, int taskID) {
+        Connection connection = null;
+        PreparedStatement preStmt = null;
 
-        preStmt.executeUpdate();
-        preStmt.close();
-        connection.close();
+        try {
+            connection = MySqlBoneCP.getInstance().getConnection();
+            String sqlString = "UPDATE `Task` SET `EndPostTime` = ? WHERE `TaskID` = ?";
+            preStmt = connection.prepareStatement(sqlString);
+            preStmt.setTimestamp(1, transitLocalDateTime(taskEndPostTime));
+            preStmt.setInt(2, taskID);
+
+            preStmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            preStmt.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // 目前沒有修改價錢的函式
 
-    private void setTaskTypeName(String taskTypeName, int taskID) throws Exception {
-        Connection connection = MySqlBoneCP.getInstance().getConnection();
-        String sqlString = "UPDATE `Task` SET `TypeName` = ? WHERE `TaskID` = ?";
-        PreparedStatement preStmt = connection.prepareStatement(sqlString);
-        preStmt.setString(1, taskTypeName);
-        preStmt.setInt(2, taskID);
+    private void setTaskTypeName(String taskTypeName, int taskID) {
+        Connection connection = null;
+        PreparedStatement preStmt = null;
 
-        preStmt.executeUpdate();
-        preStmt.close();
-        connection.close();
+        try {
+            connection = MySqlBoneCP.getInstance().getConnection();
+            String sqlString = "UPDATE `Task` SET `TypeName` = ? WHERE `TaskID` = ?";
+            preStmt = connection.prepareStatement(sqlString);
+            preStmt.setString(1, taskTypeName);
+            preStmt.setInt(2, taskID);
+
+            preStmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            preStmt.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private void setTaskReceiveUserID(int receiveUserID, int taskID) throws Exception {
-        Connection connection = MySqlBoneCP.getInstance().getConnection();
-        String sqlString = "UPDATE `Task` SET `ReceiveUserID` = ? WHERE `TaskID` = ?";
-        PreparedStatement preStmt = connection.prepareStatement(sqlString);
-        preStmt.setInt(1, receiveUserID);
-        preStmt.setInt(2, taskID);
+    private void setTaskReceiveUserID(int receiveUserID, int taskID) {
+        Connection connection = null;
+        PreparedStatement preStmt = null;
 
-        preStmt.executeUpdate();
-        preStmt.close();
-        connection.close();
+        try {
+            connection = MySqlBoneCP.getInstance().getConnection();
+            String sqlString = "UPDATE `Task` SET `ReceiveUserID` = ? WHERE `TaskID` = ?";
+            preStmt = connection.prepareStatement(sqlString);
+            preStmt.setInt(1, receiveUserID);
+            preStmt.setInt(2, taskID);
+
+            preStmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            preStmt.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private void setTaskReceiveTime(LocalDateTime receiveTime, int taskID) throws Exception {
-        Connection connection = MySqlBoneCP.getInstance().getConnection();
-        String sqlString = "UPDATE `Task` SET `ReceiveTime` = ? WHERE `TaskID` = ?";
-        PreparedStatement preStmt = connection.prepareStatement(sqlString);
-        preStmt.setTimestamp(1, transitLocalDateTime(receiveTime));
-        preStmt.setInt(2, taskID);
+    private void setTaskReceiveTime(LocalDateTime receiveTime, int taskID) {
+        Connection connection = null;
+        PreparedStatement preStmt = null;
 
-        preStmt.executeUpdate();
-        preStmt.close();
-        connection.close();
+        try {
+            connection = MySqlBoneCP.getInstance().getConnection();
+            String sqlString = "UPDATE `Task` SET `ReceiveTime` = ? WHERE `TaskID` = ?";
+            preStmt = connection.prepareStatement(sqlString);
+            preStmt.setTimestamp(1, transitLocalDateTime(receiveTime));
+            preStmt.setInt(2, taskID);
+
+            preStmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            preStmt.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private void setTaskAddress(String taskAddress, int taskID) throws Exception {
-        Connection connection = MySqlBoneCP.getInstance().getConnection();
-        String sqlString = "UPDATE `Task` SET `TaskAddress` = ? WHERE `TaskID` = ?";
-        PreparedStatement preStmt = connection.prepareStatement(sqlString);
-        preStmt.setString(1, taskAddress);
-        preStmt.setInt(2, taskID);
+    private void setTaskAddress(String taskAddress, int taskID) {
+        Connection connection = null;
+        PreparedStatement preStmt = null;
 
-        preStmt.executeUpdate();
-        preStmt.close();
-        connection.close();
+        try {
+            connection = MySqlBoneCP.getInstance().getConnection();
+            String sqlString = "UPDATE `Task` SET `TaskAddress` = ? WHERE `TaskID` = ?";
+            preStmt = connection.prepareStatement(sqlString);
+            preStmt.setString(1, taskAddress);
+            preStmt.setInt(2, taskID);
+
+            preStmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            preStmt.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private void setTaskCity(int taskCity, int taskID) throws Exception {
-        Connection connection = MySqlBoneCP.getInstance().getConnection();
-        String sqlString = "UPDATE `Task` SET `TaskCity` = ? WHERE `TaskID` = ?";
-        PreparedStatement preStmt = connection.prepareStatement(sqlString);
-        preStmt.setInt(1, taskCity);
-        preStmt.setInt(2, taskID);
+    private void setTaskCity(int taskCity, int taskID) {
+        Connection connection = null;
+        PreparedStatement preStmt = null;
 
-        preStmt.executeUpdate();
-        preStmt.close();
-        connection.close();
+        try {
+            connection = MySqlBoneCP.getInstance().getConnection();
+            String sqlString = "UPDATE `Task` SET `TaskCity` = ? WHERE `TaskID` = ?";
+            preStmt = connection.prepareStatement(sqlString);
+            preStmt.setInt(1, taskCity);
+            preStmt.setInt(2, taskID);
+
+            preStmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            preStmt.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean deleteTask(int taskID) {
 
+        Connection connection = null;
+        PreparedStatement preStmt = null;
+
         boolean is_success;
         String sqlString = "DELETE FROM `Task` WHERE `TaskID` = ?";
         try {
-            Connection connection = MySqlBoneCP.getInstance().getConnection();
-            PreparedStatement preStmt = connection.prepareStatement(sqlString);
+            connection = MySqlBoneCP.getInstance().getConnection();
+            preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, taskID);
+
             preStmt.executeUpdate();
-            preStmt.close();
-            connection.close();
+
             is_success = true;
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
             is_success = false;
+        }
+
+        try {
+            preStmt.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return is_success;
     }
