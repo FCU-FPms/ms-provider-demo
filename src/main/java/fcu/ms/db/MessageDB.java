@@ -28,7 +28,7 @@ public class MessageDB {
 
         String sqlString = "SELECT * FROM Message";
         try {
-            connection = MySqlBoneCP.getConnection();
+            connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
             rs = preStmt.executeQuery();
 
@@ -61,7 +61,7 @@ public class MessageDB {
 
         String sqlString = "SELECT * FROM Message WHERE `userId` = ? AND `receiverId`=  ? AND `taskId`=  ?";
         try {
-            connection = MySqlBoneCP.getConnection();
+            connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, userId);
             preStmt.setInt(2, receiverId);
@@ -97,7 +97,7 @@ public class MessageDB {
 
         String sqlString = "SELECT * FROM Message WHERE id=?";
         try {
-            connection = MySqlBoneCP.getConnection();
+            connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, id);
             rs = preStmt.executeQuery();
@@ -130,7 +130,7 @@ public class MessageDB {
 
         String sqlString = "INSERT INTO Message(content, userID, receiverID, postTime, taskID) VALUES( ?, ?, ?, ?, ?)";
         try {
-            connection = MySqlBoneCP.getConnection();
+            connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, message.getContent());
             preStmt.setInt(2, message.getUserID());
@@ -163,7 +163,7 @@ public class MessageDB {
 
         String sqlString = "DELETE FROM `Message` WHERE id=?";
         try {
-            connection = MySqlBoneCP.getConnection();
+            connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, id);
             preStmt.executeUpdate();
@@ -192,7 +192,7 @@ public class MessageDB {
 
         String sqlString = "SELECT * FROM Message WHERE `taskId`= ? ORDER BY postTime ASC" ;
         try {
-            connection = MySqlBoneCP.getConnection();
+            connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, taskId);
             rs = preStmt.executeQuery();

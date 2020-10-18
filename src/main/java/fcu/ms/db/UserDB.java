@@ -24,7 +24,7 @@ public class UserDB {
 
         String sqlString = "select * from userData";
         try {
-            Connection connection = MySqlBoneCP.getConnection();
+            Connection connection = MySqlBoneCP.getInstance().getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             ResultSet rs = preStmt.executeQuery();
 
@@ -51,7 +51,7 @@ public class UserDB {
         User user = null;
         String sqlString = "select * from userData where userID=?";
         try {
-            Connection connection = MySqlBoneCP.getConnection();
+            Connection connection = MySqlBoneCP.getInstance().getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, userId);
             ResultSet rs = preStmt.executeQuery();
@@ -79,7 +79,7 @@ public class UserDB {
         String sqlString = "select * from userData where userName=?";
         try {
             User user = null;
-            Connection connection = MySqlBoneCP.getConnection();
+            Connection connection = MySqlBoneCP.getInstance().getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, name);
             ResultSet rs = preStmt.executeQuery();
@@ -106,7 +106,7 @@ public class UserDB {
         boolean is_success = false;
         String sqlString = "INSERT INTO userData(userPhone,userName,userPassword) VALUES(?, ?, ?)";
         try {
-            Connection connection = MySqlBoneCP.getConnection();
+            Connection connection = MySqlBoneCP.getInstance().getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, userPhone);
             preStmt.setString(2, name);
@@ -126,7 +126,7 @@ public class UserDB {
         boolean is_success = false;
         String sqlString = "DELETE FROM `userData` WHERE userName=?";
         try {
-            Connection connection = MySqlBoneCP.getConnection();
+            Connection connection = MySqlBoneCP.getInstance().getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, name);
             preStmt.executeUpdate();
@@ -144,7 +144,7 @@ public class UserDB {
         boolean is_success = false;
         String sqlString = "DELETE FROM `userData` WHERE userId=?";
         try {
-            Connection connection = MySqlBoneCP.getConnection();
+            Connection connection = MySqlBoneCP.getInstance().getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, userId);
             preStmt.executeUpdate();
