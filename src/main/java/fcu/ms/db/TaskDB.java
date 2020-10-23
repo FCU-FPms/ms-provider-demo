@@ -23,19 +23,18 @@ public class TaskDB {
     }
 
     public boolean createTask(Task task) {
-        String sqlString = "INSERT INTO `Task`(`TaskName`," +
-                " `Message`," +
-                " `StartPostTime`," +
-                " `EndPostTime`," +
-                " `Salary`," +
-                " `TypeName`," +
-                " `ReleaseUserID`," +
-                " `ReleaseTime`," +
-                " `ReceiveUserID`," +
-                " `ReceiveTime`," +
-                " `TaskAddress`," +
-                " `TaskCity`)" +
-                " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlString = "INSERT INTO `task`" +
+                "(`name`," +
+                " `message`," +
+                " `start_post_time`," +
+                " `end_post_time`," +
+                " `salary`," +
+                " `type_name`," +
+                " `release_user_id`," +
+                " `release_time`," +
+                " `receive_user_id`," +
+                " `task_address`)" +
+                " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         boolean is_success;
 
@@ -46,7 +45,7 @@ public class TaskDB {
             connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
 
-            preStmt.setString(1, task.getTaskName());
+            preStmt.setString(1, task.getName());
             preStmt.setString(2, task.getMessage());
             preStmt.setTimestamp(3, transitLocalDateTime(task.getStartPostTime()));
             preStmt.setTimestamp(4, transitLocalDateTime(task.getEndPostTime()));
@@ -55,9 +54,8 @@ public class TaskDB {
             preStmt.setInt(7,task.getReleaseUserID());
             preStmt.setTimestamp(8, transitLocalDateTime(task.getReleaseTime()));
             preStmt.setInt(9,task.getReceiveUserID());
-            preStmt.setTimestamp(10, transitLocalDateTime(task.getReceiveTime()));
-            preStmt.setString(11,task.getTaskAddress());
-            preStmt.setInt(12,task.getTaskCity());
+            preStmt.setString(10, task.getTaskAddress());
+
 
             preStmt.executeUpdate();
 
@@ -80,7 +78,7 @@ public class TaskDB {
     public List<Task> getTasks() {
         List<Task> tasks = new ArrayList<>();
 
-        String sqlString = "SELECT * FROM `Task`";
+        String sqlString = "SELECT * FROM `task`";
         try {
             Connection connection = MySqlBoneCP.getInstance().getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
@@ -101,7 +99,7 @@ public class TaskDB {
 
     public int getTaskIdByName(String taskName) {
         int id = -1;
-        String sqlString = "SELECT `TaskID` FROM `Task` WHERE `TaskName` = ?";
+        String sqlString = "SELECT `id` FROM `task` WHERE `name` = ?";
 
         Connection connection = null;
         PreparedStatement preStmt = null;
@@ -114,7 +112,7 @@ public class TaskDB {
             rs = preStmt.executeQuery();
 
             while (rs.next()) {
-                id = rs.getInt("TaskID");
+                id = rs.getInt("id");
             }
 
         } catch (Exception ex) {
@@ -135,7 +133,7 @@ public class TaskDB {
 
     public Task getTask(int taskId) {
         Task task = null;
-        String sqlString = "SELECT * FROM `Task` WHERE `taskID` = ?";
+        String sqlString = "SELECT * FROM `task` WHERE `id` = ?";
 
         Connection connection = null;
         PreparedStatement preStmt = null;
@@ -171,7 +169,7 @@ public class TaskDB {
         boolean is_success = false;
         try {
             int taskId = task.getTaskID();
-            setTaskName(task.getTaskName(), taskId);
+            setTaskName(task.getName(), taskId);
             setTaskMessage(task.getMessage(), taskId);
             setTaskStartPostTime(task.getStartPostTime(), taskId);
             setTaskEndPostTime(task.getStartPostTime(), taskId);
@@ -180,9 +178,7 @@ public class TaskDB {
             // 無法設定 releaseUserID
             // 無法設定 releaseTime
             setTaskReceiveUserID(task.getReceiveUserID(), taskId);
-            setTaskReceiveTime(task.getReceiveTime(), taskId);
             setTaskAddress(task.getTaskAddress(), taskId);
-            setTaskCity(task.getTaskCity(), taskId);
 
             is_success = true;
         }catch (Exception ex){
@@ -198,7 +194,7 @@ public class TaskDB {
 
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
-            String sqlString = "UPDATE `Task` SET `TaskName` = ? WHERE `TaskID` = ?";
+            String sqlString = "UPDATE `task` SET `name` = ? WHERE `id` = ?";
 
             preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, taskName);
@@ -223,7 +219,7 @@ public class TaskDB {
 
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
-            String sqlString = "UPDATE `Task` SET `Message` = ? WHERE `TaskID` = ?";
+            String sqlString = "UPDATE `task` SET `message` = ? WHERE `id` = ?";
             preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, taskMessage);
             preStmt.setInt(2, taskID);
@@ -249,7 +245,7 @@ public class TaskDB {
 
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
-            String sqlString = "UPDATE `Task` SET `StartPostTime` = ? WHERE `TaskID` = ?";
+            String sqlString = "UPDATE `task` SET `start_post_time` = ? WHERE `id` = ?";
             preStmt = connection.prepareStatement(sqlString);
             preStmt.setTimestamp(1, transitLocalDateTime(taskStartPostTime));
             preStmt.setInt(2, taskID);
@@ -274,7 +270,7 @@ public class TaskDB {
 
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
-            String sqlString = "UPDATE `Task` SET `EndPostTime` = ? WHERE `TaskID` = ?";
+            String sqlString = "UPDATE `task` SET `end_post_time` = ? WHERE `id` = ?";
             preStmt = connection.prepareStatement(sqlString);
             preStmt.setTimestamp(1, transitLocalDateTime(taskEndPostTime));
             preStmt.setInt(2, taskID);
@@ -302,7 +298,7 @@ public class TaskDB {
 
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
-            String sqlString = "UPDATE `Task` SET `TypeName` = ? WHERE `TaskID` = ?";
+            String sqlString = "UPDATE `task` SET `type_name` = ? WHERE `id` = ?";
             preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, taskTypeName);
             preStmt.setInt(2, taskID);
@@ -322,13 +318,17 @@ public class TaskDB {
         }
     }
 
+    // 無法修改 release_user_id
+
+    // 無法修改 release_time
+
     private void setTaskReceiveUserID(int receiveUserID, int taskID) {
         Connection connection = null;
         PreparedStatement preStmt = null;
 
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
-            String sqlString = "UPDATE `Task` SET `ReceiveUserID` = ? WHERE `TaskID` = ?";
+            String sqlString = "UPDATE `task` SET `receive_user_id` = ? WHERE `id` = ?";
             preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, receiveUserID);
             preStmt.setInt(2, taskID);
@@ -348,30 +348,6 @@ public class TaskDB {
         }
     }
 
-    private void setTaskReceiveTime(LocalDateTime receiveTime, int taskID) {
-        Connection connection = null;
-        PreparedStatement preStmt = null;
-
-        try {
-            connection = MySqlBoneCP.getInstance().getConnection();
-            String sqlString = "UPDATE `Task` SET `ReceiveTime` = ? WHERE `TaskID` = ?";
-            preStmt = connection.prepareStatement(sqlString);
-            preStmt.setTimestamp(1, transitLocalDateTime(receiveTime));
-            preStmt.setInt(2, taskID);
-
-            preStmt.executeUpdate();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            preStmt.close();
-            connection.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     private void setTaskAddress(String taskAddress, int taskID) {
         Connection connection = null;
@@ -379,7 +355,7 @@ public class TaskDB {
 
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
-            String sqlString = "UPDATE `Task` SET `TaskAddress` = ? WHERE `TaskID` = ?";
+            String sqlString = "UPDATE `task` SET `task_address` = ? WHERE `id` = ?";
             preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, taskAddress);
             preStmt.setInt(2, taskID);
@@ -398,31 +374,6 @@ public class TaskDB {
         }
     }
 
-    private void setTaskCity(int taskCity, int taskID) {
-        Connection connection = null;
-        PreparedStatement preStmt = null;
-
-        try {
-            connection = MySqlBoneCP.getInstance().getConnection();
-            String sqlString = "UPDATE `Task` SET `TaskCity` = ? WHERE `TaskID` = ?";
-            preStmt = connection.prepareStatement(sqlString);
-            preStmt.setInt(1, taskCity);
-            preStmt.setInt(2, taskID);
-
-            preStmt.executeUpdate();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        try {
-            preStmt.close();
-            connection.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public boolean deleteTask(int taskID) {
 
@@ -430,7 +381,7 @@ public class TaskDB {
         PreparedStatement preStmt = null;
 
         boolean is_success;
-        String sqlString = "DELETE FROM `Task` WHERE `TaskID` = ?";
+        String sqlString = "DELETE FROM `task` WHERE `id` = ?";
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
@@ -452,23 +403,25 @@ public class TaskDB {
         }
         return is_success;
     }
+
     private Task parseTaskFromDbColumn(ResultSet dbResult) throws Exception {
-        int id = dbResult.getInt("TaskID");
-        String TaskName = dbResult.getString("TaskName");
-        String Message = dbResult.getString("Message");
-        LocalDateTime StartPostTime = transitTimestamp(dbResult.getTimestamp("StartPostTime"));
-        LocalDateTime EndPostTime = transitTimestamp(dbResult.getTimestamp("EndPostTime"));
-        int Salary = dbResult.getInt("Salary");
-        String TypeName = dbResult.getString("TypeName");
-        int ReleaseUserID = dbResult.getInt("ReleaseUserID");
-        LocalDateTime ReleaseTime = transitTimestamp(dbResult.getTimestamp("ReleaseTime"));
-        int ReceiveUserID = dbResult.getInt("ReceiveUserID");
-        LocalDateTime ReceiveTime = transitTimestamp(dbResult.getTimestamp("ReceiveTime"));
-        String TaskAddress = dbResult.getString("TaskAddress");
-        int TaskCity = dbResult.getInt("TaskCity");
+
+        // 10 cols
+        int id = dbResult.getInt("id");
+        String TaskName = dbResult.getString("name");
+        String Message = dbResult.getString("message");
+        LocalDateTime StartPostTime = transitTimestamp(dbResult.getTimestamp("start_post_time"));
+        LocalDateTime EndPostTime = transitTimestamp(dbResult.getTimestamp("end_post_time"));
+
+        int Salary = dbResult.getInt("salary");
+        String TypeName = dbResult.getString("type_name");
+        int ReleaseUserID = dbResult.getInt("release_user_id");
+        LocalDateTime ReleaseTime = transitTimestamp(dbResult.getTimestamp("release_time"));
+        int ReceiveUserID = dbResult.getInt("receive_user_id");
+        String TaskAddress = dbResult.getString("task_address");
 
         return new Task(id, TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, ReleaseUserID,
-                ReleaseTime, ReceiveUserID, ReceiveTime, TaskAddress, TaskCity);
+                ReleaseTime, ReceiveUserID, TaskAddress);
     }
 
     private Timestamp transitLocalDateTime(LocalDateTime localDateTime) { // 如果是null 會回傳null

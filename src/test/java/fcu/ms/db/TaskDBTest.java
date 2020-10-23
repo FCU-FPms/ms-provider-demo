@@ -8,8 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.sql.Timestamp;
 import java.util.List;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -22,8 +20,12 @@ public class TaskDBTest {
     public void createTask() {
         LocalDateTime currentTime = LocalDateTime.now();
         Task task = new Task(taskname, "testing-message", currentTime, currentTime,
-                500,"EatTask", 20, currentTime, 20, currentTime, "testing_Address",1);
+                500,"EatTask", 1, currentTime, 1, "testing_Address");
         assertTrue( taskDB.createTask(task) );
+
+        Task task2 = new Task(taskname, "testing-message", currentTime, null,
+                500,"EatTask", 1, currentTime, 1, "testing_Address");
+        assertTrue( taskDB.createTask(task2) );
     }
 
 
@@ -44,24 +46,25 @@ public class TaskDBTest {
     void getTask() {
         int id = taskDB.getTaskIdByName(taskname);
         Task task =taskDB.getTask(id);
-        assertEquals(taskname, task.getTaskName());
+        assertEquals(taskname, task.getName());
     }
 
     @Test
     public void setTask(){
-//        int id = taskDB.getTaskIdByName(taskname);
-//        LocalDateTime currentTime = new Timestamp (new Date().getTime());
-//
-//        Task task = new Task(id, taskname, "changr-message", currentTime, currentTime,
-//                600,"ChangeTask", 10, currentTime, 10, currentTime, "change_Address",2);
-//
-//        assertTrue(taskDB.setTask(task));
+        int id = taskDB.getTaskIdByName(taskname);
+
+        LocalDateTime currentTime = LocalDateTime.now();
+
+
+        Task task = new Task(id, taskname, "changr-message", currentTime, currentTime,
+                600,"ChangeTask", 1, currentTime, 1, "change_Address");
+
+        assertTrue(taskDB.setTask(task));
     }
 
 
     @Test
     void deleteTask() {
-        int id = taskDB.getTaskIdByName(taskname);
-        assertTrue(taskDB.deleteTask(id));
+        assertTrue(taskDB.deleteTask(324));
     }
 }

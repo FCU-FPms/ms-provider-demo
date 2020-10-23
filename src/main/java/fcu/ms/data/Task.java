@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 public class Task {
     private int taskID = -1;
-    private String taskName;
+    private String name;
     private String message;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -23,20 +23,15 @@ public class Task {
 
     private int receiveUserID = -1;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime receiveTime;
-
     private String taskAddress;
-    private int taskCity;
 
     public Task(){
         // 需要這個做反序列化, 跟 import com.fasterxml.jackson.databind.ObjectMapper; 的 convertValue 有關
     }
 
-    public Task(String taskName, String message, LocalDateTime startPostTime, LocalDateTime endPostTime, // 新增資料表用的 不用填ID
-                int salary, String typeName, int releaseUserID, LocalDateTime releaseTime, int receiveUserID,
-                LocalDateTime receiveTime, String taskAddress, int taskCity) {
-        this.taskName = taskName;
+    public Task(String name, String message, LocalDateTime startPostTime, LocalDateTime endPostTime, // 新增資料表用的 不用填ID
+                int salary, String typeName, int releaseUserID, LocalDateTime releaseTime, int receiveUserID, String taskAddress) {
+        this.name = name;
         this.message = message;
         this.startPostTime = startPostTime;
         this.endPostTime = endPostTime;
@@ -45,15 +40,13 @@ public class Task {
         this.releaseUserID = releaseUserID;
         this.releaseTime = releaseTime;
         this.receiveUserID = receiveUserID;
-        this.receiveTime = receiveTime;
         this.taskAddress = taskAddress;
-        this.taskCity = taskCity;
     }
 
-    // API新增資料用的 不用填ID 與 receiveUserID, receiveTime
-    public Task(String taskName, String message, LocalDateTime startPostTime, LocalDateTime endPostTime,
-                int salary, String typeName, int releaseUserID, LocalDateTime releaseTime, String taskAddress, int taskCity) {
-        this.taskName = taskName;
+    // API新增資料用的 不用填ID 與 receiveUserID
+    public Task(String name, String message, LocalDateTime startPostTime, LocalDateTime endPostTime,
+                int salary, String typeName, int releaseUserID, LocalDateTime releaseTime, String taskAddress) {
+        this.name = name;
         this.message = message;
         this.startPostTime = startPostTime;
         this.endPostTime = endPostTime;
@@ -62,14 +55,12 @@ public class Task {
         this.releaseUserID = releaseUserID;
         this.releaseTime = releaseTime;
         this.taskAddress = taskAddress;
-        this.taskCity = taskCity;
     }
 
-    public Task(int taskID, String taskName, String message, LocalDateTime startPostTime, LocalDateTime endPostTime, // 用來從資料表拿Task
-                int salary, String typeName, int releaseUserID, LocalDateTime releaseTime, int receiveUserID,
-                LocalDateTime receiveTime, String taskAddress, int taskCity) {
+    public Task(int taskID, String name, String message, LocalDateTime startPostTime, LocalDateTime endPostTime, // 用來從資料表拿Task
+                int salary, String typeName, int releaseUserID, LocalDateTime releaseTime, int receiveUserID, String taskAddress) {
         this.taskID = taskID;
-        this.taskName = taskName;
+        this.name = name;
         this.message = message;
         this.startPostTime = startPostTime;
         this.endPostTime = endPostTime;
@@ -78,9 +69,7 @@ public class Task {
         this.releaseUserID = releaseUserID;
         this.releaseTime = releaseTime;
         this.receiveUserID = receiveUserID;
-        this.receiveTime = receiveTime;
         this.taskAddress = taskAddress;
-        this.taskCity = taskCity;
     }
 
     public int getTaskID() {
@@ -91,8 +80,8 @@ public class Task {
         this.taskID = taskID;
     }
 
-    public String getTaskName() {
-        return taskName;
+    public String getName() {
+        return name;
     }
 
     public String getTaskAddress() {
@@ -103,16 +92,8 @@ public class Task {
         this.taskAddress = taskAddress;
     }
 
-    public int getTaskCity() {
-        return taskCity;
-    }
-
-    public void setTaskCity(int taskCity) {
-        this.taskCity = taskCity;
-    }
-
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getMessage() {
@@ -175,11 +156,4 @@ public class Task {
         this.receiveUserID = receiveUserID;
     }
 
-    public LocalDateTime getReceiveTime() {
-        return receiveTime;
-    }
-
-    public void setReceiveTime(LocalDateTime receiveTime) {
-        this.receiveTime = receiveTime;
-    }
 }

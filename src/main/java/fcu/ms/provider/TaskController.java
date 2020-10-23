@@ -126,7 +126,7 @@ public class TaskController {
 
     private JSONObject getTaskEntity(Task task) {
         JSONObject entity = new JSONObject();
-        entity.put("TaskName", task.getTaskName());
+        entity.put("TaskName", task.getName());
         entity.put("Message", task.getMessage());
         entity.put("StartPostTime", task.getStartPostTime());
         entity.put("EndPostTime", task.getEndPostTime());
@@ -134,10 +134,8 @@ public class TaskController {
         entity.put("ReleaseUserID", task.getReleaseUserID());
         entity.put("ReleaseTime", task.getReleaseTime());
         entity.put("ReceiveUserID", task.getReceiveUserID());
-        entity.put("ReceiveTime", task.getReceiveTime());
-        entity.put("TypeName", task.getTaskName());
+        entity.put("TypeName", task.getName());
         entity.put("TaskAddress", task.getTaskAddress());
-        entity.put("TaskCity", task.getTaskCity());
         return entity;
     }
 
