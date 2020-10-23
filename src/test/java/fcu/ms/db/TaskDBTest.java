@@ -1,6 +1,7 @@
 package fcu.ms.db;
 
 import fcu.ms.data.Task;
+import fcu.ms.data.TaskBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
@@ -19,13 +20,9 @@ public class TaskDBTest {
     @Test
     public void createTask() {
         LocalDateTime currentTime = LocalDateTime.now();
-        Task task = new Task(taskname, "testing-message", currentTime, currentTime,
-                500,"EatTask", 1, currentTime, 1, "testing_Address");
-        assertTrue( taskDB.createTask(task) );
 
-        Task task2 = new Task(taskname, "testing-message", currentTime, null,
-                500,"EatTask", 1, currentTime, 1, "testing_Address");
-        assertTrue( taskDB.createTask(task2) );
+        Task task = TaskBuilder.aTask(0, 888, 1, currentTime).build();
+        assertTrue( taskDB.createTask(task) );
     }
 
 
@@ -55,9 +52,9 @@ public class TaskDBTest {
 
         LocalDateTime currentTime = LocalDateTime.now();
 
-
-        Task task = new Task(id, taskname, "changr-message", currentTime, currentTime,
-                600,"ChangeTask", 1, currentTime, 1, "change_Address");
+        Task task = TaskBuilder.aTask(id, 888, 1, currentTime)
+                .withMessage("testfranky")
+                .build();
 
         assertTrue(taskDB.setTask(task));
     }

@@ -1,6 +1,7 @@
 package fcu.ms.db;
 
 import fcu.ms.data.Task;
+import fcu.ms.data.TaskBuilder;
 import fcu.ms.dbUtil.MySqlBoneCP;
 
 import java.sql.Connection;
@@ -47,12 +48,12 @@ public class TaskDB {
 
             preStmt.setString(1, task.getName());
             preStmt.setString(2, task.getMessage());
-            preStmt.setTimestamp(3, transitLocalDateTime(task.getStartPostTime()));
-            preStmt.setTimestamp(4, transitLocalDateTime(task.getEndPostTime()));
+            preStmt.setTimestamp(3, Util.transitLocalDateTime(task.getStartPostTime()));
+            preStmt.setTimestamp(4, Util.transitLocalDateTime(task.getEndPostTime()));
             preStmt.setInt(5, task.getSalary());
             preStmt.setString(6,task.getTypeName());
             preStmt.setInt(7,task.getReleaseUserID());
-            preStmt.setTimestamp(8, transitLocalDateTime(task.getReleaseTime()));
+            preStmt.setTimestamp(8, Util.transitLocalDateTime(task.getReleaseTime()));
             preStmt.setInt(9,task.getReceiveUserID());
             preStmt.setString(10, task.getTaskAddress());
 
@@ -189,6 +190,10 @@ public class TaskDB {
     }
 
     private void setTaskName(String taskName, int taskID) {
+        if(taskName == null) {
+            return;
+        }
+
         Connection connection = null;
         PreparedStatement preStmt = null;
 
@@ -214,6 +219,10 @@ public class TaskDB {
     }
 
     private void setTaskMessage(String taskMessage, int taskID) {
+        if(taskMessage == null) {
+            return;
+        }
+
         Connection connection = null;
         PreparedStatement preStmt = null;
 
@@ -240,6 +249,10 @@ public class TaskDB {
     }
 
     private void setTaskStartPostTime(LocalDateTime taskStartPostTime, int taskID) {
+        if(taskStartPostTime == null) {
+            return;
+        }
+
         Connection connection = null;
         PreparedStatement preStmt = null;
 
@@ -247,7 +260,7 @@ public class TaskDB {
             connection = MySqlBoneCP.getInstance().getConnection();
             String sqlString = "UPDATE `task` SET `start_post_time` = ? WHERE `id` = ?";
             preStmt = connection.prepareStatement(sqlString);
-            preStmt.setTimestamp(1, transitLocalDateTime(taskStartPostTime));
+            preStmt.setTimestamp(1, Util.transitLocalDateTime(taskStartPostTime));
             preStmt.setInt(2, taskID);
 
             preStmt.executeUpdate();
@@ -265,6 +278,10 @@ public class TaskDB {
     }
 
     private void setTaskEndPostTime(LocalDateTime taskEndPostTime, int taskID) {
+        if(taskEndPostTime == null) {
+            return;
+        }
+
         Connection connection = null;
         PreparedStatement preStmt = null;
 
@@ -272,7 +289,7 @@ public class TaskDB {
             connection = MySqlBoneCP.getInstance().getConnection();
             String sqlString = "UPDATE `task` SET `end_post_time` = ? WHERE `id` = ?";
             preStmt = connection.prepareStatement(sqlString);
-            preStmt.setTimestamp(1, transitLocalDateTime(taskEndPostTime));
+            preStmt.setTimestamp(1, Util.transitLocalDateTime(taskEndPostTime));
             preStmt.setInt(2, taskID);
 
             preStmt.executeUpdate();
@@ -293,6 +310,10 @@ public class TaskDB {
     // 目前沒有修改價錢的函式
 
     private void setTaskTypeName(String taskTypeName, int taskID) {
+        if(taskTypeName == null) {
+            return;
+        }
+
         Connection connection = null;
         PreparedStatement preStmt = null;
 
@@ -323,6 +344,10 @@ public class TaskDB {
     // 無法修改 release_time
 
     private void setTaskReceiveUserID(int receiveUserID, int taskID) {
+        if(receiveUserID == 0) {
+            return;
+        }
+
         Connection connection = null;
         PreparedStatement preStmt = null;
 
@@ -350,6 +375,10 @@ public class TaskDB {
 
 
     private void setTaskAddress(String taskAddress, int taskID) {
+        if(taskAddress == null) {
+            return;
+        }
+
         Connection connection = null;
         PreparedStatement preStmt = null;
 
@@ -408,35 +437,26 @@ public class TaskDB {
 
         // 10 cols
         int id = dbResult.getInt("id");
-        String TaskName = dbResult.getString("name");
-        String Message = dbResult.getString("message");
-        LocalDateTime StartPostTime = transitTimestamp(dbResult.getTimestamp("start_post_time"));
-        LocalDateTime EndPostTime = transitTimestamp(dbResult.getTimestamp("end_post_time"));
+        String taskName = dbResult.getString("name");
+        String message = dbResult.getString("message");
+        LocalDateTime startPostTime = Util.transitTimestamp(dbResult.getTimestamp("start_post_time"));
+        LocalDateTime endPostTime = Util.transitTimestamp(dbResult.getTimestamp("end_post_time"));
 
-        int Salary = dbResult.getInt("salary");
-        String TypeName = dbResult.getString("type_name");
-        int ReleaseUserID = dbResult.getInt("release_user_id");
-        LocalDateTime ReleaseTime = transitTimestamp(dbResult.getTimestamp("release_time"));
-        int ReceiveUserID = dbResult.getInt("receive_user_id");
-        String TaskAddress = dbResult.getString("task_address");
+        int salary = dbResult.getInt("salary");
+        String typeName = dbResult.getString("type_name");
+        int releaseUserId = dbResult.getInt("release_user_id");
+        LocalDateTime releaseTime = Util.transitTimestamp(dbResult.getTimestamp("release_time"));
+        int receiveUserId = dbResult.getInt("receive_user_id");
+        String taskAddress = dbResult.getString("task_address");
 
-        return new Task(id, TaskName, Message, StartPostTime, EndPostTime, Salary, TypeName, ReleaseUserID,
-                ReleaseTime, ReceiveUserID, TaskAddress);
+        return TaskBuilder.aTask(id, salary, releaseUserId, releaseTime)
+                .withName(taskName)
+                .withMessage(message)
+                .withStartPostTime(startPostTime)
+                .withEndPostTime(endPostTime)
+                .withTypeName(typeName)
+                .withReceiveUserID(receiveUserId)
+                .withTaskAddress(taskAddress).build();
     }
 
-    private Timestamp transitLocalDateTime(LocalDateTime localDateTime) { // 如果是null 會回傳null
-        if(localDateTime != null) {
-            return Timestamp.valueOf(localDateTime);
-        } else {
-            return null;
-        }
-    }
-
-    private LocalDateTime transitTimestamp(Timestamp timestamp) { // 如果是null 會回傳null
-        if(timestamp != null) {
-            return timestamp.toLocalDateTime();
-        } else {
-            return null;
-        }
-    }
 }
