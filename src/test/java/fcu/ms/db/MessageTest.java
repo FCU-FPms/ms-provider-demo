@@ -12,37 +12,35 @@ public class MessageTest {
     public void createMessage_TEST() {   /* 創建一個新的 message */
         MessageDB messageDB = MessageDB.getInstance();
         LocalDateTime currentTime = LocalDateTime.now();
-        Message message = new Message("testing321", 1, 1, currentTime, 200);
+        Message message = new Message("4", 1, 1, currentTime, 325);
         assertTrue( messageDB.createMessage(message) );
     }
 
     @Test
     public void getMessages_TEST() { /* 根據 messageID 來抓 message */
         MessageDB messageDB = MessageDB.getInstance();
-        Message message = messageDB.getMessage(1);
-        assertTrue(message.getId() == 1);
-    }
-
-    @Test
-    public void deleteMessage_TEST() {  /* 刪除一個 message */
-        MessageDB messageDB = MessageDB.getInstance();
-        assertTrue(messageDB.deleteMessage(1));
+        Message message = messageDB.getMessage(41);
+        assertTrue(message.getId() == 41);
     }
 
     @Test
     void getMessageByID_TEST() {  /* 根據 user/receiver 以及 taskID 來抓 message */
         MessageDB messageDB = MessageDB.getInstance();
-        List<Message> message = messageDB.getMessageByID(1,1, 200);
+        List<Message> message = messageDB.getMessageByID(1,1, 325);
         System.out.println(message);
     }
 
     @Test
     void getMessageByTaskID_TEST() {  /* 根據 taskID 來抓 message */
         MessageDB messageDB = MessageDB.getInstance();
-        List<Message> messages = messageDB.getMessageByTaskId(200);
-        for(Message message : messages) {
-            System.out.println(message.getId());
-        }
+        List<Message> messages = messageDB.getMessageByTaskId(325);
+        System.out.println(messages);
+    }
+
+    @Test
+    public void deleteMessage_TEST() {  /* 刪除一個 message */
+        MessageDB messageDB = MessageDB.getInstance();
+        assertTrue(messageDB.deleteMessage(41));
     }
 
 }

@@ -26,7 +26,7 @@ public class MessageDB {
         PreparedStatement preStmt = null;
         ResultSet rs = null;
 
-        String sqlString = "SELECT * FROM Message";
+        String sqlString = "SELECT * FROM `message`";
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
@@ -59,7 +59,7 @@ public class MessageDB {
         ResultSet rs = null;
 
 
-        String sqlString = "SELECT * FROM Message WHERE `userId` = ? AND `receiverId`=  ? AND `taskId`=  ?";
+        String sqlString = "SELECT * FROM `message` WHERE `userID` = ? AND `receiverID`=  ? AND `taskID`=  ?";
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
@@ -83,8 +83,6 @@ public class MessageDB {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
         return messages;
     }
 
@@ -95,7 +93,7 @@ public class MessageDB {
         PreparedStatement preStmt = null;
         ResultSet rs = null;
 
-        String sqlString = "SELECT * FROM Message WHERE id=?";
+        String sqlString = "SELECT * FROM `message` WHERE `id` = ?";
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
@@ -128,7 +126,7 @@ public class MessageDB {
         Connection connection = null;
         PreparedStatement preStmt = null;
 
-        String sqlString = "INSERT INTO Message(content, userID, receiverID, postTime, taskID) VALUES( ?, ?, ?, ?, ?)";
+        String sqlString = "INSERT INTO `message` (content, userID, receiverID, postTime, taskID) VALUES( ?, ?, ?, ?, ?)";
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
@@ -161,7 +159,7 @@ public class MessageDB {
         Connection connection = null;
         PreparedStatement preStmt = null;
 
-        String sqlString = "DELETE FROM `Message` WHERE id=?";
+        String sqlString = "DELETE FROM `message` WHERE id = ?";
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
@@ -190,7 +188,7 @@ public class MessageDB {
         PreparedStatement preStmt = null;
         ResultSet rs = null;
 
-        String sqlString = "SELECT * FROM Message WHERE `taskId`= ? ORDER BY postTime ASC" ;
+        String sqlString = "SELECT * FROM `message` WHERE `taskId`= ? ORDER BY `postTime` ASC" ;
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
@@ -212,7 +210,6 @@ public class MessageDB {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         return messages;
     }

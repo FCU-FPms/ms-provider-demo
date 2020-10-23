@@ -82,4 +82,16 @@ public class Message {
     public void setTaskID(int taskID) {
         this.taskID = taskID;
     }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", userID=" + userID +
+                ", receiverID=" + receiverID +
+                ", postTime=" + postTime +
+                ", taskID=" + taskID +
+                '}';
+    }
 }

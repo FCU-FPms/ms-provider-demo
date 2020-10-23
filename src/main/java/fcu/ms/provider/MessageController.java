@@ -49,7 +49,7 @@ public class MessageController {
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/conversation/{userID}/{receiverID}/{taskID}")
+    @GetMapping(value = "/conversation/{taskID}/{userID}/{receiverID}/")
     public ResponseEntity<Object> getMessageByID(@PathVariable int userID, @PathVariable int receiverID, @PathVariable int taskID) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
@@ -80,7 +80,7 @@ public class MessageController {
         entity.put("content", message.getContent());
         entity.put("postTime", message.getPostTime());
         entity.put("userID", message.getUserID());
-        entity.put("receiverId", message.getReceiverID());
+        entity.put("receiverID", message.getReceiverID());
         entity.put("taskID", message.getTaskID());
         return entity;
     }

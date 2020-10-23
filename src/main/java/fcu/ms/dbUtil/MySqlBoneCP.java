@@ -66,9 +66,9 @@ public class MySqlBoneCP {
         config.setUsername(dbSecret.getProperty("db.user"));
         config.setPassword(dbSecret.getProperty("db.password"));
 
-        config.setPartitionCount(8);
+        config.setPartitionCount(4);
         config.setMinConnectionsPerPartition(1);
-        config.setMaxConnectionsPerPartition(100);
+        config.setMaxConnectionsPerPartition(4);
 
         return config;
 

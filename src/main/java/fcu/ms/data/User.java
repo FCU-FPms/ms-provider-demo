@@ -2,15 +2,25 @@ package fcu.ms.data;
 
 public class User {
     private int id;
-    private String phoneNumber;
-    private String userName;
-    private String userPassword;
+    private String name;
+    private String phone;
+    private String firebaseUid;
 
-    public User(int id, String phoneNumber, String userName, String userPassword) {
+    public User() {
+
+    }
+
+    public User(int id, String name, String phone, String firebaseUid) {
         this.id = id;
-        this.phoneNumber = phoneNumber;
-        this.userName = userName;
-        this.userPassword = userPassword;
+        this.name = name;
+        this.phone = phone;
+        this.firebaseUid = firebaseUid;
+    }
+
+    public User(String name, String phone, String firebaseUid) {
+        this.name = name;
+        this.phone = phone;
+        this.firebaseUid = firebaseUid;
     }
 
     public int getId() {
@@ -21,24 +31,28 @@ public class User {
         this.id = id;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getName() {
+        return name;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public String getUserPassword() { return userPassword; }
+    public String getFirebaseUid() {
+        return firebaseUid;
+    }
 
-    public void setUserPassword(String userPassword) { this.userPassword = userPassword; }
+    public void setFirebaseUid(String firebaseUid) {
+        this.firebaseUid = firebaseUid;
+    }
 }
 

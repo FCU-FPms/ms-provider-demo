@@ -27,18 +27,14 @@ public class UserDB {
 
         List<User> users = new ArrayList<User>();
 
-        String sqlString = "select * from userData";
+        String sqlString = "SELECT * FROM `user`";
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
             rs = preStmt.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("userID");
-                String userPhone = rs.getString("userPhone");
-                String userName = rs.getString("userName");
-                String userPassword = rs.getString("userPassword");
-                User user = new User(id, userPhone, userName, userPassword);
+                User user = parseUserFromDbColumn(rs);
                 users.add(user);
             }
 
@@ -59,9 +55,9 @@ public class UserDB {
         return users;
     }
 
-    public User getUser(int userId) {
+    public User getUser(int id) {
         User user = null;
-        String sqlString = "select * from userData where userID=?";
+        String sqlString = "SELECT * FROM `user` WHERE `id` = ?";
 
         Connection connection = null;
         PreparedStatement preStmt = null;
@@ -70,15 +66,11 @@ public class UserDB {
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
-            preStmt.setInt(1, userId);
+            preStmt.setInt(1, id);
             rs = preStmt.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("userID");
-                String userPhone = rs.getString("userPhone");
-                String userName = rs.getString("userName");
-                String userPassword = rs.getString("userPassword");
-                user = new User(id, userPhone, userName, userPassword);
+                user = parseUserFromDbColumn(rs);
             }
 
 
@@ -95,13 +87,12 @@ public class UserDB {
         }
 
         return user;
-
     }
 
     public User getUser(String name) {
         User user = null;
 
-        String sqlString = "select * from userData where userName=?";
+        String sqlString = "SELECT * FROM `user` WHERE `name` = ?";
 
         Connection connection = null;
         PreparedStatement preStmt = null;
@@ -113,11 +104,7 @@ public class UserDB {
             preStmt.setString(1, name);
             rs = preStmt.executeQuery();
             while ( rs.next() ) {
-                int id = rs.getInt("userID");
-                String userPhone = rs.getString("userPhone");
-                String userName = rs.getString("userName");
-                String userPassword = rs.getString("userPassword");
-                user = new User(id, userPhone, userName, userPassword);
+                user = parseUserFromDbColumn(rs);
             }
 
         } catch (Exception ex) {
@@ -133,13 +120,12 @@ public class UserDB {
         }
 
         return user;
-
     }
 
-    public boolean createUser(String name, String userPhone, String userPassword) {
+    public boolean createUser(User user) {
 
         boolean is_success = false;
-        String sqlString = "INSERT INTO userData(userPhone,userName,userPassword) VALUES(?, ?, ?)";
+        String sqlString = "INSERT INTO `user` (`name`, `phone`, `firebase_uid`) VALUES (?, ?, ?)";
 
         Connection connection = null;
         PreparedStatement preStmt = null;
@@ -147,9 +133,9 @@ public class UserDB {
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
-            preStmt.setString(1, userPhone);
-            preStmt.setString(2, name);
-            preStmt.setString(3, userPassword);
+            preStmt.setString(1, user.getName());
+            preStmt.setString(2, user.getPhone());
+            preStmt.setString(3, user.getFirebaseUid());
             preStmt.executeUpdate();
 
             is_success = true;
@@ -170,7 +156,7 @@ public class UserDB {
     public boolean deleteUser(String name) {
 
         boolean is_success = false;
-        String sqlString = "DELETE FROM `userData` WHERE userName=?";
+        String sqlString = "DELETE FROM `user` WHERE `name` = ?";
 
         Connection connection = null;
         PreparedStatement preStmt = null;
@@ -196,10 +182,10 @@ public class UserDB {
         return is_success;
     }
 
-    public boolean deleteUser(int userId) {
+    public boolean deleteUser(int id) {
 
         boolean is_success = false;
-        String sqlString = "DELETE FROM `userData` WHERE userId=?";
+        String sqlString = "DELETE FROM `user` WHERE `id` = ?";
 
         Connection connection = null;
         PreparedStatement preStmt = null;
@@ -207,7 +193,7 @@ public class UserDB {
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
-            preStmt.setInt(1, userId);
+            preStmt.setInt(1, id);
             preStmt.executeUpdate();
 
             is_success = true;
@@ -223,5 +209,14 @@ public class UserDB {
         }
 
         return is_success;
+    }
+
+    private User parseUserFromDbColumn(ResultSet dbResult) throws Exception {
+        int id = dbResult.getInt("id");
+        String name = dbResult.getString("name");
+        String phone = dbResult.getString("phone");
+        String firebase_uid = dbResult.getString("firebase_uid");
+
+        return new User(id, name, phone, firebase_uid);
     }
 }
