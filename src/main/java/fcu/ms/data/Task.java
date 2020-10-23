@@ -25,7 +25,7 @@ public class Task {
 
     private String taskAddress;
 
-    public Task(){
+    public Task() {
         // 需要這個做反序列化, 跟 import com.fasterxml.jackson.databind.ObjectMapper; 的 convertValue 有關
     }
 
