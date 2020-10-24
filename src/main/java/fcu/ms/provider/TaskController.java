@@ -168,16 +168,11 @@ public class TaskController {
 
     @PostMapping(value = "/{taskID}/RequestUsers/{userID}")
     public ResponseEntity<String> addUserToTaskRequestList(@PathVariable int taskID, @PathVariable int userID) {
-        // postTime 在API中要打上 yyyy-mm-dd hh:mm:ss 格式
-
-        boolean is_success = requestTaskUsersDB.addUserToTaskRequestList(userID, taskID);
-
-        HttpHeaders headers = createBaseHttpHeaders();
-
-        if(is_success) {
-            return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        if ( requestTaskUsersDB.isUserAlreadyInList(userID, taskID) ) {
+            return sendCreateResponse(true);
         } else {
-            return new ResponseEntity<String>("Error to addUserToTaskRequestList in DB", headers, HttpStatus.BAD_REQUEST);
+            boolean is_success = requestTaskUsersDB.addUserToTaskRequestList(userID, taskID);
+            return sendCreateResponse(is_success);
         }
     }
 
@@ -251,6 +246,15 @@ public class TaskController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         return headers;
+    }
+
+    private ResponseEntity<String> sendCreateResponse(boolean is_success) {
+        HttpHeaders headers = createBaseHttpHeaders();
+        if(is_success) {
+            return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<String>("Error in create", headers, HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

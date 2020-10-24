@@ -95,13 +95,50 @@ public class RequestTaskUsersDB {
         return is_success;
     }
 
+    public boolean isUserAlreadyInList(int userID, int taskID) {
 
+        boolean isAlreadyInList = false;
 
+        Connection connection = null;
+        PreparedStatement preStmt = null;
+        ResultSet rs = null;
+
+        String sqlString = "SELECT * FROM `request_task_users` WHERE task_id = ? AND user_id = ?;";
+        try {
+            connection = MySqlBoneCP.getInstance().getConnection();
+            preStmt = connection.prepareStatement(sqlString);
+
+            preStmt.setInt(1, taskID);
+            preStmt.setInt(2, userID);
+            rs = preStmt.executeQuery();
+
+            if (rs.next() == true) {
+                isAlreadyInList = true;
+            }
+
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
+        }
+
+        try {
+            rs.close();
+            preStmt.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return isAlreadyInList;
+    }
 
 
     public List<User> getRequestUsers(int taskID) {
 
         List<User> tasks = new ArrayList<>();
+
+        Connection connection = null;
+        PreparedStatement preStmt = null;
+        ResultSet rs = null;
 
         String sqlString = "SELECT `user`.`id`, `user`.`name` " +
                            "FROM `request_task_users`, `user` " +
@@ -109,11 +146,11 @@ public class RequestTaskUsersDB {
                            "AND `request_task_users`.`user_id` = `user`.`id`" +
                            "ORDER BY `request_task_users`.`id` ASC;";
         try {
-            Connection connection = MySqlBoneCP.getInstance().getConnection();
-            PreparedStatement preStmt = connection.prepareStatement(sqlString);
+            connection = MySqlBoneCP.getInstance().getConnection();
+            preStmt = connection.prepareStatement(sqlString);
 
             preStmt.setInt(1, taskID);
-            ResultSet rs = preStmt.executeQuery();
+            rs = preStmt.executeQuery();
 
             while (rs.next()) {
                 int userID = rs.getInt("id");
@@ -123,26 +160,19 @@ public class RequestTaskUsersDB {
                 User user = UserBuilder.anUser(userID, userName).build();
                 tasks.add(user);
             }
-            rs.close();
-            preStmt.close();
-            connection.close();
-
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
         }
+
+        try {
+            rs.close();
+            preStmt.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return tasks;
-
     }
-
-
-
-
-
-
-
-
-
-
-
 
 }

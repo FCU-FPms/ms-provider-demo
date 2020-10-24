@@ -16,12 +16,12 @@ public class Task {
 
     private int salary;
     private String typeName;
-    private int releaseUserID = -1;
+    private int releaseUserID;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime releaseTime;
 
-    private int receiveUserID = -1;
+    private int receiveUserID = 0;
 
     private String taskAddress;
 
