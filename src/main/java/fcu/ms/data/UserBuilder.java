@@ -2,17 +2,22 @@ package fcu.ms.data;
 
 public final class UserBuilder {
     private final int id;
-    private final String name;
+    private String name;
     private String phone;
     private String firebaseUid;
 
-    private UserBuilder(int id, String name) {
+    private UserBuilder(int id) {
         this.id = id;
-        this.name = name;
     }
 
-    public static UserBuilder anUser(int id, String name) {
-        return new UserBuilder(id, name);
+    public static UserBuilder anUser(int id) {
+        return new UserBuilder(id);
+    }
+
+
+    public UserBuilder withName(String name) {
+        this.name = name;
+        return this;
     }
 
     public UserBuilder withPhone(String phone) {

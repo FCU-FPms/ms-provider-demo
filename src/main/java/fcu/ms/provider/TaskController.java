@@ -202,11 +202,8 @@ public class TaskController {
 
         for (User user : users) {
             int id = user.getId();
-            String name = user.getName();
             JSONObject entity = new JSONObject();
             entity.put("id", id);
-            entity.put("name", name);
-
             entities.add(entity);
         }
 

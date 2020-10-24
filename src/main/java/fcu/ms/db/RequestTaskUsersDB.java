@@ -154,10 +154,8 @@ public class RequestTaskUsersDB {
 
             while (rs.next()) {
                 int userID = rs.getInt("id");
-                String userName = rs.getString("name");
 
-
-                User user = UserBuilder.anUser(userID, userName).build();
+                User user = UserBuilder.anUser(userID).build();
                 tasks.add(user);
             }
         } catch (Exception ex) {
