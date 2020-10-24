@@ -89,10 +89,10 @@ public class UserDB {
         return user;
     }
 
-    public User getUser(String name) {
+    public User getUserByFirebaseUID(String uid) {
         User user = null;
 
-        String sqlString = "SELECT * FROM `user` WHERE `name` = ?";
+        String sqlString = "SELECT * FROM `user` WHERE `firebase_uid` = ? ";
 
         Connection connection = null;
         PreparedStatement preStmt = null;
@@ -101,7 +101,7 @@ public class UserDB {
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
-            preStmt.setString(1, name);
+            preStmt.setString(1, uid);
             rs = preStmt.executeQuery();
             while ( rs.next() ) {
                 user = parseUserFromDbColumn(rs);

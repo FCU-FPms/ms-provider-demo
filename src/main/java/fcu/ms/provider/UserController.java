@@ -37,6 +37,28 @@ public class UserController {
         }
     }
 
+    @GetMapping("/firebase/{uid}")
+    public ResponseEntity<Object> getUserByID(@PathVariable String uid) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        User user = userDB.getUserByFirebaseUID(uid);
+
+        Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
+        if(user != null) {
+            JSONObject entity = new JSONObject();
+            int userId = user.getId();
+            entity.put("name", user.getName());
+            entity.put("phone", user.getPhone());
+            entity.put("firebase_uid", user.getFirebaseUid());
+
+            entities.put(String.valueOf(userId), entity);
+            return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<Object>(headers, HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PostMapping(value = "")
     public ResponseEntity<String> createUser(@RequestBody User user) {
         boolean is_success = userDB.createUser(user);

@@ -5,23 +5,28 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserDBTest {
+
+    UserDB userDB = UserDB.getInstance();
     @Test
     public void createUser_TEST() {
-        UserDB userDB = UserDB.getInstance();
         User user = new User("testing123", "0912345678", "firebase_uid_test");
         assertTrue( userDB.createUser(user) );
     }
 
     @Test
     public void getUser_TEST() {
-        UserDB userDB = UserDB.getInstance();
-        User user = userDB.getUser("franky");
+        User user = userDB.getUser(1);
         System.out.println(user.getName());
     }
 
     @Test
     public void deleteUser_TEST() {
-        UserDB userDB = UserDB.getInstance();
         assertTrue(userDB.deleteUser("testing123"));
+    }
+
+    @Test
+    void getUserByFirebaseUID() {
+        User user = userDB.getUserByFirebaseUID("sdfasfeewfafs");
+        System.out.println(user);
     }
 }
