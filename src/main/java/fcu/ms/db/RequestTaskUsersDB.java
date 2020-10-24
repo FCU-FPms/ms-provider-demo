@@ -1,5 +1,7 @@
 package fcu.ms.db;
 
+import fcu.ms.data.User;
+import fcu.ms.data.UserBuilder;
 import fcu.ms.dbUtil.MySqlBoneCP;
 
 import java.sql.Connection;
@@ -97,11 +99,15 @@ public class RequestTaskUsersDB {
 
 
 
-    public List<Integer> getRequestUsersID(int taskID) {
+    public List<User> getRequestUsers(int taskID) {
 
-        List<Integer> tasks = new ArrayList<Integer>();
+        List<User> tasks = new ArrayList<>();
 
-        String sqlString = "SELECT `id` FROM `request_task_users` WHERE request_task_users.task_id = ?";
+        String sqlString = "SELECT `user`.`id`, `user`.`name` " +
+                           "FROM `request_task_users`, `user` " +
+                           "WHERE request_task_users.task_id = ? " +
+                           "AND `request_task_users`.`user_id` = `user`.`id`" +
+                           "ORDER BY `request_task_users`.`id` ASC;";
         try {
             Connection connection = MySqlBoneCP.getInstance().getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
@@ -111,7 +117,11 @@ public class RequestTaskUsersDB {
 
             while (rs.next()) {
                 int userID = rs.getInt("id");
-                tasks.add(userID);
+                String userName = rs.getString("name");
+
+
+                User user = UserBuilder.anUser(userID, userName).build();
+                tasks.add(user);
             }
             rs.close();
             preStmt.close();

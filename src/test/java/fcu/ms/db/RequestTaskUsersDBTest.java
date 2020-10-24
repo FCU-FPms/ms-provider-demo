@@ -1,12 +1,12 @@
 package fcu.ms.db;
 
+import fcu.ms.data.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -30,9 +30,8 @@ public class RequestTaskUsersDBTest {
 
     @Test
     public void getRequestUsersID() {
-
         int TaskID = 325;
-        List<Integer> usersID = instance.getRequestUsersID(TaskID);
-        System.out.println(usersID);
+        List<User> users = instance.getRequestUsers(TaskID);
+        System.out.println(users);
     }
 }

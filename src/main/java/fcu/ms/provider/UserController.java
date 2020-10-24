@@ -1,6 +1,5 @@
 package fcu.ms.provider;
 
-import fcu.ms.data.Task;
 import fcu.ms.data.User;
 import fcu.ms.db.UserDB;
 import net.minidev.json.JSONObject;

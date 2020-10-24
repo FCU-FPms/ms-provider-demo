@@ -13,6 +13,10 @@ public class TaskState {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime stepTime;
 
+    public TaskState() {
+
+    }
+
 
     // 拿整個save_tasks_state資料表用
     public TaskState(int id, int taskID, TaskStateEnum taskState, LocalDateTime stepTime) {

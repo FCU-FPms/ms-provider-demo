@@ -9,6 +9,10 @@ import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import com.github.fge.jsonpatch.JsonPatchException;
 
 import fcu.ms.data.Task;
+import fcu.ms.data.TaskState;
+import fcu.ms.data.User;
+import fcu.ms.db.RequestTaskUsersDB;
+import fcu.ms.db.TasksStateDB;
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import fcu.ms.db.TaskDB;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +32,8 @@ import com.github.fge.jsonpatch.JsonPatch;
 @RequestMapping(value ="/tasks")
 public class TaskController {
     TaskDB taskDB = TaskDB.getInstance();
+    TasksStateDB tasksStateDB = TasksStateDB.getTasksStateDB();
+    RequestTaskUsersDB requestTaskUsersDB = RequestTaskUsersDB.getInstance();
 
     @PostMapping(value = "")
     public ResponseEntity<String> createTask(@RequestBody Task task) {
@@ -39,8 +46,7 @@ public class TaskController {
 
         boolean is_success = taskDB.createTask(task);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
+        HttpHeaders headers = createBaseHttpHeaders();
 
         if(is_success) {
             return new ResponseEntity<String>(headers, HttpStatus.CREATED);
@@ -52,8 +58,7 @@ public class TaskController {
 
     @GetMapping("")
     public ResponseEntity<Object> getTasks() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
+        HttpHeaders headers = createBaseHttpHeaders();
 
         List<Task> taskList = taskDB.getTasks();
 
@@ -72,8 +77,7 @@ public class TaskController {
 
     @GetMapping("/{TaskID}")
     public ResponseEntity<Object> getTaskByID(@PathVariable int TaskID) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
+        HttpHeaders headers = createBaseHttpHeaders();
 
         Task task = taskDB.getTask(TaskID);
 
@@ -90,8 +94,7 @@ public class TaskController {
 
     @PatchMapping (path = "/{taskId}", consumes = "application/json-patch+json")
     public ResponseEntity<String> updateTask(@PathVariable int taskId, @RequestBody JsonPatch patch) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
+        HttpHeaders headers = createBaseHttpHeaders();
         boolean is_success = false;
 
         try {
@@ -113,8 +116,7 @@ public class TaskController {
     public ResponseEntity<String> deleteTaskByID(@PathVariable int TaskID){
         boolean is_success = taskDB.deleteTask(TaskID);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
+        HttpHeaders headers = createBaseHttpHeaders();
 
         if(is_success){
             return new ResponseEntity<String>(headers, HttpStatus.NO_CONTENT);
@@ -123,6 +125,106 @@ public class TaskController {
             return new ResponseEntity<String>("Error to delete Task in DB", headers, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping(value = "/{taskID}/state")
+    public ResponseEntity<String> addTaskState(@PathVariable int taskID, @RequestBody TaskState taskState) {
+        // postTime 在API中要打上 yyyy-mm-dd hh:mm:ss 格式
+
+        taskState.setTaskID(taskID);
+        if(taskState.getStepTime() == null) {
+            LocalDateTime releaseTime = LocalDateTime.now(); // 會自動填入發布時的時間點
+            taskState.setStepTime(releaseTime);
+        }
+
+        boolean is_success = tasksStateDB.createTaskState(taskState);
+
+        HttpHeaders headers = createBaseHttpHeaders();
+
+        if(is_success) {
+            return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<String>("Error to build addTaskState in DB", headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/{taskID}/state")
+    public ResponseEntity<Object> getLatestTaskState(@PathVariable int taskID) {
+        HttpHeaders headers = createBaseHttpHeaders();
+
+        TaskState taskState = tasksStateDB.getLatestStateByTaskID(taskID);
+
+        Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
+        if(taskState != null) {
+            JSONObject entity = new JSONObject();
+            entity.put("taskState", taskState.getTaskState());
+            entity.put("stepTime", taskState.getStepTime());
+
+            return new ResponseEntity<Object>(entity, headers, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<Object>(headers, HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @PostMapping(value = "/{taskID}/RequestUsers/{userID}")
+    public ResponseEntity<String> addUserToTaskRequestList(@PathVariable int taskID, @PathVariable int userID) {
+        // postTime 在API中要打上 yyyy-mm-dd hh:mm:ss 格式
+
+        boolean is_success = requestTaskUsersDB.addUserToTaskRequestList(userID, taskID);
+
+        HttpHeaders headers = createBaseHttpHeaders();
+
+        if(is_success) {
+            return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<String>("Error to addUserToTaskRequestList in DB", headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping(value = "/{taskID}/RequestUsers/{userID}")
+    public ResponseEntity<String> removeUserFromTaskRequestList(@PathVariable int taskID, @PathVariable int userID) {
+        // postTime 在API中要打上 yyyy-mm-dd hh:mm:ss 格式
+
+        boolean is_success = requestTaskUsersDB.removeUserFromTaskRequestList(userID, taskID);
+
+        HttpHeaders headers = createBaseHttpHeaders();
+
+        if(is_success) {
+            return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<String>("Error to removeUserFromTaskRequestList in DB", headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    @GetMapping("/{taskID}/RequestUsers")
+    public ResponseEntity<Object> getTaskRequestList(@PathVariable int taskID) {
+        HttpHeaders headers = createBaseHttpHeaders();
+
+        List<User> users = requestTaskUsersDB.getRequestUsers(taskID); // getRequestUsers
+
+        List<JSONObject> entities = new ArrayList<JSONObject>();
+
+        for (User user : users) {
+            int id = user.getId();
+            String name = user.getName();
+            JSONObject entity = new JSONObject();
+            entity.put("id", id);
+            entity.put("name", name);
+
+            entities.add(entity);
+        }
+
+        return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
+    }
+
+
+
+
+
+
+
+
 
     private JSONObject getTaskEntity(Task task) {
         JSONObject entity = new JSONObject();
@@ -150,6 +252,12 @@ public class TaskController {
 
         JsonNode patched = patch.apply(objectMapper.convertValue(targetTask, JsonNode.class)); //這可以自動轉換task
         return objectMapper.treeToValue(patched, Task.class);
+    }
+
+    private HttpHeaders createBaseHttpHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+        return headers;
     }
 
 }

@@ -54,5 +54,15 @@ public class User {
     public void setFirebaseUid(String firebaseUid) {
         this.firebaseUid = firebaseUid;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", firebaseUid='" + firebaseUid + '\'' +
+                '}';
+    }
 }
 
