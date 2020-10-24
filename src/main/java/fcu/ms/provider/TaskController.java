@@ -219,13 +219,6 @@ public class TaskController {
     }
 
 
-
-
-
-
-
-
-
     private JSONObject getTaskEntity(Task task) {
         JSONObject entity = new JSONObject();
         entity.put("TaskName", task.getName());
