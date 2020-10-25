@@ -98,6 +98,29 @@ public class TaskDB {
         return tasks;
     }
 
+    public List<Task> getUserReleaseTasks(int userId) {
+        List<Task> tasks = new ArrayList<>();
+
+        String sqlString = "SELECT * FROM `task` WHERE `release_user_id` = ? ";
+        try {
+            Connection connection = MySqlBoneCP.getInstance().getConnection();
+            PreparedStatement preStmt = connection.prepareStatement(sqlString);
+            preStmt.setInt(1, userId);
+            ResultSet rs = preStmt.executeQuery();
+            while (rs.next()) {
+                Task task = parseTaskFromDbColumn(rs);
+                tasks.add(task);
+            }
+            rs.close();
+            preStmt.close();
+            connection.close();
+
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
+        }
+        return tasks;
+    }
+
     public int getTaskIdByName(String taskName) {
         int id = -1;
         String sqlString = "SELECT `id` FROM `task` WHERE `name` = ?";

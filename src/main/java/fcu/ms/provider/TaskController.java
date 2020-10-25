@@ -75,6 +75,24 @@ public class TaskController {
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
 
+    @GetMapping("/ReleaseUser/{userId}")
+    public ResponseEntity<Object> getUserReleaseTasks(@PathVariable int userId) {
+        HttpHeaders headers = createBaseHttpHeaders();
+
+        List<Task> taskList = taskDB.getUserReleaseTasks(userId);
+
+        Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
+
+        for (Task task : taskList) {
+            int taskId = task.getTaskID();
+            JSONObject entity = getTaskEntity(task);
+
+            entities.put(String.valueOf(taskId), entity);
+        }
+
+        return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
+    }
+
 
     @GetMapping("/{TaskID}")
     public ResponseEntity<Object> getTaskByID(@PathVariable int TaskID) {
