@@ -39,6 +39,13 @@ public class MessageTest {
     }
 
     @Test
+    void getMessageByUserID_TEST() {  /* 根據 userID 來抓 message */
+        MessageDB messageDB = MessageDB.getInstance();
+        List<Message> messages = messageDB.getMessageByUserId(1);
+        System.out.println(messages);
+    }
+
+    @Test
     public void deleteMessage_TEST() {  /* 刪除一個 message */
         MessageDB messageDB = MessageDB.getInstance();
         assertTrue(messageDB.deleteMessage(41));

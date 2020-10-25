@@ -214,6 +214,39 @@ public class MessageDB {
         return messages;
     }
 
+    public List<Message> getMessageByUserId(int userId) {
+        List<Message> messages = new ArrayList<Message>();
+
+        Connection connection = null;
+        PreparedStatement preStmt = null;
+        ResultSet rs = null;
+
+        String sqlString = "SELECT * FROM `message` WHERE `userID`= ? ORDER BY `postTime` ASC" ;
+        try {
+            connection = MySqlBoneCP.getInstance().getConnection();
+            preStmt = connection.prepareStatement(sqlString);
+            preStmt.setInt(1, userId);
+            rs = preStmt.executeQuery();
+            while (rs.next()) {
+                Message message = parseMessageFromDbColumn(rs);
+                messages.add(message);
+            }
+
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
+        }
+
+        try {
+            rs.close();
+            preStmt.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return messages;
+    }
+
     private Message parseMessageFromDbColumn(ResultSet dbResult) throws Exception {
         int id = dbResult.getInt("id");
         String content = dbResult.getString("content");
