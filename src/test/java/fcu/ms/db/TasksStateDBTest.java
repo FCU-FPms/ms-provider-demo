@@ -5,6 +5,7 @@ import fcu.ms.data.TaskStateEnum;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,7 +16,7 @@ class TasksStateDBTest {
     void createTaskState() {
         int taskID = 325;
 
-        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime currentTime = LocalDateTime.now(ZoneOffset.UTC);
 
         TaskState taskState = new TaskState(taskID, TaskStateEnum.BOOS_ACCOUNT_THE_TASK_IS_DONE, currentTime);
         tasksStateDB.createTaskState(taskState);
@@ -23,7 +24,7 @@ class TasksStateDBTest {
 
     @Test
     void getLatestStateByTaskID() {
-        int taskID = 325;
+        int taskID = 348;
         TaskState taskState = tasksStateDB.getLatestStateByTaskID(taskID);
         System.out.println(taskState);
     }

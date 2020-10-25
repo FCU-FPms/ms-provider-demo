@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class MessageController {
     public ResponseEntity<String> createMessage(@RequestBody Message message) {
 
         if(message.getPostTime() == null) { // 會自動填入傳送訊息時的時間點
-            LocalDateTime postTime = LocalDateTime.now();
+            LocalDateTime postTime = LocalDateTime.now(ZoneOffset.UTC);
             message.setPostTime(postTime);
         }
 

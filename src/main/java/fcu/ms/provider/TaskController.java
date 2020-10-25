@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import fcu.ms.db.TaskDB;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +41,7 @@ public class TaskController {
         // postTime 在API中要打上 yyyy-mm-dd hh:mm:ss 格式
 
         if(task.getReleaseTime() == null) {
-            LocalDateTime releaseTime = LocalDateTime.now(); // 會自動填入發布時的時間點
+            LocalDateTime releaseTime = LocalDateTime.now(ZoneOffset.UTC); // 會自動填入發布時的時間點
             task.setReleaseTime(releaseTime);
         }
 
@@ -132,7 +133,7 @@ public class TaskController {
 
         taskState.setTaskID(taskID);
         if(taskState.getStepTime() == null) {
-            LocalDateTime releaseTime = LocalDateTime.now(); // 會自動填入發布時的時間點
+            LocalDateTime releaseTime = LocalDateTime.now(ZoneOffset.UTC); // 會自動填入發布時的時間點
             taskState.setStepTime(releaseTime);
         }
 

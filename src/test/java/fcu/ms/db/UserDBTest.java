@@ -15,7 +15,7 @@ public class UserDBTest {
 
     @Test
     public void getUser_TEST() {
-        User user = userDB.getUser(1);
+        User user = userDB.getUser(15);
         System.out.println(user.getName());
     }
 
@@ -26,7 +26,7 @@ public class UserDBTest {
 
     @Test
     void getUserByFirebaseUID() {
-        User user = userDB.getUserByFirebaseUID("sdfasfeewfafs");
+        User user = userDB.getUserByFirebaseUID("firebase_uid_test");
         System.out.println(user);
     }
 }

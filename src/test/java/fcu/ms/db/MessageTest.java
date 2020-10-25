@@ -2,6 +2,7 @@ package fcu.ms.db;
 import fcu.ms.data.Message;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -11,7 +12,7 @@ public class MessageTest {
     @Test
     public void createMessage_TEST() {   /* 創建一個新的 message */
         MessageDB messageDB = MessageDB.getInstance();
-        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime currentTime = LocalDateTime.now(ZoneOffset.UTC);
         Message message = new Message("4", 1, 1, currentTime, 325);
         assertTrue( messageDB.createMessage(message) );
     }

@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -19,9 +20,11 @@ public class TaskDBTest {
 
     @Test
     public void createTask() {
-        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime currentTime = LocalDateTime.now(ZoneOffset.UTC);
 
-        Task task = TaskBuilder.aTask(0, 888, 1, currentTime).build();
+        Task task = TaskBuilder.aTask(0, 16888, 1, currentTime)
+                .withName(taskname)
+                .build();
         assertTrue( taskDB.createTask(task) );
     }
 
@@ -50,7 +53,7 @@ public class TaskDBTest {
     public void setTask(){
         int id = taskDB.getTaskIdByName(taskname);
 
-        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime currentTime = LocalDateTime.now(ZoneOffset.UTC);
 
         Task task = TaskBuilder.aTask(id, 888, 1, currentTime)
                 .withMessage("testfranky")
