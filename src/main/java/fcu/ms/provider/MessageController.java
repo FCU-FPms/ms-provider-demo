@@ -40,7 +40,7 @@ public class MessageController {
         }
     }
 
-    @GetMapping(value = "/conversation/{taskID}")
+    @GetMapping(value = "/conversationByTaskID/{taskID}")
     public ResponseEntity<Object> getMessageByTaskID(@PathVariable int taskID) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
@@ -50,12 +50,12 @@ public class MessageController {
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/conversation/{userID}")
+    @GetMapping(value = "/conversationByUserID/{userID}")
     public ResponseEntity<Object> getMessageByUserID(@PathVariable int userID) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
 
-        List<Message> messages = messageDB.getMessageByTaskId(userID);
+        List<Message> messages = messageDB.getMessageByUserId(userID);
         Map<String, JSONObject> entities = getEachMessage(messages);
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
