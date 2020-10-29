@@ -6,7 +6,7 @@ import org.junit.jupiter.api.TestInstance;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import java.util.List;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -33,5 +33,15 @@ public class RequestTaskUsersDBTest {
         int TaskID = 325;
         List<User> users = instance.getRequestUsers(TaskID);
         System.out.println(users);
+    }
+
+    @Test
+    void isUserAlreadyInList() {
+
+        int userID = 21;
+        int TaskID = 420;
+        assertTrue( instance.isUserAlreadyInList(userID, TaskID) );
+        assertFalse( instance.isUserAlreadyInList(userID+1, TaskID) );
+
     }
 }

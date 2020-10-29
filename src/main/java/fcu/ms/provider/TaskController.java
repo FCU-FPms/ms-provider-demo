@@ -229,6 +229,13 @@ public class TaskController {
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
 
+    @GetMapping("/{taskID}/checkUserAlreadyRequest/{userID}")
+    public ResponseEntity<Object> checkUserAlreadyRequest(@PathVariable int taskID, @PathVariable int userID) {
+        HttpHeaders headers = createBaseHttpHeaders();
+        boolean isUserAlreadyRequest = requestTaskUsersDB.isUserAlreadyInList(userID, taskID); // getRequestUsers
+        return new ResponseEntity<Object>(isUserAlreadyRequest, headers, HttpStatus.OK);
+    }
+
 
     private JSONObject getTaskEntity(Task task) {
         JSONObject entity = new JSONObject();

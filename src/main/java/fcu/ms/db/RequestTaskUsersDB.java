@@ -103,7 +103,7 @@ public class RequestTaskUsersDB {
         PreparedStatement preStmt = null;
         ResultSet rs = null;
 
-        String sqlString = "SELECT * FROM `request_task_users` WHERE task_id = ? AND user_id = ?;";
+        String sqlString = "SELECT 1 FROM `request_task_users` WHERE task_id = ? AND user_id = ? LIMIT 1";
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
