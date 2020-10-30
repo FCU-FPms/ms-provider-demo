@@ -18,7 +18,7 @@ class TasksStateDBTest {
 
         LocalDateTime currentTime = LocalDateTime.now(ZoneOffset.UTC);
 
-        TaskState taskState = new TaskState(taskID, TaskStateEnum.BOOS_ACCOUNT_THE_TASK_IS_DONE, currentTime);
+        TaskState taskState = new TaskState(taskID, TaskStateEnum.BOOS_RELEASE_AND_SELECTING_WORKER, currentTime);
         tasksStateDB.createTaskState(taskState);
     }
 
