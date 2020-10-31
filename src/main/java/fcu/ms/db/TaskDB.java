@@ -367,9 +367,6 @@ public class TaskDB {
     // 無法修改 release_time
 
     private void setTaskReceiveUserID(int receiveUserID, int taskID) {
-        if(receiveUserID == 0) {
-            return;
-        }
 
         Connection connection = null;
         PreparedStatement preStmt = null;
