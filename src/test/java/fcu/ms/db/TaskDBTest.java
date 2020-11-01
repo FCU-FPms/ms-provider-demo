@@ -67,4 +67,22 @@ public class TaskDBTest {
     void deleteTask() {
         assertTrue(taskDB.deleteTask(324));
     }
+
+    @Test
+    void getUserRequestTasks() {
+        List<Task> taskList = taskDB.getUserRequestTasks(14);
+        assertTrue(taskList.size() > 0); // 如果沒資料會報錯
+    }
+
+    @Test
+    void getReceiveUserTasks() {
+        List<Task> taskList = taskDB.getUserReceiveTasks(14);
+        assertTrue(taskList.size() > 0); // 如果沒資料會報錯
+    }
+
+    @Test
+    void getUserEndTasks() {
+        List<Task> taskList = taskDB.getUserEndTasks(14);
+        assertTrue(taskList.size() > 0); // 如果沒資料會報錯
+    }
 }

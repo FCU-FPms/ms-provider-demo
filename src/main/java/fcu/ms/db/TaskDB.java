@@ -121,6 +121,85 @@ public class TaskDB {
         return tasks;
     }
 
+    public List<Task> getUserRequestTasks(int userId) {
+        List<Task> tasks = new ArrayList<>();
+
+        String sqlString = "SELECT `task`.* FROM `task`,`request_task_users` " +
+                           "WHERE `request_task_users`.`task_id` = `task`.`id` " +
+                           "AND `request_task_users`.`user_id` = ?";
+        try {
+            Connection connection = MySqlBoneCP.getInstance().getConnection();
+            PreparedStatement preStmt = connection.prepareStatement(sqlString);
+            preStmt.setInt(1, userId);
+            ResultSet rs = preStmt.executeQuery();
+            while (rs.next()) {
+                Task task = parseTaskFromDbColumn(rs);
+                tasks.add(task);
+            }
+            rs.close();
+            preStmt.close();
+            connection.close();
+
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
+        }
+        return tasks;
+    }
+
+    public List<Task> getUserReceiveTasks(int userId) {
+        List<Task> tasks = new ArrayList<>();
+
+        String sqlString = "SELECT * FROM `task` WHERE `receive_user_id` = ? ";
+        try {
+            Connection connection = MySqlBoneCP.getInstance().getConnection();
+            PreparedStatement preStmt = connection.prepareStatement(sqlString);
+            preStmt.setInt(1, userId);
+            ResultSet rs = preStmt.executeQuery();
+            while (rs.next()) {
+                Task task = parseTaskFromDbColumn(rs);
+                tasks.add(task);
+            }
+            rs.close();
+            preStmt.close();
+            connection.close();
+
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
+        }
+        return tasks;
+    }
+
+    public List<Task> getUserEndTasks(int userId) { // 拿已經結束的任務 不管是不是完美完成 或是 失敗的完成
+        List<Task> tasks = new ArrayList<>();
+
+        String sqlString = "SELECT * FROM `task`, `save_tasks_state` " +
+                "WHERE `task`.`receive_user_id` = ? " +
+                "AND `save_tasks_state`.`taskID` = `task`.`id` " +
+                "AND (`save_tasks_state`.`task_state_id` = 6 OR `save_tasks_state`.`task_state_id` = 7)";
+        // 6 7 是結束狀態的值
+
+
+        try {
+            Connection connection = MySqlBoneCP.getInstance().getConnection();
+            PreparedStatement preStmt = connection.prepareStatement(sqlString);
+            preStmt.setInt(1, userId);
+            ResultSet rs = preStmt.executeQuery();
+            while (rs.next()) {
+                Task task = parseTaskFromDbColumn(rs);
+                tasks.add(task);
+            }
+            rs.close();
+            preStmt.close();
+            connection.close();
+
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
+        }
+        return tasks;
+    }
+
+
+
     public int getTaskIdByName(String taskName) {
         int id = -1;
         String sqlString = "SELECT `id` FROM `task` WHERE `name` = ?";
