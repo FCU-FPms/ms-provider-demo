@@ -247,22 +247,22 @@ public class MessageDB {
 
         return messages;
     }
-    public List<Integer> getUserHasWhichTask(int userID){
-        List<Integer> taskIDList = new ArrayList<Integer>();
+    public List<Task> getUserHasWhichTask(int userID){
+        List<Task> taskIDList = new ArrayList<Task>();
 
         Connection connection = null;
         PreparedStatement preStmt = null;
         ResultSet rs = null;
 
-        String sqlString = "SELECT distinct taskID FROM `message` WHERE `userID`= ?" ;
+        String sqlString = "SELECT DISTINCT message.taskID,task.name FROM `message` inner join `task` on message.taskID = task.id WHERE `userID`= ?" ;
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, userID);
             rs = preStmt.executeQuery();
             while (rs.next()) {
-                int taskID = rs.getInt("taskID");
-                taskIDList.add(taskID);
+                Task task = parseTaskFromDbColumn(rs);
+                taskIDList.add(task);
             }
 
         } catch (Exception ex) {
@@ -289,4 +289,10 @@ public class MessageDB {
         int taskID = dbResult.getInt("taskID");
         return new Message(id, content, userID, receiverID, postTime, taskID);
     }
+    private Task parseTaskFromDbColumn(ResultSet dbResult) throws Exception {
+        int id = dbResult.getInt("taskID");
+        String name = dbResult.getString("name");
+        return new Task(id,name);
+    }
+
 }

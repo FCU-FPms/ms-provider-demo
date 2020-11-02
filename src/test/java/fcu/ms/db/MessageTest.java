@@ -1,5 +1,6 @@
 package fcu.ms.db;
 import fcu.ms.data.Message;
+import fcu.ms.data.Task;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -26,7 +27,7 @@ public class MessageTest {
     @Test
     void getUserHasWhichTasks_TEST(){
         MessageDB messageDB = MessageDB.getInstance();
-        List<Integer> taskIDList = messageDB.getUserHasWhichTask(1);
+        List<Task> taskIDList = messageDB.getUserHasWhichTask(1);
         assertTrue(taskIDList.size() == 2);
 
     }
@@ -41,8 +42,14 @@ public class MessageTest {
     @Test
     void getMessageByTaskID_TEST() {  /* 根據 taskID 來抓 message */
         MessageDB messageDB = MessageDB.getInstance();
-        List<Message> messages = messageDB.getMessageByTaskId(325);
+        List<Message> messages = messageDB.getMessageByTaskId(348);
         System.out.println(messages);
+    }
+    @Test
+    void getUserHasWhichTask_TEST() {
+        MessageDB messageDB = MessageDB.getInstance();
+        List<Task> tasks = messageDB.getUserHasWhichTask(1);
+        System.out.println(tasks);
     }
 
     @Test

@@ -1,5 +1,6 @@
 package fcu.ms.provider;
 import fcu.ms.data.Message;
+import fcu.ms.data.Task;
 import fcu.ms.db.MessageDB;
 
 import net.minidev.json.JSONObject;
@@ -75,9 +76,9 @@ public class MessageController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
 
-        List<Integer> taskIDList = messageDB.getUserHasWhichTask(userID);
+        List<Task> taskIDList = messageDB.getUserHasWhichTask(userID);
 
-        Map<String, JSONObject> entities = getEachTaskID(taskIDList);
+        Map<String, JSONObject> entities = getEachTask(taskIDList);
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
 
@@ -105,9 +106,10 @@ public class MessageController {
         entity.put("taskID", message.getTaskID());
         return entity;
     }
-    private JSONObject getTaskIDEntity(Integer taskID) {
+    private JSONObject getTaskIDEntity(Task task) {
         JSONObject entity = new JSONObject();
-        entity.put("TaskID", taskID);
+        entity.put("TaskID", task.getTaskID());
+        entity.put("name",task.getName());
         return entity;
     }
 
@@ -123,12 +125,13 @@ public class MessageController {
         }
         return entities;
     }
-    private Map<String, JSONObject> getEachTaskID(List<Integer> taskIDList) {
+    private Map<String, JSONObject> getEachTask(List<Task> taskList) {
 
         Map<String, JSONObject> entities = new HashMap<>();
 
-        for (Integer taskID : taskIDList) {
-            JSONObject entity = getTaskIDEntity(taskID);
+        for (Task task : taskList) {
+            int taskID = task.getTaskID();
+            JSONObject entity = getTaskIDEntity(task);
             entities.put(String.valueOf(taskID), entity);
         }
         return entities;

@@ -28,6 +28,10 @@ public class Task {
     public Task() {
         // 需要這個做反序列化, 跟 import com.fasterxml.jackson.databind.ObjectMapper; 的 convertValue 有關
     }
+    public Task(int id, String name){
+        this.taskID = id;
+        this.name = name;
+    }
 
     public int getTaskID() {
         return taskID;
