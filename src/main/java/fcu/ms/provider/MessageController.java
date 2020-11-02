@@ -70,6 +70,16 @@ public class MessageController {
         Map<String, JSONObject> entities = getEachMessage(messages);
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
+    @GetMapping(value = "/userHasWhichTasks/{userID}")
+    public ResponseEntity<Object> getUserHasWhichTasks(@PathVariable int userID) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        List<Integer> taskIDList = messageDB.getUserHasWhichTask(userID);
+
+        Map<String, JSONObject> entities = getEachTaskID(taskIDList);
+        return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
+    }
 
     @DeleteMapping(value = "/{messageID}")
     public ResponseEntity deleteMessage(@PathVariable int messageID){
@@ -95,6 +105,12 @@ public class MessageController {
         entity.put("taskID", message.getTaskID());
         return entity;
     }
+    private JSONObject getTaskIDEntity(Integer taskID) {
+        JSONObject entity = new JSONObject();
+        entity.put("TaskID", taskID);
+        return entity;
+    }
+
 
     private Map<String, JSONObject> getEachMessage(List<Message> messages) {
 
@@ -104,6 +120,16 @@ public class MessageController {
             int messageID = message.getId();
             JSONObject entity = getMessageEntity(message);
             entities.put(String.valueOf(messageID), entity);
+        }
+        return entities;
+    }
+    private Map<String, JSONObject> getEachTaskID(List<Integer> taskIDList) {
+
+        Map<String, JSONObject> entities = new HashMap<>();
+
+        for (Integer taskID : taskIDList) {
+            JSONObject entity = getTaskIDEntity(taskID);
+            entities.put(String.valueOf(taskID), entity);
         }
         return entities;
     }

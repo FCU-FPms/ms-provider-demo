@@ -23,6 +23,13 @@ public class MessageTest {
         Message message = messageDB.getMessage(41);
         assertTrue(message.getId() == 41);
     }
+    @Test
+    void getUserHasWhichTasks_TEST(){
+        MessageDB messageDB = MessageDB.getInstance();
+        List<Integer> taskIDList = messageDB.getUserHasWhichTask(1);
+        assertTrue(taskIDList.size() == 2);
+
+    }
 
     @Test
     void getMessageByID_TEST() {  /* 根據 user/receiver 以及 taskID 來抓 message */

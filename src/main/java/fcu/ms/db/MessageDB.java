@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fcu.ms.data.Message;
+import fcu.ms.data.Task;
 import fcu.ms.dbUtil.MySqlBoneCP;
 
 
@@ -245,6 +246,38 @@ public class MessageDB {
         }
 
         return messages;
+    }
+    public List<Integer> getUserHasWhichTask(int userID){
+        List<Integer> taskIDList = new ArrayList<Integer>();
+
+        Connection connection = null;
+        PreparedStatement preStmt = null;
+        ResultSet rs = null;
+
+        String sqlString = "SELECT distinct taskID FROM `message` WHERE `userID`= ?" ;
+        try {
+            connection = MySqlBoneCP.getInstance().getConnection();
+            preStmt = connection.prepareStatement(sqlString);
+            preStmt.setInt(1, userID);
+            rs = preStmt.executeQuery();
+            while (rs.next()) {
+                int taskID = rs.getInt("taskID");
+                taskIDList.add(taskID);
+            }
+
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
+        }
+
+        try {
+            rs.close();
+            preStmt.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return taskIDList;
     }
 
     private Message parseMessageFromDbColumn(ResultSet dbResult) throws Exception {
