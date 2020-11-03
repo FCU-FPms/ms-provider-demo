@@ -248,21 +248,22 @@ public class MessageDB {
         return messages;
     }
     public List<Task> getUserHasWhichTask(int userID){
-        List<Task> taskIDList = new ArrayList<Task>();
+        List<Task> taskList = new ArrayList<Task>();
 
         Connection connection = null;
         PreparedStatement preStmt = null;
         ResultSet rs = null;
 
-        String sqlString = "SELECT DISTINCT message.taskID,task.name FROM `message` inner join `task` on message.taskID = task.id WHERE `userID`= ?" ;
+        String sqlString = "SELECT DISTINCT message.*,task.* FROM `message` inner join `task` on message.taskID = task.id WHERE `userID`= ? OR `receiverID` = ?" ;
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
             preStmt.setInt(1, userID);
+            preStmt.setInt(2, userID);
             rs = preStmt.executeQuery();
             while (rs.next()) {
                 Task task = parseTaskFromDbColumn(rs);
-                taskIDList.add(task);
+                taskList.add(task);
             }
 
         } catch (Exception ex) {
@@ -277,7 +278,7 @@ public class MessageDB {
             e.printStackTrace();
         }
 
-        return taskIDList;
+        return taskList;
     }
 
     private Message parseMessageFromDbColumn(ResultSet dbResult) throws Exception {
@@ -292,7 +293,9 @@ public class MessageDB {
     private Task parseTaskFromDbColumn(ResultSet dbResult) throws Exception {
         int id = dbResult.getInt("taskID");
         String name = dbResult.getString("name");
-        return new Task(id,name);
+        String content = dbResult.getString("content");
+        LocalDateTime messageSendTime = dbResult.getTimestamp("postTime").toLocalDateTime();
+        return new Task(id, name, content, messageSendTime);
     }
 
 }

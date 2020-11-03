@@ -76,9 +76,9 @@ public class MessageController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
 
-        List<Task> taskIDList = messageDB.getUserHasWhichTask(userID);
+        List<Task> taskList = messageDB.getUserHasWhichTask(userID);
 
-        Map<String, JSONObject> entities = getEachTask(taskIDList);
+        Map<String, JSONObject> entities = getEachTask(taskList);
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
 
@@ -106,10 +106,12 @@ public class MessageController {
         entity.put("taskID", message.getTaskID());
         return entity;
     }
-    private JSONObject getTaskIDEntity(Task task) {
+    private JSONObject getTaskEntity(Task task) {
         JSONObject entity = new JSONObject();
         entity.put("TaskID", task.getTaskID());
         entity.put("name",task.getName());
+        entity.put("content",task.getContent());
+        entity.put("messageSendTime",task.getMessageSendTime());
         return entity;
     }
 
@@ -131,7 +133,7 @@ public class MessageController {
 
         for (Task task : taskList) {
             int taskID = task.getTaskID();
-            JSONObject entity = getTaskIDEntity(task);
+            JSONObject entity = getTaskEntity(task);
             entities.put(String.valueOf(taskID), entity);
         }
         return entities;

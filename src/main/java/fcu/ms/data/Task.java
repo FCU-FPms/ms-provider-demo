@@ -25,13 +25,21 @@ public class Task {
 
     private String taskAddress;
 
+    private String content;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime messageSendTime;
+
     public Task() {
         // 需要這個做反序列化, 跟 import com.fasterxml.jackson.databind.ObjectMapper; 的 convertValue 有關
     }
-    public Task(int id, String name){
+    public Task(int id, String name, String content, LocalDateTime messageSendTime){
         this.taskID = id;
         this.name = name;
+        this.content = content;
+        this.messageSendTime = messageSendTime;
     }
+
 
     public int getTaskID() {
         return taskID;
@@ -117,4 +125,15 @@ public class Task {
         this.receiveUserID = receiveUserID;
     }
 
+    public String getContent() { return content; }
+
+    public void setContent(String content) { this.content = content; }
+
+    public LocalDateTime getMessageSendTime() {
+        return messageSendTime;
+    }
+
+    public void setMessageSendTime(LocalDateTime messageSendTime) {
+        this.messageSendTime = messageSendTime;
+    }
 }
