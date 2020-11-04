@@ -87,6 +87,53 @@ public class MessageDB {
         return messages;
     }
 
+    public List<Message> getMessageByTaskIDAndTwoUserID(int taskId, int user1ID, int user2ID) {
+        List<Message> messages = new ArrayList<Message>();
+
+        Connection connection = null;
+        PreparedStatement preStmt = null;
+        ResultSet rs = null;
+
+
+        String sqlString = "SELECT * FROM `message` " +
+                           "WHERE `taskID`=? " +
+                           "AND (`userID` = ? OR `receiverID` = ?  ) " +
+                           "AND ( `userID`= ? OR `receiverID`= ?) " +
+                           "ORDER BY `postTime` DESC;";
+        try {
+            connection = MySqlBoneCP.getInstance().getConnection();
+            preStmt = connection.prepareStatement(sqlString);
+            preStmt.setInt(1, taskId);
+
+            preStmt.setInt(2, user1ID);
+            preStmt.setInt(3, user1ID);
+
+            preStmt.setInt(4, user2ID);
+            preStmt.setInt(5, user2ID);
+
+            rs = preStmt.executeQuery();
+            while (rs.next()) {
+                Message message = parseMessageFromDbColumn(rs);
+                messages.add(message);
+            }
+
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
+        }
+
+        try {
+            rs.close();
+            preStmt.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return messages;
+    }
+
+
+
+
     public Message getMessage(int id) {
         Message message = null;
 
