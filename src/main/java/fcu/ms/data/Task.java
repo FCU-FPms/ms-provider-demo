@@ -136,4 +136,23 @@ public class Task {
     public void setMessageSendTime(LocalDateTime messageSendTime) {
         this.messageSendTime = messageSendTime;
     }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "taskID=" + taskID +
+                ", name='" + name + '\'' +
+                ", message='" + message + '\'' +
+                ", startPostTime=" + startPostTime +
+                ", endPostTime=" + endPostTime +
+                ", salary=" + salary +
+                ", typeName='" + typeName + '\'' +
+                ", releaseUserID=" + releaseUserID +
+                ", releaseTime=" + releaseTime +
+                ", receiveUserID=" + receiveUserID +
+                ", taskAddress='" + taskAddress + '\'' +
+                ", content='" + content + '\'' +
+                ", messageSendTime=" + messageSendTime +
+                '}';
+    }
 }
