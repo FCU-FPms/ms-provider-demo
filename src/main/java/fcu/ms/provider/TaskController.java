@@ -283,6 +283,24 @@ public class TaskController {
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
 
+    @GetMapping("/userMessageRelatedWhichTask/{userId}")
+    public ResponseEntity<Object> getUserMessageRelatedWhichTask(@PathVariable int userId) {
+        HttpHeaders headers = createBaseHttpHeaders();
+
+        List<Task> taskList = taskDB.getUserMessageRelatedWhichTask(userId);
+
+        Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
+
+        for (Task task : taskList) {
+            int taskId = task.getTaskID();
+            JSONObject entity = getTaskEntity(task);
+
+            entities.put(String.valueOf(taskId), entity);
+        }
+
+        return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
+    }
+
     @GetMapping("/{taskID}/checkUserAlreadyRequest/{userID}")
     public ResponseEntity<Object> checkUserAlreadyRequest(@PathVariable int taskID, @PathVariable int userID) {
         HttpHeaders headers = createBaseHttpHeaders();

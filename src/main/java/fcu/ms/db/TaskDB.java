@@ -198,6 +198,38 @@ public class TaskDB {
         return tasks;
     }
 
+    public List<Task> getUserMessageRelatedWhichTask(int userId) { // 拿與那個使用者訊息相關的任務
+        List<Task> tasks = new ArrayList<>();
+
+        String sqlString = "SELECT * FROM `task`" +
+                           "WHERE `id` = " +
+                           "( SELECT DISTINCT `taskID` " +
+                           "  FROM `message` " +
+                           "  WHERE `userID`= ? " +
+                           "  OR `receiverID` = ? )";
+
+        try {
+            Connection connection = MySqlBoneCP.getInstance().getConnection();
+            PreparedStatement preStmt = connection.prepareStatement(sqlString);
+            preStmt.setInt(1, userId);
+            preStmt.setInt(2, userId);
+            ResultSet rs = preStmt.executeQuery();
+            while (rs.next()) {
+                Task task = parseTaskFromDbColumn(rs);
+                tasks.add(task);
+            }
+            rs.close();
+            preStmt.close();
+            connection.close();
+
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
+        }
+        return tasks;
+    }
+
+
+
 
 
     public int getTaskIdByName(String taskName) {

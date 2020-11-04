@@ -189,7 +189,7 @@ public class MessageDB {
         PreparedStatement preStmt = null;
         ResultSet rs = null;
 
-        String sqlString = "SELECT * FROM `message` WHERE `taskId`= ? ORDER BY `postTime` ASC" ;
+        String sqlString = "SELECT * FROM `message` WHERE `taskId`= ? ORDER BY `postTime` ASC";
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
@@ -290,6 +290,8 @@ public class MessageDB {
         int taskID = dbResult.getInt("taskID");
         return new Message(id, content, userID, receiverID, postTime, taskID);
     }
+
+
     private Task parseTaskFromDbColumn(ResultSet dbResult) throws Exception {
         int id = dbResult.getInt("taskID");
         String name = dbResult.getString("name");

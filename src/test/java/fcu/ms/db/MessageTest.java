@@ -48,8 +48,8 @@ public class MessageTest {
     @Test
     void getUserHasWhichTask_TEST() {
         MessageDB messageDB = MessageDB.getInstance();
-        List<Task> tasks = messageDB.getUserHasWhichTask(1);
-        System.out.println(tasks);
+        List<Task> tasks = messageDB.getUserHasWhichTask(14);
+        System.out.println(tasks.size());
     }
 
     @Test
