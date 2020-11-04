@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,31 @@ public class MessageController {
         }
     }
 
+    @GetMapping(value = "/allChatMessage/{taskID}/{user1ID}/{user2ID}")
+    public ResponseEntity<Object> getAllChatMessage(@PathVariable int taskID, @PathVariable int user1ID, @PathVariable int user2ID) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        List<Message> messages = messageDB.getMessageByTaskIDAndTwoUserID(taskID, user1ID, user2ID);
+        List<JSONObject> entities = new ArrayList<>();
+
+        for(Message message : messages) {
+
+            int id = message.getId();
+            JSONObject entity = new JSONObject();
+            entity.put("content", message.getContent());
+            entity.put("postTime", message.getPostTime());
+            entity.put("userID", message.getUserID());
+            entity.put("receiverID", message.getReceiverID());
+            entity.put("taskID", message.getTaskID());
+            entities.add(entity);
+        }
+
+        return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
+    }
+
+
+
     @GetMapping(value = "/conversationByTaskID/{taskID}") // 這還不知道可以用在哪裡
     public ResponseEntity<Object> getMessageByTaskID(@PathVariable int taskID) {
         HttpHeaders headers = new HttpHeaders();
@@ -61,6 +87,7 @@ public class MessageController {
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
 
+
     @GetMapping(value = "/conversation/{taskID}/{userID}/{receiverID}")
     public ResponseEntity<Object> getMessageByID(@PathVariable int userID, @PathVariable int receiverID, @PathVariable int taskID) {
         HttpHeaders headers = new HttpHeaders();
@@ -71,6 +98,8 @@ public class MessageController {
         Map<String, JSONObject> entities = getEachMessage(messages);
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
+
+
     @GetMapping(value = "/userHasWhichTasks/{userID}")
     public ResponseEntity<Object> getUserHasWhichTasks(@PathVariable int userID) {
         HttpHeaders headers = new HttpHeaders();

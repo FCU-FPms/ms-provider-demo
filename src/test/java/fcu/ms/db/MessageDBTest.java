@@ -1,14 +1,16 @@
 package fcu.ms.db;
+
 import fcu.ms.data.Message;
 import fcu.ms.data.Task;
 import org.junit.jupiter.api.Test;
+
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MessageTest {
+import static org.junit.jupiter.api.Assertions.*;
 
+class MessageDBTest {
 
     @Test
     public void createMessage_TEST() {   /* 創建一個新的 message */
@@ -65,4 +67,10 @@ public class MessageTest {
         assertTrue(messageDB.deleteMessage(41));
     }
 
+    @Test
+    void getMessageByTaskIDAndTwoUserID() {
+        MessageDB messageDB = MessageDB.getInstance();
+        List<Message> messages = messageDB.getMessageByTaskIDAndTwoUserID(348, 1, 14);
+        System.out.println(messages);
+    }
 }
