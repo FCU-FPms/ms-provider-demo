@@ -31,7 +31,7 @@ pipeline {
         }
         stage('use image run container') {
             steps {
-                sh 'docker run --name franky-ms-test-docker-$BRANCH_NAME --env application-name=ms-provider-$BRANCH_NAME -d --memory 256MB --restart=always --net=host franky-ms-test-docker-$BRANCH_NAME'
+                sh 'docker run --name franky-ms-test-docker-$BRANCH_NAME --env application-name=ms-provider-$BRANCH_NAME -d --memory 1024MB --restart=always --net=host franky-ms-test-docker-$BRANCH_NAME'
             }
         }
     }
