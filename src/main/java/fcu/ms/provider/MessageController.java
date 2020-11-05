@@ -122,6 +122,17 @@ public class MessageController {
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/allChatMessage/{user1ID}/{user2ID}")
+    public ResponseEntity<Object> getUserRelatedWho(@PathVariable int user1ID, @PathVariable int user2ID) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        List<Message> messages = messageDB.getMessageByTwoUserID(user1ID, user2ID);
+
+        List<JSONObject> entities = UtilForJson.getEachMessage(messages);
+        return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
+    }
+
     @DeleteMapping(value = "/{messageID}")
     public ResponseEntity deleteMessage(@PathVariable int messageID){
         boolean is_success = messageDB.deleteMessage(messageID);

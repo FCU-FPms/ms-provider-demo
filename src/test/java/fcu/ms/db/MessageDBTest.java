@@ -79,4 +79,10 @@ class MessageDBTest {
         MessageDB messageDB = MessageDB.getInstance();
         System.out.println(messageDB.getUserRelatedWho(14));
     }
+
+    @Test
+    void getMessageByTwoUserID() {
+        MessageDB messageDB = MessageDB.getInstance();
+        System.out.println(messageDB.getMessageByTwoUserID(14, 1));
+    }
 }
