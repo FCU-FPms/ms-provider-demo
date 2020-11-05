@@ -5,6 +5,12 @@ spring:
   application:
     name: local-test # 防止多人測試時 註冊到其它服務
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
 eureka:
   instance:
     prefer-ip-address: true #以IP地址注册到服务中心
