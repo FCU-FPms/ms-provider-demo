@@ -1,5 +1,9 @@
 package fcu.ms.db;
 
+import fcu.ms.data.User;
+import fcu.ms.data.UserBuilder;
+
+import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
@@ -19,6 +23,17 @@ public class Util {
         } else {
             return null;
         }
+    }
+
+    public static User parseUserFromDbColumn(ResultSet dbResult) throws Exception {
+        int id = dbResult.getInt("id");
+        String name = dbResult.getString("name");
+        String phone = dbResult.getString("phone");
+        String firebase_uid = dbResult.getString("firebase_uid");
+        return UserBuilder.anUser(id)
+                .withName(name)
+                .withPhone(phone)
+                .withFirebaseUid(firebase_uid).build();
     }
 
 }

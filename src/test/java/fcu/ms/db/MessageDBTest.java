@@ -73,4 +73,10 @@ class MessageDBTest {
         List<Message> messages = messageDB.getMessageByTaskIDAndTwoUserID(348, 1, 14);
         System.out.println(messages);
     }
+
+    @Test
+    void getUserRelatedWho() {
+        MessageDB messageDB = MessageDB.getInstance();
+        System.out.println(messageDB.getUserRelatedWho(14));
+    }
 }

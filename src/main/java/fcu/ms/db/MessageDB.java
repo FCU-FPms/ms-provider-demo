@@ -6,6 +6,7 @@ import java.util.List;
 
 import fcu.ms.data.Message;
 import fcu.ms.data.Task;
+import fcu.ms.data.User;
 import fcu.ms.dbUtil.MySqlBoneCP;
 
 
@@ -131,8 +132,44 @@ public class MessageDB {
         return messages;
     }
 
+    public List<User> getUserRelatedWho(int userID) {
+        List<User> users = new ArrayList<>();
 
+        Connection connection = null;
+        PreparedStatement preStmt = null;
+        ResultSet rs = null;
 
+        String sqlString = "SELECT * FROM `user` " +
+                "WHERE `id` IN" +
+                " (SELECT `userID` FROM `message` WHERE `receiverID` = ? " +
+                " UNION " +
+                " SELECT `receiverID` FROM `message` WHERE `userID` = ?)";
+        try {
+            connection = MySqlBoneCP.getInstance().getConnection();
+            preStmt = connection.prepareStatement(sqlString);
+
+            preStmt.setInt(1, userID);
+            preStmt.setInt(2, userID);
+
+            rs = preStmt.executeQuery();
+            while (rs.next()) {
+                User user = Util.parseUserFromDbColumn(rs);
+                users.add(user);
+            }
+
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
+        }
+
+        try {
+            rs.close();
+            preStmt.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
 
     public Message getMessage(int id) {
         Message message = null;

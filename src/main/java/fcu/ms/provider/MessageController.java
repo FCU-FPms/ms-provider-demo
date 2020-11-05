@@ -1,6 +1,7 @@
 package fcu.ms.provider;
 import fcu.ms.data.Message;
 import fcu.ms.data.Task;
+import fcu.ms.data.User;
 import fcu.ms.db.MessageDB;
 
 import net.minidev.json.JSONObject;
@@ -108,6 +109,16 @@ public class MessageController {
         List<Task> taskList = messageDB.getUserHasWhichTask(userID);
 
         Map<String, JSONObject> entities = getEachTask(taskList);
+        return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/userRelatedWho/{userID}")
+    public ResponseEntity<Object> getUserRelatedWho(@PathVariable int userID) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        List<User> users = messageDB.getUserRelatedWho(userID);
+        Map<String, JSONObject> entities = UtilForJson.getEachUser(users);
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
 
