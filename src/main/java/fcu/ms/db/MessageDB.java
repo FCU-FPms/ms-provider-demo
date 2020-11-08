@@ -143,7 +143,7 @@ public class MessageDB {
         String sqlString = "SELECT * FROM `message` " +
                 "WHERE (`userID` = ? OR `receiverID` = ?  ) " +
                 "AND ( `userID`= ? OR `receiverID`= ?) " +
-                "ORDER BY `postTime` DESC;";
+                "ORDER BY `postTime` ASC;";
         try {
             connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
