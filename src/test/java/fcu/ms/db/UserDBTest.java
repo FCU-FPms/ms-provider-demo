@@ -9,13 +9,13 @@ public class UserDBTest {
     UserDB userDB = UserDB.getInstance();
     @Test
     public void createUser_TEST() {
-        User user = new User("testing123", "0912345678", "firebase_uid_test");
+        User user = new User("testing123", "firebase_uid_test");
         assertTrue( userDB.createUser(user) );
     }
 
     @Test
     public void getUser_TEST() {
-        User user = userDB.getUser(15);
+        User user = userDB.getUser(24);
         System.out.println(user.getName());
     }
 

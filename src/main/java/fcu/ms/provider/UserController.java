@@ -27,7 +27,6 @@ public class UserController {
             JSONObject entity = new JSONObject();
             int userId = user.getId();
             entity.put("name", user.getName());
-            entity.put("phone", user.getPhone());
             entity.put("firebase_uid", user.getFirebaseUid());
 
             entities.put(String.valueOf(userId), entity);
@@ -49,7 +48,6 @@ public class UserController {
             JSONObject entity = new JSONObject();
             int userId = user.getId();
             entity.put("name", user.getName());
-            entity.put("phone", user.getPhone());
             entity.put("firebase_uid", user.getFirebaseUid());
 
             entities.put(String.valueOf(userId), entity);

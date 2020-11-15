@@ -3,7 +3,6 @@ package fcu.ms.data;
 public final class UserBuilder {
     private final int id;
     private String name;
-    private String phone;
     private String firebaseUid;
 
     private UserBuilder(int id) {
@@ -20,11 +19,6 @@ public final class UserBuilder {
         return this;
     }
 
-    public UserBuilder withPhone(String phone) {
-        this.phone = phone;
-        return this;
-    }
-
     public UserBuilder withFirebaseUid(String firebaseUid) {
         this.firebaseUid = firebaseUid;
         return this;
@@ -34,7 +28,6 @@ public final class UserBuilder {
         User user = new User();
         user.setId(id);
         user.setName(name);
-        user.setPhone(phone);
         user.setFirebaseUid(firebaseUid);
         return user;
     }

@@ -125,7 +125,7 @@ public class UserDB {
     public boolean createUser(User user) {
 
         boolean is_success = false;
-        String sqlString = "INSERT INTO `user` (`name`, `phone`, `firebase_uid`) VALUES (?, ?, ?)";
+        String sqlString = "INSERT INTO `user` (`name`, `firebase_uid`) VALUES (?, ?)";
 
         Connection connection = null;
         PreparedStatement preStmt = null;
@@ -134,8 +134,7 @@ public class UserDB {
             connection = MySqlBoneCP.getInstance().getConnection();
             preStmt = connection.prepareStatement(sqlString);
             preStmt.setString(1, user.getName());
-            preStmt.setString(2, user.getPhone());
-            preStmt.setString(3, user.getFirebaseUid());
+            preStmt.setString(2, user.getFirebaseUid());
             preStmt.executeUpdate();
 
             is_success = true;
@@ -214,9 +213,8 @@ public class UserDB {
     private User parseUserFromDbColumn(ResultSet dbResult) throws Exception {
         int id = dbResult.getInt("id");
         String name = dbResult.getString("name");
-        String phone = dbResult.getString("phone");
         String firebase_uid = dbResult.getString("firebase_uid");
 
-        return new User(id, name, phone, firebase_uid);
+        return new User(id, name, firebase_uid);
     }
 }

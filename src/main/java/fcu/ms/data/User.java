@@ -3,23 +3,20 @@ package fcu.ms.data;
 public class User {
     private int id;
     private String name;
-    private String phone;
     private String firebaseUid;
 
     public User() {
 
     }
 
-    public User(int id, String name, String phone, String firebaseUid) {
+    public User(int id, String name, String firebaseUid) {
         this.id = id;
         this.name = name;
-        this.phone = phone;
         this.firebaseUid = firebaseUid;
     }
 
-    public User(String name, String phone, String firebaseUid) {
+    public User(String name, String firebaseUid) {
         this.name = name;
-        this.phone = phone;
         this.firebaseUid = firebaseUid;
     }
 
@@ -39,14 +36,6 @@ public class User {
         this.name = name;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public String getFirebaseUid() {
         return firebaseUid;
     }
@@ -60,7 +49,6 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", phone='" + phone + '\'' +
                 ", firebaseUid='" + firebaseUid + '\'' +
                 '}';
     }

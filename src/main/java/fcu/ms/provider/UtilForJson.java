@@ -25,7 +25,6 @@ public class UtilForJson {
     public static JSONObject getUserEntity(User user) {
         JSONObject entity = new JSONObject();
         entity.put("name", user.getName());
-        entity.put("phone", user.getPhone());
         entity.put("firebase_uid", user.getFirebaseUid());
         return entity;
     }
