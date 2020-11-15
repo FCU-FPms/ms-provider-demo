@@ -47,7 +47,6 @@ public class UtilForJson {
         entity.put("userID", message.getUserID());
         entity.put("receiverID", message.getReceiverID());
         entity.put("postTime", message.getPostTime());
-        entity.put("taskID", message.getTaskID());
         return entity;
     }
 

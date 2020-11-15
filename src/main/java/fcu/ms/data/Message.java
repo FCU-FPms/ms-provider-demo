@@ -12,27 +12,23 @@ public class Message {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime postTime;
 
-    private int taskID;
-
     public Message() {
         // 反序列化用
     }
 
-    public Message(int id, String content, int userID, int receiverID, LocalDateTime postTime, int taskID) {
+    public Message(int id, String content, int userID, int receiverID, LocalDateTime postTime) {
         this.id = id;
         this.content = content;
         this.userID = userID;
         this.receiverID = receiverID;
         this.postTime = postTime;
-        this.taskID = taskID;
     }
 
-    public Message(String content, int userID, int receiverID, LocalDateTime postTime, int taskID) { // 新增資料用的 無id
+    public Message(String content, int userID, int receiverID, LocalDateTime postTime) { // 新增資料用的 無id
         this.content = content;
         this.userID = userID;
         this.receiverID = receiverID;
         this.postTime = postTime;
-        this.taskID = taskID;
     }
 
     public int getId() {
@@ -75,14 +71,6 @@ public class Message {
         this.postTime = postTime;
     }
 
-    public int getTaskID() {
-        return taskID;
-    }
-
-    public void setTaskID(int taskID) {
-        this.taskID = taskID;
-    }
-
     @Override
     public String toString() {
         return "Message{" +
@@ -91,7 +79,6 @@ public class Message {
                 ", userID=" + userID +
                 ", receiverID=" + receiverID +
                 ", postTime=" + postTime +
-                ", taskID=" + taskID +
                 '}';
     }
 }

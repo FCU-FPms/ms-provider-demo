@@ -28,11 +28,9 @@ public class Util {
     public static User parseUserFromDbColumn(ResultSet dbResult) throws Exception {
         int id = dbResult.getInt("id");
         String name = dbResult.getString("name");
-        String phone = dbResult.getString("phone");
         String firebase_uid = dbResult.getString("firebase_uid");
         return UserBuilder.anUser(id)
                 .withName(name)
-                .withPhone(phone)
                 .withFirebaseUid(firebase_uid).build();
     }
 
