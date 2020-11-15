@@ -75,6 +75,24 @@ public class TaskController {
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
 
+    @GetMapping("/WithoutUserId/{userId}")
+    public ResponseEntity<Object> getTasksWithoutMyTask(@PathVariable int userId) {
+        HttpHeaders headers = createBaseHttpHeaders();
+
+        List<Task> taskList = taskDB.getTasksWithoutMyTask(userId);
+
+        Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
+
+        for (Task task : taskList) {
+            int taskId = task.getTaskID();
+            JSONObject entity = getTaskEntity(task);
+
+            entities.put(String.valueOf(taskId), entity);
+        }
+
+        return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
+    }
+
     @GetMapping("/UserRequestTasks/{userId}")
     public ResponseEntity<Object> getUserRequestTasks(@PathVariable int userId) {
         HttpHeaders headers = createBaseHttpHeaders();
@@ -278,24 +296,6 @@ public class TaskController {
             JSONObject entity = new JSONObject();
             entity.put("id", id);
             entities.add(entity);
-        }
-
-        return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
-    }
-
-    @GetMapping("/userMessageRelatedWhichTask/{userId}")
-    public ResponseEntity<Object> getUserMessageRelatedWhichTask(@PathVariable int userId) {
-        HttpHeaders headers = createBaseHttpHeaders();
-
-        List<Task> taskList = taskDB.getUserMessageRelatedWhichTask(userId);
-
-        Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
-
-        for (Task task : taskList) {
-            int taskId = task.getTaskID();
-            JSONObject entity = getTaskEntity(task);
-
-            entities.put(String.valueOf(taskId), entity);
         }
 
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);

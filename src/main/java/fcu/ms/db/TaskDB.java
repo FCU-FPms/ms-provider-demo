@@ -77,7 +77,7 @@ public class TaskDB {
     public List<Task> getTasks() {
         List<Task> tasks = new ArrayList<>();
 
-        String sqlString = "SELECT * FROM `task`";
+        String sqlString = "SELECT * FROM `task` ORDER BY `release_time` DESC";
         try {
             Connection connection = MySqlBoneCP.getInstance().getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
@@ -96,10 +96,10 @@ public class TaskDB {
         return tasks;
     }
 
-    public List<Task> getUserReleaseTasks(int userId) {
+    public List<Task> getTasksWithoutMyTask(int userId) {
         List<Task> tasks = new ArrayList<>();
 
-        String sqlString = "SELECT * FROM `task` WHERE `release_user_id` = ? ";
+        String sqlString = "SELECT * FROM `task` WHERE `release_user_id` != ? ORDER BY `release_time` DESC";
         try {
             Connection connection = MySqlBoneCP.getInstance().getConnection();
             PreparedStatement preStmt = connection.prepareStatement(sqlString);
@@ -119,6 +119,30 @@ public class TaskDB {
         return tasks;
     }
 
+    public List<Task> getUserReleaseTasks(int userId) {
+        List<Task> tasks = new ArrayList<>();
+
+        String sqlString = "SELECT * FROM `task` WHERE `release_user_id` = ? ORDER BY `release_time` DESC ";
+        try {
+            Connection connection = MySqlBoneCP.getInstance().getConnection();
+            PreparedStatement preStmt = connection.prepareStatement(sqlString);
+            preStmt.setInt(1, userId);
+            ResultSet rs = preStmt.executeQuery();
+            while (rs.next()) {
+                Task task = parseTaskFromDbColumn(rs);
+                tasks.add(task);
+            }
+            rs.close();
+            preStmt.close();
+            connection.close();
+
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
+        }
+        return tasks;
+    }
+
+    // Todo 之後需要照申請時間來排序
     public List<Task> getUserRequestTasks(int userId) {
         List<Task> tasks = new ArrayList<>();
 
@@ -195,39 +219,6 @@ public class TaskDB {
         }
         return tasks;
     }
-
-    public List<Task> getUserMessageRelatedWhichTask(int userId) { // 拿與那個使用者訊息相關的任務
-        List<Task> tasks = new ArrayList<>();
-
-        String sqlString = "SELECT * FROM `task`" +
-                           "WHERE `id` = " +
-                           "( SELECT DISTINCT `taskID` " +
-                           "  FROM `message` " +
-                           "  WHERE `userID`= ? " +
-                           "  OR `receiverID` = ? )";
-
-        try {
-            Connection connection = MySqlBoneCP.getInstance().getConnection();
-            PreparedStatement preStmt = connection.prepareStatement(sqlString);
-            preStmt.setInt(1, userId);
-            preStmt.setInt(2, userId);
-            ResultSet rs = preStmt.executeQuery();
-            while (rs.next()) {
-                Task task = parseTaskFromDbColumn(rs);
-                tasks.add(task);
-            }
-            rs.close();
-            preStmt.close();
-            connection.close();
-
-        } catch (Exception ex) {
-            System.out.println("Error: " + ex);
-        }
-        return tasks;
-    }
-
-
-
 
 
     public int getTaskIdByName(String taskName) {
