@@ -319,7 +319,6 @@ public class TaskController {
         entity.put("ReleaseUserID", task.getReleaseUserID());
         entity.put("ReleaseTime", task.getReleaseTime());
         entity.put("ReceiveUserID", task.getReceiveUserID());
-        entity.put("TypeName", task.getName());
         entity.put("TaskAddress", task.getTaskAddress());
         return entity;
     }

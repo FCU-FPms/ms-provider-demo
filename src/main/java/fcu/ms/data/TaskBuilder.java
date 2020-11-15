@@ -9,7 +9,6 @@ public final class TaskBuilder {
     private LocalDateTime startPostTime;
     private LocalDateTime endPostTime;
     private final int salary;
-    private String typeName;
     private final int releaseUserID;
     private final LocalDateTime releaseTime;
     private int receiveUserID;
@@ -46,11 +45,6 @@ public final class TaskBuilder {
         return this;
     }
 
-    public TaskBuilder withTypeName(String typeName) {
-        this.typeName = typeName;
-        return this;
-    }
-
 
     public TaskBuilder withReceiveUserID(int receiveUserID) {
         this.receiveUserID = receiveUserID;
@@ -70,7 +64,6 @@ public final class TaskBuilder {
         task.setStartPostTime(startPostTime);
         task.setEndPostTime(endPostTime);
         task.setSalary(salary);
-        task.setTypeName(typeName);
         task.setReleaseUserID(releaseUserID);
         task.setReleaseTime(releaseTime);
         task.setReceiveUserID(receiveUserID);

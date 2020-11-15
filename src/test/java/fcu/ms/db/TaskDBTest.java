@@ -65,7 +65,7 @@ public class TaskDBTest {
 
     @Test
     void deleteTask() {
-        assertTrue(taskDB.deleteTask(324));
+        assertTrue(taskDB.deleteTask(458));
     }
 
     @Test

@@ -15,7 +15,6 @@ public class Task {
     private LocalDateTime endPostTime;
 
     private int salary;
-    private String typeName;
     private int releaseUserID;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -93,14 +92,6 @@ public class Task {
         this.salary = salary;
     }
 
-    public String getTypeName() {
-        return typeName;
-    }
-
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
-    }
-
     public int getReleaseUserID() {
         return releaseUserID;
     }
@@ -141,17 +132,16 @@ public class Task {
     public String toString() {
         return "Task{" +
                 "taskID=" + taskID +
-                ", name='" + name + '\'' +
-                ", message='" + message + '\'' +
+                ", name='" + name +
+                ", message='" + message +
                 ", startPostTime=" + startPostTime +
                 ", endPostTime=" + endPostTime +
                 ", salary=" + salary +
-                ", typeName='" + typeName + '\'' +
                 ", releaseUserID=" + releaseUserID +
                 ", releaseTime=" + releaseTime +
                 ", receiveUserID=" + receiveUserID +
-                ", taskAddress='" + taskAddress + '\'' +
-                ", content='" + content + '\'' +
+                ", taskAddress='" + taskAddress +
+                ", content='" + content +
                 ", messageSendTime=" + messageSendTime +
                 '}';
     }

@@ -30,12 +30,11 @@ public class TaskDB {
                 " `start_post_time`," +
                 " `end_post_time`," +
                 " `salary`," +
-                " `type_name`," +
                 " `release_user_id`," +
                 " `release_time`," +
                 " `receive_user_id`," +
                 " `task_address`)" +
-                " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         boolean is_success;
 
@@ -51,11 +50,10 @@ public class TaskDB {
             preStmt.setTimestamp(3, Util.transitLocalDateTime(task.getStartPostTime()));
             preStmt.setTimestamp(4, Util.transitLocalDateTime(task.getEndPostTime()));
             preStmt.setInt(5, task.getSalary());
-            preStmt.setString(6,task.getTypeName());
-            preStmt.setInt(7,task.getReleaseUserID());
-            preStmt.setTimestamp(8, Util.transitLocalDateTime(task.getReleaseTime()));
-            preStmt.setInt(9,task.getReceiveUserID());
-            preStmt.setString(10, task.getTaskAddress());
+            preStmt.setInt(6,task.getReleaseUserID());
+            preStmt.setTimestamp(7, Util.transitLocalDateTime(task.getReleaseTime()));
+            preStmt.setInt(8,task.getReceiveUserID());
+            preStmt.setString(9, task.getTaskAddress());
 
 
             preStmt.executeUpdate();
@@ -309,7 +307,6 @@ public class TaskDB {
             setTaskStartPostTime(task.getStartPostTime(), taskId);
             setTaskEndPostTime(task.getStartPostTime(), taskId);
             // 無法設定 salary
-            setTaskTypeName(task.getTypeName(), taskId);
             // 無法設定 releaseUserID
             // 無法設定 releaseTime
             setTaskReceiveUserID(task.getReceiveUserID(), taskId);
@@ -443,36 +440,6 @@ public class TaskDB {
 
     // 目前沒有修改價錢的函式
 
-    private void setTaskTypeName(String taskTypeName, int taskID) {
-        if(taskTypeName == null) {
-            return;
-        }
-
-        Connection connection = null;
-        PreparedStatement preStmt = null;
-
-        try {
-            connection = MySqlBoneCP.getInstance().getConnection();
-            String sqlString = "UPDATE `task` SET `type_name` = ? WHERE `id` = ?";
-            preStmt = connection.prepareStatement(sqlString);
-            preStmt.setString(1, taskTypeName);
-            preStmt.setInt(2, taskID);
-
-            preStmt.executeUpdate();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        try {
-            preStmt.close();
-            connection.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     // 無法修改 release_user_id
 
     // 無法修改 release_time
@@ -574,7 +541,6 @@ public class TaskDB {
         LocalDateTime endPostTime = Util.transitTimestamp(dbResult.getTimestamp("end_post_time"));
 
         int salary = dbResult.getInt("salary");
-        String typeName = dbResult.getString("type_name");
         int releaseUserId = dbResult.getInt("release_user_id");
         LocalDateTime releaseTime = Util.transitTimestamp(dbResult.getTimestamp("release_time"));
         int receiveUserId = dbResult.getInt("receive_user_id");
@@ -585,7 +551,6 @@ public class TaskDB {
                 .withMessage(message)
                 .withStartPostTime(startPostTime)
                 .withEndPostTime(endPostTime)
-                .withTypeName(typeName)
                 .withReceiveUserID(receiveUserId)
                 .withTaskAddress(taskAddress).build();
     }
