@@ -1,6 +1,7 @@
 package fcu.ms.provider;
 
 import fcu.ms.data.Message;
+import fcu.ms.data.Task;
 import fcu.ms.data.User;
 import net.minidev.json.JSONObject;
 
@@ -46,6 +47,33 @@ public class UtilForJson {
         entity.put("userID", message.getUserID());
         entity.put("receiverID", message.getReceiverID());
         entity.put("postTime", message.getPostTime());
+        return entity;
+    }
+
+
+    public static List<JSONObject> getEachTask(List<Task> tasks) {
+
+        List<JSONObject> entities = new ArrayList<>();
+
+        for (Task task : tasks) {
+            JSONObject entity = getTaskEntity(task);
+            entities.add(entity);
+        }
+        return entities;
+    }
+
+    public static JSONObject getTaskEntity(Task task) {
+        JSONObject entity = new JSONObject();
+        entity.put("TaskID", task.getTaskID());
+        entity.put("TaskName", task.getName());
+        entity.put("Message", task.getMessage());
+        entity.put("StartPostTime", task.getStartPostTime());
+        entity.put("EndPostTime", task.getEndPostTime());
+        entity.put("Salary", task.getSalary());
+        entity.put("ReleaseUserID", task.getReleaseUserID());
+        entity.put("ReleaseTime", task.getReleaseTime());
+        entity.put("ReceiveUserID", task.getReceiveUserID());
+        entity.put("TaskAddress", task.getTaskAddress());
         return entity;
     }
 

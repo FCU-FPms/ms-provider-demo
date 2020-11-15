@@ -62,15 +62,7 @@ public class TaskController {
         HttpHeaders headers = createBaseHttpHeaders();
 
         List<Task> taskList = taskDB.getTasks();
-
-        Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
-
-        for (Task task : taskList) {
-            int taskId = task.getTaskID();
-            JSONObject entity = getTaskEntity(task);
-
-            entities.put(String.valueOf(taskId), entity);
-        }
+        List<JSONObject> entities = UtilForJson.getEachTask(taskList);
 
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
@@ -80,16 +72,7 @@ public class TaskController {
         HttpHeaders headers = createBaseHttpHeaders();
 
         List<Task> taskList = taskDB.getTasksWithoutMyTask(userId);
-
-        Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
-
-        for (Task task : taskList) {
-            int taskId = task.getTaskID();
-            JSONObject entity = getTaskEntity(task);
-
-            entities.put(String.valueOf(taskId), entity);
-        }
-
+        List<JSONObject> entities = UtilForJson.getEachTask(taskList);
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
 
@@ -98,52 +81,26 @@ public class TaskController {
         HttpHeaders headers = createBaseHttpHeaders();
 
         List<Task> taskList = taskDB.getUserRequestTasks(userId);
-
-        Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
-
-        for (Task task : taskList) {
-            int taskId = task.getTaskID();
-            JSONObject entity = getTaskEntity(task);
-
-            entities.put(String.valueOf(taskId), entity);
-        }
-
+        List<JSONObject> entities = UtilForJson.getEachTask(taskList);
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
 
-    @GetMapping("/UserReceiveTasks/{userId}")
+    @GetMapping("/UserReceiveTasks/{userId}") // 就是在進行中的
     public ResponseEntity<Object> getReceiveUserTasks(@PathVariable int userId) {
         HttpHeaders headers = createBaseHttpHeaders();
 
         List<Task> taskList = taskDB.getUserReceiveTasks(userId);
-
-        Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
-
-        for (Task task : taskList) {
-            int taskId = task.getTaskID();
-            JSONObject entity = getTaskEntity(task);
-
-            entities.put(String.valueOf(taskId), entity);
-        }
+        List<JSONObject> entities = UtilForJson.getEachTask(taskList);
 
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
 
-    @GetMapping("/UserEndTasks/{userId}")
+    @GetMapping("/UserEndTasks/{userId}") // 就是已結束的
     public ResponseEntity<Object> getUserEndTasks(@PathVariable int userId) {
         HttpHeaders headers = createBaseHttpHeaders();
 
         List<Task> taskList = taskDB.getUserEndTasks(userId);
-
-        Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
-
-        for (Task task : taskList) {
-            int taskId = task.getTaskID();
-            JSONObject entity = getTaskEntity(task);
-
-            entities.put(String.valueOf(taskId), entity);
-        }
-
+        List<JSONObject> entities = UtilForJson.getEachTask(taskList);
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
 
@@ -152,16 +109,7 @@ public class TaskController {
         HttpHeaders headers = createBaseHttpHeaders();
 
         List<Task> taskList = taskDB.getUserReleaseTasks(userId);
-
-        Map<String, JSONObject> entities = new HashMap<String, JSONObject>();
-
-        for (Task task : taskList) {
-            int taskId = task.getTaskID();
-            JSONObject entity = getTaskEntity(task);
-
-            entities.put(String.valueOf(taskId), entity);
-        }
-
+        List<JSONObject> entities = UtilForJson.getEachTask(taskList);
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
 
