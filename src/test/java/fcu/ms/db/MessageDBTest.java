@@ -19,13 +19,18 @@ class MessageDBTest {
     }
 
     @Test
-    void getUserRelatedWho() {
+    void getUserRelatedWho_TEST() {
         MessageDB messageDB = MessageDB.getInstance();
         System.out.println(messageDB.getUserRelatedWho(14));
     }
+    @Test
+    void getLatestMessage_TEST() {
+        MessageDB messageDB = MessageDB.getInstance();
+        System.out.println(messageDB.getLatestMessageByTwoUserID(14,21));
+    }
 
     @Test
-    void getMessageByTwoUserID() {
+    void getMessageByTwoUserID_TEST() {
         MessageDB messageDB = MessageDB.getInstance();
         System.out.println(messageDB.getMessageByTwoUserID(14, 1));
     }

@@ -49,6 +49,17 @@ public class MessageController {
         Map<String, JSONObject> entities = UtilForJson.getEachUser(users);
         return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
     }
+    @GetMapping(value = "/getLatestMessage/{user1ID}/{user2ID}")
+    public ResponseEntity<Object> getLatestMessage(@PathVariable int user1ID, @PathVariable int user2ID) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        List<Message> messages = messageDB.getLatestMessageByTwoUserID(user1ID, user2ID);
+        List<JSONObject> entities = UtilForJson.getEachMessage(messages);
+
+        return new ResponseEntity<Object>(entities, headers, HttpStatus.OK);
+    }
+
 
     @GetMapping(value = "/allChatMessage/{user1ID}/{user2ID}")
     public ResponseEntity<Object> getUserRelatedWho(@PathVariable int user1ID, @PathVariable int user2ID) {
