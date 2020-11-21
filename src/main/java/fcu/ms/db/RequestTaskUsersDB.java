@@ -140,7 +140,7 @@ public class RequestTaskUsersDB {
         PreparedStatement preStmt = null;
         ResultSet rs = null;
 
-        String sqlString = "SELECT `user`.`id`, `user`.`name` " +
+        String sqlString = "SELECT `user`.* " +
                            "FROM `request_task_users`, `user` " +
                            "WHERE request_task_users.task_id = ? " +
                            "AND `request_task_users`.`user_id` = `user`.`id`" +
@@ -154,8 +154,14 @@ public class RequestTaskUsersDB {
 
             while (rs.next()) {
                 int userID = rs.getInt("id");
+                String name = rs.getString("name");
+                String firebaseUid = rs.getString("firebase_uid");
 
-                User user = UserBuilder.anUser(userID).build();
+                User user = UserBuilder.anUser(userID)
+                        .withName(name)
+                        .withFirebaseUid(firebaseUid)
+                        .build();
+
                 tasks.add(user);
             }
         } catch (Exception ex) {
