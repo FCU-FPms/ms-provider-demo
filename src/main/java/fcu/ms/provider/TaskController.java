@@ -240,9 +240,10 @@ public class TaskController {
         List<JSONObject> entities = new ArrayList<JSONObject>();
 
         for (User user : users) {
-            int id = user.getId();
             JSONObject entity = new JSONObject();
-            entity.put("id", id);
+            entity.put("id", user.getId());
+            entity.put("name", user.getName());
+            entity.put("firebase_uid", user.getFirebaseUid());
             entities.add(entity);
         }
 
